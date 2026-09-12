@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Potygen | Chatbot Rural com Fluxo de Conversa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #eef6e9 0%, #d9e6cf 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .potygen-container {
+            max-width: 550px;
+            width: 100%;
+            height: 92vh;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: #0f552e;
+            padding: 1rem 1.5rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .logo-area { display: flex; align-items: center; gap: 12px; }
+        .logo-area i { font-size: 28px; }
+        .logo-area h1 { font-size: 1.4rem; font-weight: 700; }
+        .lgpd-badge {
+            background: rgba(255,255,255,0.15);
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #fefce8;
+            scroll-behavior: smooth;
+        }
+
+        .message { display: flex; max-width: 85%; animation: fadeSlideUp 0.2s ease-out; }
+        .user-message { align-self: flex-end; justify-content: flex-end; }
+        .bot-message { align-self: flex-start; }
+
+        .bubble {
+            padding: 10px 14px;
+            border-radius: 22px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            font-weight: 500;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+        .user-message .bubble { background: #0d8a4f; color: white; border-bottom-right-radius: 4px; }
+        .bot-message .bubble { background: white; border: 1px solid #e2e8f0; color: #1e293b; border-bottom-left-radius: 4px; }
+
+        .input-area {
+            background: white;
+            padding: 12px 16px;
+            border-top: 1px solid #e2edda;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .input-wrapper {
+            flex: 1;
+            display: flex;
+            background: #f3f9ef;
+            border-radius: 40px;
+            padding: 6px 16px;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #cbdcc1;
+        }
+        .input-wrapper input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px 0;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .btn-icon {
+            background: #0d8a4f;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 60px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .btn-icon:hover { background: #0a6d3e; transform: scale(0.96); }
+        .btn-outline { background: #eef2e6; color: #2b5e2f; border: 1px solid #cbdcc1; }
+        .recording-active {
+            background: #e53e3e;
+            animation: pulseRed 1.2s infinite;
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseRed {
+            0% { background: #e53e3e; box-shadow: 0 0 0 0 rgba(229,62,62,0.4);}
+            70% { background: #b91c1c; box-shadow: 0 0 0 8px rgba(229,62,62,0);}
+            100% { background: #e53e3e; box-shadow: 0 0 0 0 rgba(229,62,62,0);}
+        }
+        .status-bar {
+            background: #eef2e6;
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 8px;
+            color: #2d6a4f;
+            border-top: 1px solid #deecd0;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+        }
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #0d8a4f;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-8px); opacity: 1; }
+        }
+        @media (max-width: 500px) {
+            .potygen-container { height: 95vh; border-radius: 1.5rem; }
+            .bubble { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="potygen-container">
+    <div class="chat-header">
+        <div class="logo-area">
+            <i class="fa-solid fa-leaf"></i>
+            <h1>Potygen</h1>
+        </div>
+        <div class="lgpd-badge">
+            <i class="fa-solid fa-shield-hart"></i> <span>LGPD · Voz Local · Dados Fictícios</span>
+        </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        <div class="message bot-message">
+            <div class="bubble">
+                🌾 Olá! Eu sou o Potygen, seu assistente rural.<br>
+                💬 Pergunte sobre:<br>
+                • <strong>"Taxa de prenhez da Estrela"</strong><br>
+                • <strong>"Saúde da Mimosa"</strong><br>
+                • <strong>"Recomendação para Luna"</strong><br>
+                • <strong>"Consanguinidade"</strong><br>
+                🎤 Clique no microfone para falar ou digite sua pergunta.
+            </div>
+        </div>
+    </div>
+
+    <div class="input-area">
+        <div class="input-wrapper">
+            <i class="fa-regular fa-message" style="color:#5c8252;"></i>
+            <input type="text" id="textInput" placeholder="Digite sua pergunta..." autocomplete="off">
+        </div>
+        <button class="btn-icon" id="sendBtn" title="Enviar"><i class="fa-regular fa-paper-plane"></i></button>
+        <button class="btn-icon" id="voiceBtn" title="Falar (Web Speech API)"><i class="fa-solid fa-microphone"></i></button>
+        <button class="btn-icon btn-outline" id="clearBtn" title="Limpar chat"><i class="fa-regular fa-trash-can"></i></button>
+    </div>
+    <div class="status-bar">
+        <span><i class="fa-solid fa-microchip"></i> Modo offline | Reconhecimento de voz ativo</span>
+        <span id="voiceStatus"><i class="fa-regular fa-circle-check"></i> Pronto para falar</span>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // 1. BANCO DE DADOS DOS ANIMAIS (FICTÍCIO, MAS REALISTA)
+    // ============================================================
+    const animais = {
+        "estrela": {
+            nome: "Estrela",
+            especie: "Nelore",
+            saude: "Ótima",
+            alimentacao: "Boa (suplementação mineral em dia)",
+            idade: 4,
+            ultimoParto: "15/01/2026",
+            taxaPrenhezBase: 85,
+            historico: "3 crias nascidas com sucesso"
+        },
+        "mimosa": {
+            nome: "Mimosa",
+            especie: "Gir Leiteiro",
+            saude: "Média (tratamento para verminose finalizado)",
+            alimentacao: "Regular, pastagem nativa",
+            idade: 6,
+            ultimoParto: "10/10/2025",
+            taxaPrenhezBase: 68,
+            historico: "2 crias, intervalo longo entre partos"
+        },
+        "luna": {
+            nome: "Luna",
+            especie: "Santa Inês (Ovino)",
+            saude: "Ótima",
+            alimentacao: "Excelente (concentrado + pastagem)",
+            idade: 3,
+            ultimoParto: "20/02/2026",
+            taxaPrenhezBase: 92,
+            historico: "Primeira cria, excelente desempenho"
+        }
+    };
+
+    // ============================================================
+    // 2. CONTEXTO DA CONVERSA (memória para respostas mais naturais)
+    // ============================================================
+    let ultimoAnimalMencionado = null;
+    let ultimoAssunto = null;
+
+    // ============================================================
+    // 3. PROCESSADOR DE INTENÇÕES (fluxo de conversa inteligente)
+    // ============================================================
+    function processarMensagem(texto) {
+        const txt = texto.toLowerCase().trim();
+        
+        // Detectar animal mencionado
+        let animalEncontrado = null;
+        for (const [key, animal] of Object.entries(animais)) {
+            if (txt.includes(key) || txt.includes(animal.nome.toLowerCase())) {
+                animalEncontrado = key;
+                ultimoAnimalMencionado = key;
+                break;
+            }
+        }
+        
+        // ========== PERGUNTAS SOBRE TAXA DE PRENHEZ ==========
+        if (txt.includes("taxa") && (txt.includes("prenhez") || txt.includes("prenhes"))) {
+            if (animalEncontrado) {
+                const animal = animais[animalEncontrado];
+                const idadeMeses = animal.idade * 12;
+                let recomendacao = "";
+                if (animal.taxaPrenhezBase >= 85) {
+                    recomendacao = "✅ Excelente! Continue com o manejo atual.";
+                } else if (animal.taxaPrenhezBase >= 60) {
+                    recomendacao = "⚠️ Pode melhorar com suplementação mineral e ajuste na alimentação.";
+                } else {
+                    recomendacao = "🔻 Necessita revisão do manejo reprodutivo e nutricional.";
+                }
+                ultimoAssunto = "taxa_prenhez";
+                return {
+                    resposta: `🐄 ${animal.nome} (${animal.especie}) - Taxa de prenhez estimada: ${animal.taxaPrenhezBase}%\n\n📊 Dados: Idade ${animal.idade} anos, Saúde: ${animal.saude}, Alimentação: ${animal.alimentacao}\n${recomendacao}`,
+                    contexto: { animal: animalEncontrado, assunto: "taxa_prenhez" }
+                };
+            } else {
+                return {
+                    resposta: `📈 A taxa média de prenhez do rebanho é 81%.\n\nPara saber a taxa de um animal específico, pergunte: "Qual a taxa da Estrela?" ou "Taxa da Mimosa"`,
+                    contexto: { assunto: "taxa_geral" }
+                };
+            }
+        }
+        
+        // ========== PERGUNTAS SOBRE SAÚDE ==========
+        if (txt.includes("saude") || txt.includes("saúde") || txt.includes("doente") || txt.includes("problema")) {
+            if (animalEncontrado) {
+                const animal = animais[animalEncontrado];
+                ultimoAssunto = "saude";
+                return {
+                    resposta: `🩺 SAÚDE DE ${animal.nome.toUpperCase()}:\n\n• Condição: ${animal.saude}\n• Alimentação: ${animal.alimentacao}\n• ${animal.saude === "Ótima" ? "✅ Animal saudável, sem restrições" : (animal.saude === "Média" ? "⚠️ Acompanhamento veterinário recomendado" : "🔻 Necessita intervenção")}\n• Último parto: ${animal.ultimoParto}`,
+                    contexto: { animal: animalEncontrado, assunto: "saude" }
+                };
+            } else {
+                return {
+                    resposta: `🏥 Para informações de saúde, me diga qual animal você quer saber: "Saúde da Estrela", "Saúde da Mimosa" ou "Saúde da Luna".`,
+                    contexto: { assunto: "saude_geral" }
+                };
+            }
+        }
+        
+        // ========== RECOMENDAÇÕES REPRODUTIVAS ==========
+        if (txt.includes("recomend") || txt.includes("melhorar") || txt.includes("aumentar") || txt.includes("dica")) {
+            if (animalEncontrado) {
+                const animal = animais[animalEncontrado];
+                let recomendacoes = "";
+                if (animal.taxaPrenhezBase >= 85) {
+                    recomendacoes = "✅ Mantenha o manejo atual: alimentação balanceada e monitoramento do cio.";
+                } else if (animal.taxaPrenhezBase >= 60) {
+                    recomendacoes = "🔹 Recomendações:\n• Suplementação mineral 60 dias antes da estação reprodutiva\n• Avaliar escore de condição corporal (ECC)\n• Ajustar protocolo hormonal se usar IATF";
+                } else {
+                    recomendacoes = "🔻 Recomendações urgentes:\n• Exame reprodutivo completo\n• Melhorar alimentação e suplementação\n• Descartar infecções/subfertilidade";
+                }
+                ultimoAssunto = "recomendacao";
+                return {
+                    resposta: `💡 RECOMENDAÇÃO PARA ${animal.nome.toUpperCase()}:\n\n${recomendacoes}`,
+                    contexto: { animal: animalEncontrado, assunto: "recomendacao" }
+                };
+            } else {
+                return {
+                    resposta: `📋 Recomendações gerais para o rebanho:\n• Suplementação mineral 60 dias pré-estação\n• Controle de verminose\n• Monitoramento do ECC (escore 3.0-3.5)\n• Inseminar nas horas mais frescas\n\nPara dicas específicas, pergunte: "Recomendação para a Estrela"`,
+                    contexto: { assunto: "recomendacao_geral" }
+                };
+            }
+        }
+        
+        // ========== CONSANGUINIDADE ==========
+        if (txt.includes("consanguin") || txt.includes("parentesco") || txt.includes("cruzamento errado")) {
+            ultimoAssunto = "consanguinidade";
+            return {
+                resposta: `⚠️ CONSANGUINIDADE:\n\n• Reduz a fertilidade em até 40%\n• Evite acasalamento entre pai-filha, irmãos ou avô-neta\n• Recomendação: Introduza touros de linhagens diferentes a cada 2-3 gerações\n• Grau de parentesco ideal: abaixo de 12.5% (primos distantes)`,
+                contexto: { assunto: "consanguinidade" }
+            };
+        }
+        
+        // ========== HISTÓRICO DO ANIMAL ==========
+        if (txt.includes("historico") || txt.includes("histórico") || txt.includes("cria") || txt.includes("parto")) {
+            if (animalEncontrado) {
+                const animal = animais[animalEncontrado];
+                ultimoAssunto = "historico";
+                return {
+                    resposta: `📜 HISTÓRICO DE ${animal.nome.toUpperCase()}:\n\n• ${animal.historico}\n• Último parto: ${animal.ultimoParto}\n• Idade: ${animal.idade} anos\n• Taxa de prenhez base: ${animal.taxaPrenhezBase}%`,
+                    contexto: { animal: animalEncontrado, assunto: "historico" }
+                };
+            } else {
+                return {
+                    resposta: `Para ver o histórico, me diga qual animal: "Histórico da Estrela", "Histórico da Mimosa" ou "Histórico da Luna"`,
+                    contexto: { assunto: "historico_geral" }
+                };
+            }
+        }
+        
+        // ========== PERGUNTAR REPETINDO A ÚLTIMA RESPOSTA ==========
+        if (txt.includes("repete") || txt.includes("novamente") || txt.includes("fala de novo")) {
+            if (ultimoAssunto && ultimoAnimalMencionado) {
+                const animal = animais[ultimoAnimalMencionado];
+                return processarMensagem(`${ultimoAssunto} do ${animal.nome}`);
+            } else if (ultimoAssunto) {
+                return processarMensagem(ultimoAssunto);
+            }
+        }
+        
+        // ========== PERGUNTAR SOBRE O ÚLTIMO ASSUNTO ==========
+        if (txt.includes("me fale mais") || txt.includes("mais detalhes") || txt.includes("aprofundar")) {
+            if (ultimoAssunto && ultimoAnimalMencionado) {
+                const animal = animais[ultimoAnimalMencionado];
+                return processarMensagem(`${ultimoAssunto} do ${animal.nome}`);
+            } else if (ultimoAssunto) {
+                return processarMensagem(ultimoAssunto);
+            }
+        }
+        
+        // ========== CUMPRIMENTOS ==========
+        if (txt.includes("olá") || txt.includes("oi") || txt.includes("bom dia") || txt.includes("boa tarde")) {
+            return {
+                resposta: `Olá! Como posso ajudar você hoje?\n\nPergunte sobre:\n• Taxa de prenhez da Estrela\n• Saúde da Mimosa\n• Recomendação para Luna\n• Consanguinidade`,
+                contexto: { assunto: "saudacao" }
+            };
+        }
+        
+        // ========== LISTAR ANIMAIS ==========
+        if (txt.includes("animais") || txt.includes("rebanho") || txt.includes("lista")) {
+            return {
+                resposta: `🐮 ANIMAIS DO REBANHO:\n\n• Estrela (Nelore) - Taxa: 85%\n• Mimosa (Gir) - Taxa: 68%\n• Luna (Santa Inês/Ovino) - Taxa: 92%\n\nDigite o nome do animal para mais detalhes.`,
+                contexto: { assunto: "lista_animais" }
+            };
+        }
+        
+        // ========== RESPOSTA PADRÃO (com ajuda) ==========
+        return {
+            resposta: `🤖 Não entendi completamente.\n\nVocê pode perguntar:\n• "Qual a taxa de prenhez da Estrela?"\n• "Saúde da Mimosa"\n• "Recomendação para Luna"\n• "Consanguinidade"\n• "Histórico da Estrela"`,
+            contexto: { assunto: "ajuda" }
+        };
+    }
+    
+    // ============================================================
+    // 4. FUNÇÕES DE INTERFACE (Chat com animação de digitação)
+    // ============================================================
+    const chatContainer = document.getElementById('chatMessages');
+    const textInput = document.getElementById('textInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const voiceBtn = document.getElementById('voiceBtn');
+    const voiceStatus = document.getElementById('voiceStatus');
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    function addMessage(text, isUser, isTyping = false) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        
+        if (!isUser && isTyping) {
+            msgDiv.innerHTML = `<div class="bubble typing-indicator"><span></span><span></span><span></span></div>`;
+        } else {
+            const formattedText = escapeHtml(text).replace(/\n/g, '<br>');
+            msgDiv.innerHTML = `<div class="bubble">${formattedText}</div>`;
+        }
+        
+        chatContainer.appendChild(msgDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        return msgDiv;
+    }
+    
+    async function enviarMensagem(texto) {
+        if (!texto.trim()) return;
+        
+        // Mostrar mensagem do usuário
+        addMessage(texto, true);
+        textInput.value = '';
+        
+        // Mostrar indicador de digitação
+        const typingMsg = addMessage('', false, true);
+        
+        // Simular tempo de processamento (mais natural)
+        await new Promise(resolve => setTimeout(resolve, 600));
+        
+        // Processar e obter resposta
+        const resultado = processarMensagem(texto);
+        
+        // Remover indicador e adicionar resposta
+        typingMsg.remove();
+        addMessage(resultado.resposta, false);
+    }
+    
+    // ============================================================
+    // 5. RECONHECIMENTO DE VOZ (Web Speech API - offline-first)
+    // ============================================================
+    let recognition = null;
+    let isListening = false;
+    
+    function initSpeechRecognition() {
+        const SpeechRecog = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecog) {
+            voiceStatus.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> Voz não suportada';
+            voiceBtn.disabled = true;
+            return;
+        }
+        
+        recognition = new SpeechRecog();
+        recognition.lang = 'pt-BR';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        
+        recognition.onstart = () => {
+            isListening = true;
+            voiceBtn.classList.add('recording-active');
+            voiceStatus.innerHTML = '<i class="fa-solid fa-microphone-alt"></i> Ouvindo... Fale agora';
+        };
+        
+        recognition.onend = () => {
+            isListening = false;
+            voiceBtn.classList.remove('recording-active');
+            voiceStatus.innerHTML = '<i class="fa-regular fa-circle-check"></i> Pronto para falar';
+        };
+        
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            if (transcript) {
+                enviarMensagem(transcript);
+            }
+        };
+        
+        recognition.onerror = (event) => {
+            console.error('Erro no reconhecimento:', event.error);
+            voiceStatus.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Erro: ${event.error === 'not-allowed' ? 'Permita o microfone' : 'Tente novamente'}`;
+            voiceBtn.classList.remove('recording-active');
+            isListening = false;
+            
+            if (event.error === 'not-allowed') {
+                setTimeout(() => {
+                    voiceStatus.innerHTML = '<i class="fa-regular fa-circle-check"></i> Clique no microfone e permita o acesso';
+                }, 3000);
+            }
+        };
+        
+        voiceStatus.innerHTML = '<i class="fa-regular fa-circle-check"></i> Clique no microfone e fale';
+    }
+    
+    function toggleVoice() {
+        if (!recognition) {
+            alert('Reconhecimento de voz não disponível. Use o teclado.');
+            return;
+        }
+        
+        if (isListening) {
+            recognition.stop();
+        } else {
+            try {
+                recognition.start();
+            } catch (e) {
+                console.error(e);
+                voiceStatus.innerHTML = '<i class="fa-solid fa-exclamation-circle"></i> Aguarde...';
+                setTimeout(() => {
+                    try { recognition.start(); } catch(e2) {}
+                }, 500);
+            }
+        }
+    }
+    
+    // ============================================================
+    // 6. EVENTOS E INICIALIZAÇÃO
+    // ============================================================
+    sendBtn.addEventListener('click', () => enviarMensagem(textInput.value));
+    textInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') enviarMensagem(textInput.value); });
+    clearBtn.addEventListener('click', () => {
+        chatContainer.innerHTML = '';
+        addMessage('🧹 Chat limpo! Estou aqui para ajudar com suas dúvidas.', false);
+        addMessage('🌱 Pergunte: "Taxa da Estrela", "Saúde da Mimosa" ou "Recomendação para Luna"', false);
+    });
+    voiceBtn.addEventListener('click', toggleVoice);
+    
+    // Inicializar
+    initSpeechRecognition();
+    
+    // Mensagem de boas-vindas adicional
+    setTimeout(() => {
+        addMessage('💡 DICA: Para conversar, você pode perguntar "Qual a taxa de prenhez da Estrela?" e depois "Me fale mais sobre ela" que eu lembro do contexto!', false);
+    }, 1500);
+</script>
+</body>
+</html>

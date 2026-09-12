@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações de Conta</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Navbar Styles -->
+    <link rel="stylesheet" href="../style/navbar-style.css">
+    <link rel="stylesheet" href="../style/chatbot-floating.css">
+    <!-- Tailwind custom config + CSS -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            light: '#00a859',
+                            DEFAULT: '#00a859',
+                            dark: '#008f4c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="configuracoes.css">
+    <style>
+        /* ===== Modais (sistema de fazendas + exclusão de conta) ===== */
+        .pg-modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            display: none; align-items: center; justify-content: center;
+            z-index: 1000; padding: 16px;
+            backdrop-filter: blur(2px);
+        }
+        .pg-modal-overlay.aberto { display: flex; }
+        .pg-modal {
+            background: #fff; border-radius: 18px;
+            width: 100%; max-width: 560px; max-height: 90vh;
+            overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            animation: pgModalIn .18s ease-out;
+        }
+        @keyframes pgModalIn { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .pg-modal-header { padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; }
+        .pg-modal-header h3 { font-size: 1.1rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 10px; }
+        .pg-modal-body { padding: 20px 24px; }
+        .pg-modal-footer { padding: 16px 24px; border-top: 1px solid #e5e7eb; display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+        .pg-close-btn { background: none; border: none; cursor: pointer; color: #6b7280; font-size: 1.2rem; }
+
+        .pg-input, .pg-select { width: 100%; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 10px; font-size: .9rem; background: #f9fafb; }
+        .pg-input:focus, .pg-select:focus { outline: none; border-color: #00a859; box-shadow: 0 0 0 3px rgba(0,168,89,.15); background: #fff; }
+        .pg-label { font-size: .75rem; font-weight: 600; color: #475569; margin-bottom: 4px; display: block; }
+        .pg-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media (max-width: 540px) { .pg-grid-2 { grid-template-columns: 1fr; } }
+
+        .pg-btn { padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: .875rem; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; transition: all .15s; }
+        .pg-btn-primary { background: #00a859; color: #fff; }
+        .pg-btn-primary:hover { background: #008f4c; }
+        .pg-btn-secondary { background: #f1f5f9; color: #334155; }
+        .pg-btn-secondary:hover { background: #e2e8f0; }
+        .pg-btn-danger { background: #dc2626; color: #fff; }
+        .pg-btn-danger:hover { background: #b91c1c; }
+
+        /* Lista fazendas */
+        .fazendas-lista { max-height: 360px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .fazenda-item { display: flex; align-items: center; gap: 12px; padding: 12px; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; transition: all .15s; }
+        .fazenda-item:hover { border-color: #00a859; background: #f0fdf4; }
+        .fazenda-item.ativa { border-color: #00a859; background: #ecfdf5; }
+        .fazenda-item.ativa .fi-check { display: block; color: #00a859; }
+        .fi-icon { width: 40px; height: 40px; border-radius: 10px; background: #ecfdf5; color: #00a859; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .fi-info { flex: 1; min-width: 0; }
+        .fi-nome { font-weight: 600; color: #0f172a; font-size: .9rem; }
+        .fi-sub { font-size: .75rem; color: #64748b; }
+        .fi-check { display: none; }
+        .fazendas-lista-vazia { text-align: center; padding: 32px 16px; color: #94a3b8; font-size: .85rem; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen font-sans">
+
+    <!-- NAVBAR CARREGADA DINAMICAMENTE -->
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-100px] opacity-0 transition-all duration-300 pointer-events-none">
+        <div id="toast-box" class="bg-emerald-600 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+            <span id="toast-message" class="font-medium text-sm">Alterações salvas com sucesso!</span>
+        </div>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="max-w-6xl mx-auto px-4 py-6 md:py-10">
+
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">Configurações</h1>
+                <p class="text-sm text-gray-500 mt-1">Gerencie sua conta, segurança e preferências</p>
+            </div>
+        </header>
+
+        <main class="space-y-6">
+
+            <!-- Abas de Navegação -->
+            <div class="flex gap-2 p-1.5 bg-gray-100 rounded-2xl w-full max-w-md border border-gray-200/50">
+                <button id="tab-info"
+                        onclick="switchTab('info')"
+                        class="flex-1 flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl text-sm font-semibold transition-all focus:outline-none border-2 border-emerald-600 text-emerald-600 bg-emerald-50">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                    Informações Pessoais
+                </button>
+                <button id="tab-security"
+                        onclick="switchTab('security')"
+                        class="flex-1 flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl text-sm font-semibold transition-all focus:outline-none border-2 border-gray-200 text-gray-700 bg-white">
+                    <i data-lucide="shield" class="w-4 h-4"></i>
+                    Segurança
+                </button>
+            </div>
+
+            <!-- Painel: Informações Pessoais -->
+            <section id="panel-info" class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">Informações Pessoais</h2>
+                    <p class="text-xs text-gray-500 mt-0.5">Atualize seus dados de cadastro</p>
+                </div>
+
+                <form id="formInfoPessoais" onsubmit="salvarInformacoes(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-semibold text-gray-600">Nome Completo</label>
+                            <input id="infNome" type="text"
+                                   class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" required>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-semibold text-gray-600">Tipo de Usuário</label>
+                            <input id="infTipoUsuario" type="text" disabled
+                                   class="w-full px-4 py-2.5 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-500 cursor-not-allowed">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-semibold text-gray-600">Celular / WhatsApp</label>
+                            <input id="infTelefone" type="tel" placeholder="(00) 99999-9999"
+                                   class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-semibold text-gray-600">CPF</label>
+                            <input id="infCpf" type="text" disabled
+                                   class="w-full px-4 py-2.5 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-400 cursor-not-allowed">
+                            <p class="text-[10px] text-gray-400">CPF não pode ser alterado</p>
+                        </div>
+
+                        <div class="space-y-1.5 md:col-span-2">
+                            <label class="block text-xs font-semibold text-gray-600">Propriedade</label>
+                            <input id="infPropriedade" type="text"
+                                   class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-semibold text-gray-600">Cidade</label>
+                            <input id="infCidade" type="text"
+                                   class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-semibold text-gray-600">Estado</label>
+                            <div class="relative">
+                                <select id="infEstado" class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 appearance-none cursor-pointer">
+                                    <option value="">—</option>
+                                    <option value="AC">Acre</option><option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option><option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option><option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option><option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option><option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option><option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option><option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option><option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option><option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option><option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option><option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option><option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option><option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                </select>
+                                <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100">
+                        <button type="submit"
+                                class="w-full sm:w-auto px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow transition-all flex items-center justify-center gap-2">
+                            Salvar Informações
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Painel: Segurança -->
+            <section id="panel-security" class="hidden space-y-6">
+
+                <!-- Alterar E-mail -->
+                <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm space-y-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">Alterar E-mail</h2>
+                        <p class="text-xs text-gray-500 mt-0.5">O e-mail atual é: <span id="emailAtualLabel" class="font-medium text-emerald-600">—</span></p>
+                    </div>
+
+                    <form onsubmit="alterarEmail(event)" class="space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-semibold text-gray-600">Novo E-mail</label>
+                                <input id="secNovoEmail" type="email" placeholder="novo@email.com"
+                                       class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" required>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-semibold text-gray-600">Confirmar Novo E-mail</label>
+                                <input id="secConfirmaEmail" type="email" placeholder="novo@email.com"
+                                       class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" required>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-gray-100">
+                            <button type="submit"
+                                    class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow transition-all">
+                                Alterar E-mail
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Alterar Senha -->
+                <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm space-y-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">Alterar Senha</h2>
+                        <p class="text-xs text-gray-500 mt-0.5">Use uma senha forte com pelo menos 8 caracteres</p>
+                    </div>
+
+                    <form onsubmit="alterarSenha(event)" class="space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-semibold text-gray-600">Nova Senha</label>
+                                <input id="secNovaSenha" type="password" placeholder="••••••••" minlength="8"
+                                       class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" required>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-semibold text-gray-600">Confirmar Nova Senha</label>
+                                <input id="secConfirmaSenha" type="password" placeholder="••••••••" minlength="8"
+                                       class="w-full px-4 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" required>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-emerald-50/50 rounded-xl border border-emerald-100/50">
+                            <h3 class="text-sm font-semibold text-emerald-800 flex items-center gap-2 mb-2">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                                Dicas de Segurança
+                            </h3>
+                            <ul class="text-xs text-gray-600 space-y-1.5 list-disc list-inside pl-1">
+                                <li>Crie uma combinação de letras maiúsculas, minúsculas, números e símbolos</li>
+                                <li>Evite reutilizar senhas de outros serviços</li>
+                                <li>Não compartilhe sua senha com terceiros</li>
+                            </ul>
+                        </div>
+
+                        <div class="pt-4 border-t border-gray-100">
+                            <button type="submit"
+                                    class="w-full sm:w-auto px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow transition-all">
+                                Alterar Senha
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Excluir Conta -->
+                <div class="bg-white rounded-2xl p-6 border border-red-200 shadow-sm space-y-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-red-700 flex items-center gap-2">
+                            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                            Excluir Conta
+                        </h2>
+                        <p class="text-xs text-gray-500 mt-0.5">Esta ação é permanente e removerá todos os seus dados.</p>
+                    </div>
+                    <button type="button" onclick="abrirModalExcluirConta()"
+                            class="w-full sm:w-auto px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm rounded-lg shadow-sm hover:shadow transition-all inline-flex items-center gap-2">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        Excluir Conta
+                    </button>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ===================== MODAIS ===================== -->
+
+    <!-- Modal Trocar Fazenda -->
+    <div id="modalTrocarFazenda" class="pg-modal-overlay">
+        <div class="pg-modal">
+            <div class="pg-modal-header">
+                <h3><i class="fa-solid fa-tractor text-emerald-600"></i> Trocar Fazenda</h3>
+                <button class="pg-close-btn" onclick="fecharModal('modalTrocarFazenda')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="pg-modal-body">
+                <div id="fazendasLista" class="fazendas-lista"></div>
+            </div>
+            <div class="pg-modal-footer">
+                <button class="pg-btn pg-btn-secondary" onclick="fecharModal('modalTrocarFazenda')">Fechar</button>
+                <button class="pg-btn pg-btn-primary" onclick="abrirModalCadastrarFazenda()">
+                    <i class="fa-solid fa-plus"></i> Nova Fazenda
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cadastrar Fazenda -->
+    <div id="modalCadastrarFazenda" class="pg-modal-overlay">
+        <div class="pg-modal">
+            <div class="pg-modal-header">
+                <h3><i class="fa-solid fa-plus text-emerald-600"></i> Cadastrar Fazenda</h3>
+                <button class="pg-close-btn" onclick="fecharModalCadastro()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="pg-modal-body">
+                <div class="space-y-3">
+                    <div class="pg-grid-2">
+                        <div>
+                            <label class="pg-label">Nome da Fazenda *</label>
+                            <input id="fzNome" class="pg-input" type="text" placeholder="Ex: Fazenda Boa Vista">
+                        </div>
+                        <div>
+                            <label class="pg-label">Tipo de Criação *</label>
+                            <select id="fzTipoCriacao" class="pg-select">
+                                <option value="">Selecione</option>
+                                <option value="Bovino">Bovino</option>
+                                <option value="Ovino">Ovino</option>
+                                <option value="Caprino">Caprino</option>
+                                <option value="Misto">Misto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="pg-grid-2">
+                        <div>
+                            <label class="pg-label">Área (hectares)</label>
+                            <input id="fzArea" class="pg-input" type="number" step="0.01" placeholder="0">
+                        </div>
+                        <div>
+                            <label class="pg-label">Telefone</label>
+                            <input id="fzTelefone" class="pg-input" type="tel" placeholder="(00) 99999-9999">
+                        </div>
+                    </div>
+                    <div class="pg-grid-2">
+                        <div>
+                            <label class="pg-label">Proprietário</label>
+                            <input id="fzProprietario" class="pg-input" type="text" disabled>
+                        </div>
+                        <div>
+                            <label class="pg-label">CPF</label>
+                            <input id="fzCpf" class="pg-input" type="text" disabled>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="pg-label">Endereço</label>
+                        <input id="fzEndereco" class="pg-input" type="text" placeholder="Rua, número">
+                    </div>
+                    <div class="pg-grid-2">
+                        <div>
+                            <label class="pg-label">CEP</label>
+                            <input id="fzCep" class="pg-input" type="text" placeholder="00000-000">
+                        </div>
+                        <div>
+                            <label class="pg-label">Cidade</label>
+                            <input id="fzCidade" class="pg-input" type="text">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="pg-label">Estado</label>
+                        <select id="fzEstado" class="pg-select">
+                            <option value="">—</option>
+                            <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+                            <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+                            <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+                            <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+                            <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+                            <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+                            <option>SP</option><option>SE</option><option>TO</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="pg-label">Descrição</label>
+                        <textarea id="fzDescricao" class="pg-input" rows="2" placeholder="Observações"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="pg-modal-footer">
+                <button class="pg-btn pg-btn-secondary" onclick="fecharModalCadastro()">Cancelar</button>
+                <button id="btnSalvarFazenda" class="pg-btn pg-btn-primary" onclick="salvarFazenda()">
+                    <i class="fa-solid fa-tractor"></i> Cadastrar Fazenda
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Exclusão de Conta -->
+    <div id="modalExcluirConta" class="pg-modal-overlay">
+        <div class="pg-modal" style="max-width: 460px;">
+            <div class="pg-modal-header">
+                <h3 style="color:#b91c1c;"><i class="fa-solid fa-triangle-exclamation"></i> Excluir Conta</h3>
+                <button class="pg-close-btn" onclick="fecharModal('modalExcluirConta')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="pg-modal-body">
+                <p class="text-sm text-gray-700">Você tem certeza que deseja <strong>excluir sua conta</strong>?</p>
+                <p class="text-xs text-gray-500 mt-2">Esta ação é <strong>permanente</strong>. Todos os seus dados (fazendas, animais, registros) serão removidos e você não poderá recuperá-los.</p>
+            </div>
+            <div class="pg-modal-footer">
+                <button class="pg-btn pg-btn-secondary" onclick="fecharModal('modalExcluirConta')">Não, cancelar</button>
+                <button id="btnConfirmarExcluir" class="pg-btn pg-btn-danger" onclick="confirmarExcluirConta()">
+                    <i class="fa-solid fa-trash"></i> Sim, excluir minha conta
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../backend/database.js"></script>
+    <script src="../backend/auth.js"></script>
+    <script src="../backend/fazenda.js"></script>
+    <script src="../backend/fazenda-ui.js"></script>
+    <script src="../backend/configuracoes.js"></script>
+    <!-- Navbar Loading -->
+    <script src="../backend/navbar-loader.js"></script>
+    <!-- Navbar Script Global -->
+    <script src="../backend/navbar-script.js"></script>
+    <script src="../backend/logout.js"></script>
+    <script src="../backend/chatbot-floating.js"></script>
+</body>
+</html>

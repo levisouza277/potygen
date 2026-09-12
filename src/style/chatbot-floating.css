@@ -1,0 +1,170 @@
+.potygen-floating-chat {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 2147483647;
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+}
+
+.potygen-chat-toggle {
+    width: 62px;
+    height: 62px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0d8a4f, #17a85a);
+    color: #fff;
+    font-size: 1.4rem;
+    box-shadow: 0 18px 35px rgba(13, 138, 79, 0.38);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.potygen-chat-toggle:hover {
+    transform: translateY(-2px) scale(1.02);
+}
+
+.potygen-chat-toggle-active {
+    transform: rotate(90deg);
+}
+
+.potygen-chat-panel {
+    position: absolute;
+    right: 0;
+    bottom: 76px;
+    width: min(360px, calc(100vw - 32px));
+    height: 430px;
+    background: #ffffff;
+    border: 1px solid rgba(15, 85, 46, 0.1);
+    border-radius: 22px;
+    box-shadow: 0 28px 45px rgba(15, 23, 42, 0.18);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(18px) scale(0.96);
+    transition: all 0.22s ease;
+}
+
+.potygen-chat-panel-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.potygen-chat-header {
+    background: linear-gradient(135deg, #0f552e, #0d8a4f);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+}
+
+.potygen-chat-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 0.96rem;
+}
+
+.potygen-chat-close {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+    cursor: pointer;
+}
+
+.potygen-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    background: #f8faf7;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.potygen-chat-message {
+    display: flex;
+    width: 100%;
+}
+
+.potygen-chat-message-user {
+    justify-content: flex-end;
+}
+
+.potygen-chat-message-bot {
+    justify-content: flex-start;
+}
+
+.potygen-chat-bubble {
+    max-width: 88%;
+    padding: 12px 14px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    word-wrap: break-word;
+}
+
+.potygen-chat-message-user .potygen-chat-bubble {
+    background: linear-gradient(135deg, #0d8a4f, #1ca765);
+    color: #fff;
+    border-bottom-right-radius: 6px;
+}
+
+.potygen-chat-message-bot .potygen-chat-bubble {
+    background: #fff;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+    border-bottom-left-radius: 6px;
+}
+
+.potygen-chat-compose {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px 12px;
+    border-top: 1px solid #ebf0ea;
+    background: #fff;
+}
+
+.potygen-chat-compose input {
+    flex: 1;
+    border: 1px solid #dbe6d8;
+    border-radius: 999px;
+    padding: 11px 14px;
+    outline: none;
+    font-size: 0.92rem;
+}
+
+.potygen-chat-compose input:focus {
+    border-color: #0d8a4f;
+    box-shadow: 0 0 0 3px rgba(13, 138, 79, 0.12);
+}
+
+.potygen-chat-compose button {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: #0d8a4f;
+    color: #fff;
+    cursor: pointer;
+}
+
+@media (max-width: 480px) {
+    .potygen-floating-chat {
+        right: 14px;
+        bottom: 14px;
+    }
+
+    .potygen-chat-panel {
+        width: min(310px, calc(100vw - 20px));
+        height: 390px;
+    }
+}

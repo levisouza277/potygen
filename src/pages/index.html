@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potygen - Login</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../style/navbar-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <section class="login-side">
+            <div class="login-box">
+                <h1>Bem-vindo</h1>
+                <p class="desc">Acesse o sistema de pecuária e monitoramento genético. Faça login para gerenciar seu rebanho.</p>
+
+                <form id="loginForm">
+                    <div class="field">
+                        <label for="email">E-mail</label>
+                        <div class="input-wrap">
+                            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+                            <input type="email" id="email" placeholder="Digite seu e-mail" required>
+                        </div>
+                        <span class="error-msg" id="emailError" aria-live="polite">Por favor, utilize um e-mail @gmail.com válido.</span>
+                    </div>
+
+                    <div class="field">
+                        <label for="senha">Senha</label>
+                        <div class="input-wrap">
+                            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                            <input type="password" id="senha" placeholder="Digite sua senha" required>
+                            <button type="button" class="eye-toggle" aria-label="Mostrar ou esconder senha">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <label class="remember">
+                            <input type="checkbox" id="lembrarMe">
+                            <span>Lembrar-me</span>
+                        </label>
+                        <a href="#" class="forgot" id="esqueciSenha">Esqueceu a senha?</a>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Entrar</button>
+                </form>
+
+                <div class="footer-link">
+                    Não tem uma conta? <a href="cadastro.html">Cadastre-se aqui</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="info-side">
+            <div class="card">
+                <div class="logo">
+                    <img src="../assets/logo.png" alt="Potygen Logo">
+                </div>
+                
+                <h2>Sistema de Pecuária e Monitoramento Genético</h2>
+                <p>Gerencie seu rebanho com inteligência artificial, monitore dados genéticos e otimize seus programas de inseminação artificial.</p>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="value">IA</span>
+                        <span class="label">Powered</span>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2026 Potygen. Todos os direitos reservados.
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../backend/database.js"></script>
+    <script src="../backend/script-login.js"></script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potygen - Registrar Inseminação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style/navbar-style.css">
+    <link rel="stylesheet" href="../style/style-dashboard.css">
+    <link rel="stylesheet" href="../style/style_registrar.css">
+    <link rel="stylesheet" href="../style/fazenda-modal.css">
+    <link rel="stylesheet" href="../style/chatbot-floating.css">
+</head>
+<body>
+
+<div class="app-container">
+    <!-- NAVBAR INJETADA AUTOMATICAMENTE POR navbar-script.js (igual ao gestao-animais) -->
+
+    <main class="main-content" id="mainContent">
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <div>
+                    <h1 class="top-bar-title">Registrar Inseminação</h1>
+                </div>
+            </div>
+        </header>
+
+        <div class="container-fluid">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <p class="text-secondary text-center">Insira as informações na sequência do manejo reprodutivo.</p>
+                </div>
+            </div>
+
+            <form id="formInseminacao">
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="dash-card border-start border-success h-100">
+                            <h5 class="mb-4 text-navy"><i class="fa-solid fa-cow me-2 text-success"></i>1. Identificação e Tempo</h5>
+
+                            <div class="mb-3">
+                                <label for="buscaMatriz" class="form-label">Buscar Matriz (Brinco ou Nome)</label>
+                                <div class="busca-animal-container">
+                                    <input type="text" id="buscaMatriz"
+                                           class="form-control"
+                                           placeholder="Digite o brinco ou nome da fêmea..."
+                                           autocomplete="off"
+                                           oninput="filtrarListaMatriz(this.value)"
+                                           onfocus="mostrarTodasMatrizes()">
+                                    <div id="listaMatrizesResultados" class="lista-animais-dropdown"></div>
+                                </div>
+                                <input type="hidden" id="matrizSelecionadaId" value="">
+                                <div class="help-text">Digite para filtrar - Clique no animal para selecionar</div>
+                            </div>
+
+                            <div class="mb-3 p-3 bg-light rounded border text-secondary" id="containerFeedback" style="cursor: pointer;">
+                                <small class="d-block fw-bold text-muted mb-1">Confirmação da Matriz:</small>
+                                <span id="textoFeedback">Selecione uma matriz acima para validar os dados do animal.</span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="localizacao" class="form-label">Lote / Localização</label>
+                                <input type="text" class="form-control" id="localizacao" placeholder="Ex: Piquete 04, Setor Sul" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="data_inseminacao" class="form-label">Data da Inseminação</label>
+                                    <input type="date" class="form-control" id="data_inseminacao" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="hora_inseminacao" class="form-label">Hora do Manejo</label>
+                                    <input type="time" class="form-control" id="hora_inseminacao" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="dash-card h-100 d-flex flex-column justify-content-between">
+                            <div>
+                                <h5 class="mb-4 text-navy"><i class="fa-solid fa-vial-circle-check me-2 text-success"></i>2. Genética e Profissional</h5>
+
+                                <div class="mb-3">
+                                    <label for="buscaReprodutor" class="form-label">Buscar Reprodutor (Brinco ou Nome)</label>
+                                    <div class="busca-animal-container">
+                                        <input type="text" id="buscaReprodutor"
+                                               class="form-control"
+                                               placeholder="Digite o brinco ou nome do macho..."
+                                               autocomplete="off"
+                                               oninput="filtrarListaReprodutor(this.value)"
+                                               onfocus="mostrarTodosReprodutores()">
+                                        <div id="listaReprodutoresResultados" class="lista-animais-dropdown"></div>
+                                    </div>
+                                    <input type="hidden" id="reprodutorSelecionadoId" value="">
+                                    <div class="help-text">Digite para filtrar - Clique no animal para selecionar</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="confirmacaoReprodutor" class="form-label">Confirmação do Reprodutor</label>
+                                    <div class="p-3 bg-light rounded border text-secondary" id="containerFeedbackReprodutor">
+                                        <small class="d-block fw-bold text-muted mb-1">Dados do Macho:</small>
+                                        <span id="textoFeedbackReprodutor">Selecione um reprodutor acima para confirmar.</span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="tecnico_responsavel" class="form-label">Nome do Profissional (Inseminador)</label>
+                                    <input type="text" class="form-control" id="tecnico_responsavel" placeholder="Ex: Dr. Carlos Rocha" required>
+                                </div>
+                            </div>
+                            <div class="text-end pt-3">
+                                <button type="submit" class="btn btn-submit-pri px-5 py-3 w-100">Salvar Registro</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+ <!-- ============================================================ -->
+<!-- MODAL: TROCAR FAZENDA                                        -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="modalTrocarFazenda" style="display:none;">
+    <div class="modal-content">
+        <header class="modal-header">
+            <div>
+                <h2>Suas Fazendas</h2>
+                <p>Selecione uma fazenda para gerenciar</p>
+            </div>
+            <button class="btn-close" onclick="fecharModal('modalTrocarFazenda')">&times;</button>
+        </header>
+        <section class="modal-body">
+            <div class="fazendas-lista" id="fazendasLista">
+                <div class="fazendas-lista-vazia">
+                    <i class="fa-solid fa-tractor" style="font-size:28px;margin-bottom:8px;opacity:0.3;display:block;"></i>
+                    Carregando fazendas...
+                </div>
+            </div>
+            <button class="btn-nova-fazenda-lista" onclick="abrirModalCadastrarFazenda()">
+                <i class="fa-solid fa-plus"></i> Cadastrar nova fazenda
+            </button>
+        </section>
+        <div class="modal-footer-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalTrocarFazenda')">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: CADASTRAR FAZENDA                                     -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="modalCadastrarFazenda" style="display:none;">
+    <div class="modal-content">
+        <header class="modal-header">
+            <div>
+                <h2><i class="fa-solid fa-tractor" style="color:#0d8a4f;margin-right:8px;"></i>Cadastrar Nova Fazenda</h2>
+                <p>Preencha os dados da propriedade</p>
+            </div>
+            <button class="btn-close" onclick="fecharModalCadastro()">&times;</button>
+        </header>
+
+        <section class="modal-body">
+            <!-- IDENTIFICAÇÃO -->
+            <p class="form-section-label">Identificação</p>
+            <div class="input-row-fazenda">
+                <div class="input-group-f">
+                    <label>Nome da Fazenda <span class="req">*</span></label>
+                    <input type="text" id="fzNome" placeholder="Ex: Fazenda São João" maxlength="150">
+                </div>
+            </div>
+            <div class="input-row-fazenda cols-2" style="margin-top:12px;">
+                <div class="input-group-f">
+                    <label>Nome do Proprietário</label>
+                    <input type="text" id="fzProprietario" readonly placeholder="—">
+                </div>
+                <div class="input-group-f">
+                    <label>CNPJ / CPF</label>
+                    <input type="text" id="fzCpf" readonly placeholder="—">
+                </div>
+            </div>
+
+            <!-- CARACTERÍSTICAS -->
+            <p class="form-section-label" style="margin-top:20px;">Características</p>
+            <div class="input-row-fazenda cols-3">
+                <div class="input-group-f">
+                    <label>Tipo de Criação <span class="req">*</span></label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-leaf"></i>
+                        <select id="fzTipoCriacao">
+                            <option value="">Selecione...</option>
+                            <option value="Bovinos">Bovinos</option>
+                            <option value="Ovinos">Ovinos</option>
+                            <option value="Caprinos">Caprinos</option>
+                            <option value="Misto">Misto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group-f">
+                    <label>Área (hectares)</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-ruler-combined"></i>
+                        <input type="number" id="fzArea" placeholder="0" min="0" step="0.01">
+                    </div>
+                </div>
+                <div class="input-group-f">
+                    <label>Telefone</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="text" id="fzTelefone" placeholder="(00) 00000-0000" maxlength="20">
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOCALIZAÇÃO -->
+            <p class="form-section-label" style="margin-top:20px;">
+                <i class="fa-solid fa-location-dot" style="margin-right:4px;"></i>Localização
+            </p>
+            <div class="input-row-fazenda cols-2">
+                <div class="input-group-f">
+                    <label>CEP</label>
+                    <input type="text" id="fzCep" placeholder="00000-000" maxlength="10">
+                </div>
+                <div class="input-group-f">
+                    <label>Endereço / Localidade</label>
+                    <input type="text" id="fzEndereco" placeholder="Zona rural, estrada, km..." maxlength="200">
+                </div>
+            </div>
+            <div class="input-row-fazenda cols-2" style="margin-top:12px;">
+                <div class="input-group-f">
+                    <label>Cidade</label>
+                    <input type="text" id="fzCidade" placeholder="Crateús" maxlength="100">
+                </div>
+                <div class="input-group-f">
+                    <label>Estado</label>
+                    <select id="fzEstado">
+                        <option value="">Selecione...</option>
+                        <option value="AC">AC</option><option value="AL">AL</option>
+                        <option value="AP">AP</option><option value="AM">AM</option>
+                        <option value="BA">BA</option><option value="CE">CE</option>
+                        <option value="DF">DF</option><option value="ES">ES</option>
+                        <option value="GO">GO</option><option value="MA">MA</option>
+                        <option value="MT">MT</option><option value="MS">MS</option>
+                        <option value="MG">MG</option><option value="PA">PA</option>
+                        <option value="PB">PB</option><option value="PR">PR</option>
+                        <option value="PE">PE</option><option value="PI">PI</option>
+                        <option value="RJ">RJ</option><option value="RN">RN</option>
+                        <option value="RS">RS</option><option value="RO">RO</option>
+                        <option value="RR">RR</option><option value="SC">SC</option>
+                        <option value="SP">SP</option><option value="SE">SE</option>
+                        <option value="TO">TO</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- DESCRIÇÃO -->
+            <div class="input-group-f" style="margin-top:16px;">
+                <label>Descrição / Observações</label>
+                <textarea id="fzDescricao" placeholder="Informações adicionais sobre a fazenda..." rows="3"></textarea>
+            </div>
+        </section>
+
+        <div class="modal-footer-actions">
+            <button class="btn-cancel" onclick="fecharModalCadastro()">Cancelar</button>
+            <button class="btn-submit-pri" id="btnSalvarFazenda" onclick="salvarFazenda()">
+                <i class="fa-solid fa-tractor"></i> Cadastrar Fazenda
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts base -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Backend / infraestrutura (mesma ordem usada em gestao-animais.html) -->
+<script src="../backend/database.js"></script>
+<script src="../backend/auth.js"></script>
+
+<!-- Sistema de Fazendas (necessário para filtrar animais por fazenda) -->
+<script src="../backend/fazenda.js"></script>
+<script src="../backend/fazenda-ui.js"></script>
+
+<!-- Página -->
+<script src="../backend/registrar_inseminacao.js"></script>
+
+<script src="../backend/navbar-loader.js"></script>
+
+<!-- Navbar + logout (a navbar é injetada por este script, por isso o HTML não contém mais a sidebar) -->
+<script src="../backend/navbar-script.js"></script>
+<script src="../backend/logout.js"></script>
+<script src="../backend/chatbot-floating.js"></script>
+</body>
+</html>

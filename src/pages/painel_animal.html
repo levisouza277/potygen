@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potygen - Painel do Animal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style/chatbot-floating.css">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f5f7fb; margin: 0; }
+
+        /* ---- HEADER PÁGINA (sem navbar) ---- */
+        .page-header {
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 16px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 16px; flex-wrap: wrap;
+        }
+        .btn-back {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #f1f5f9; color: #475569;
+            padding: 9px 16px; border-radius: 10px;
+            font-weight: 700; font-size: 14px;
+            text-decoration: none; border: none; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-back:hover { background: #e2e8f0; color: #0d8a4f; }
+        .page-title { font-size: 20px; font-weight: 800; color: #2b3674; margin: 0; }
+
+        /* ---- LAYOUT ---- */
+        .painel-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            padding: 24px;
+            max-width: 1400px; margin: 0 auto;
+        }
+        @media(max-width: 900px){ .painel-grid { grid-template-columns: 1fr; } }
+
+        .dash-card {
+            background: #fff; border-radius: 16px; padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 15px; font-weight: 800; color: #2b3674;
+            margin: 0 0 16px 0;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .avatar-animal {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, #e6f7ef, #d1fae5);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 36px; color: #0d8a4f;
+            margin: 0 auto 16px;
+        }
+        .animal-nome { font-size: 22px; font-weight: 800; color: #2b3674; text-align: center; margin: 0 0 4px; }
+        .animal-brinco { font-size: 14px; color: #94a3b8; text-align: center; margin: 0 0 16px; }
+        .tag-status { display: inline-block; padding: 5px 14px; border-radius: 30px; font-size: 13px; font-weight: 700; }
+        .tag-inseminada   { background:#fef9c3; color:#ca8a04; }
+        .tag-prenhe       { background:#ede9fe; color:#7c3aed; }
+        .tag-vazia        { background:#f1f5f9; color:#475569; }
+        .tag-parto        { background:#d1fae5; color:#059669; }
+        .tag-cio          { background:#fee2e2; color:#dc2626; }
+        .tag-alta_prenhez { background:#dbeafe; color:#1d4ed8; }
+        .tag-aborto       { background:#fee2e2; color:#b91c1c; }
+
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #f1f5f9; font-size: 14px; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #64748b; font-weight: 600; }
+        .info-valor { color: #2b3674; font-weight: 700; }
+
+        .acoes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-acao {
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            padding: 14px 8px; border: none; border-radius: 12px;
+            font-family: inherit; font-weight: 700; font-size: 12px;
+            cursor: pointer; transition: all 0.2s; text-align: center;
+        }
+        .btn-acao i { font-size: 18px; }
+        .btn-acao:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-acao-azul     { background:#dbeafe; color:#1d4ed8; }
+        .btn-acao-roxo     { background:#ede9fe; color:#7c3aed; }
+        .btn-acao-amarelo  { background:#fef9c3; color:#ca8a04; }
+        .btn-acao-vermelho { background:#fee2e2; color:#dc2626; }
+        .btn-acao-cinza    { background:#f1f5f9; color:#475569; }
+
+        /* Calendário */
+        .cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .cal-nav-btn { background: #f1f5f9; border: none; color: #475569; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; }
+        .cal-nav-btn:hover { background: #0d8a4f; color: #fff; }
+        .cal-mes-label { font-weight: 800; color: #2b3674; }
+        .calendario-grade { width: 100%; border-collapse: collapse; }
+        .calendario-grade th { text-align: center; font-weight: 700; color: #a3aed0; font-size: 12px; padding-bottom: 8px; text-transform: uppercase; }
+        .calendario-grade td { width: 14.28%; padding: 3px; vertical-align: top; }
+        .dia-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; min-height: 50px; padding: 4px; display: flex; flex-direction: column; gap: 4px; }
+        .dia-card.hoje { border: 2px solid #0d8a4f; background: #f0fdf4; }
+        .dia-num { font-weight: 700; color: #475569; font-size: 13px; }
+        .dia-vazio { min-height: 50px; }
+        .bolinhas { display: flex; flex-wrap: wrap; gap: 2px; }
+        .ponto-evento { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+        .ponto-ins { background: #0d8a4f; }
+        .ponto-cio { background: #dc2626; }
+        .ponto-ultrassom { background: #2563eb; }
+        .ponto-parto { background: #ca8a04; }
+        .ponto-aborto { background: #b91c1c; }
+        .legenda-cal { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; font-size: 12px; color: #64748b; }
+        .legenda-item { display: flex; align-items: center; gap: 6px; }
+
+        /* Timeline */
+        .timeline { list-style: none; padding: 0; margin: 0; }
+        .timeline li { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px dashed #f1f5f9; }
+        .timeline li:last-child { border-bottom: none; }
+        .tl-icone { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .tl-ins { background: #d1fae5; color: #0d8a4f; }
+        .tl-ultra { background: #dbeafe; color: #2563eb; }
+        .tl-parto { background: #fef9c3; color: #ca8a04; }
+        .tl-aborto { background: #fee2e2; color: #b91c1c; }
+        .tl-label { font-weight: 700; color: #2b3674; font-size: 14px; }
+        .tl-sub { color: #64748b; font-size: 12px; margin-top: 2px; }
+
+        .tabs { display: flex; gap: 4px; margin-bottom: 16px; background: #f1f5f9; padding: 4px; border-radius: 10px; }
+        .tab-btn { flex: 1; padding: 8px; border: none; border-radius: 8px; background: transparent; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 13px; color: #64748b; }
+        .tab-btn.ativo { background: #fff; color: #0d8a4f; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+        .tab-content { display: none; }
+        .tab-content.ativo { display: block; }
+        .empty-state { text-align: center; color: #94a3b8; padding: 30px 0; font-size: 14px; }
+        .empty-state i { font-size: 28px; display: block; margin-bottom: 8px; }
+
+        /* Modais */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.aberto { display: flex; }
+        .modal-box { background: #fff; border-radius: 16px; padding: 24px; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .modal-titulo { font-weight: 800; color: #2b3674; font-size: 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-weight: 700; color: #475569; font-size: 13px; margin-bottom: 6px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 9px; font-family: inherit; font-size: 14px; outline: none; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #0d8a4f; }
+        .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
+        .btn-primary { background: #0d8a4f; color: #fff; border: none; padding: 9px 18px; border-radius: 9px; font-weight: 700; cursor: pointer; font-size: 14px; }
+        .btn-primary:hover { background: #0a6b3d; }
+        .btn-secondary { background: #f1f5f9; color: #475569; border: none; padding: 9px 18px; border-radius: 9px; font-weight: 600; cursor: pointer; font-size: 14px; }
+
+        .toast { position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 600; z-index: 99999; box-shadow: 0 8px 24px rgba(0,0,0,0.2); transform: translateY(80px); opacity: 0; transition: all 0.3s ease; }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.7); z-index: 9998; display: none; align-items: center; justify-content: center; }
+        .loading-overlay.ativo { display: flex; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #0d8a4f; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .fazenda-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #f0fdf4; color: #0d8a4f;
+            padding: 6px 12px; border-radius: 20px;
+            font-size: 13px; font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+<div class="toast" id="toast"></div>
+
+<header class="page-header">
+    <a href="agenda-reprodutiva.html" class="btn-back" id="btnVoltarAgenda">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Voltar para Agenda Reprodutiva
+    </a>
+    <h1 class="page-title" id="pageTitulo">Painel do Animal</h1>
+    <span class="fazenda-badge" id="fazendaBadge">
+        <i class="fa-solid fa-tractor"></i> <span id="fazendaBadgeNome">—</span>
+    </span>
+</header>
+
+<div class="painel-grid">
+    <!-- COLUNA ESQUERDA -->
+    <div>
+        <div class="dash-card" style="text-align:center;">
+            <div class="avatar-animal" id="avatarAnimal"><i class="fa-solid fa-cow"></i></div>
+            <h2 class="animal-nome" id="animalNome">Carregando...</h2>
+            <p class="animal-brinco" id="animalBrinco">Brinco: —</p>
+            <div style="margin-bottom:16px;">
+                <span class="tag-status tag-vazia" id="animalStatusTag">—</span>
+            </div>
+            <hr style="border:none;border-top:1px solid #f1f5f9;margin:0 0 16px;">
+            <div id="infoBasica"></div>
+        </div>
+
+        <div class="dash-card">
+            <div class="section-title"><i class="fa-solid fa-bolt" style="color:#0d8a4f;"></i> Ações Rápidas</div>
+            <div class="acoes-grid">
+                <button class="btn-acao btn-acao-azul" onclick="abrirModal('modalUltrassom')"><i class="fa-solid fa-stethoscope"></i> Agendar Ultrassom</button>
+                <button class="btn-acao btn-acao-roxo" onclick="abrirModal('modalEditarCio')"><i class="fa-solid fa-calendar-pen"></i> Editar Cio</button>
+                <button class="btn-acao btn-acao-amarelo" onclick="abrirModal('modalEditarParto')"><i class="fa-solid fa-baby"></i> Editar Parto</button>
+                <button class="btn-acao btn-acao-vermelho" onclick="abrirModal('modalRegistrarAborto')"><i class="fa-solid fa-triangle-exclamation"></i> Registrar Aborto</button>
+                <button class="btn-acao btn-acao-cinza" style="grid-column:1/-1;" onclick="abrirModal('modalRegistrarNascimento')"><i class="fa-solid fa-star"></i> Registrar Nascimento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COLUNA DIREITA -->
+    <div>
+        <div class="dash-card">
+            <div class="cal-nav">
+                <button class="cal-nav-btn" id="btnMesAnt"><i class="fa-solid fa-chevron-left"></i></button>
+                <span class="cal-mes-label" id="calMesLabel">—</span>
+                <button class="cal-nav-btn" id="btnMesProx"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="calendario-grade">
+                    <thead><tr><th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th></tr></thead>
+                    <tbody id="corpoCalendario"></tbody>
+                </table>
+            </div>
+            <div class="legenda-cal">
+                <div class="legenda-item"><span class="ponto-evento ponto-ins"></span> Inseminação</div>
+                <div class="legenda-item"><span class="ponto-evento ponto-cio"></span> Cio</div>
+                <div class="legenda-item"><span class="ponto-evento ponto-ultrassom"></span> Ultrassom</div>
+                <div class="legenda-item"><span class="ponto-evento ponto-parto"></span> Parto</div>
+                <div class="legenda-item"><span class="ponto-evento ponto-aborto"></span> Aborto</div>
+            </div>
+        </div>
+
+        <div class="dash-card">
+            <div class="section-title"><i class="fa-solid fa-clock-rotate-left" style="color:#0d8a4f;"></i> Histórico Reprodutivo</div>
+            <div class="tabs">
+                <button class="tab-btn ativo" onclick="mudarTab('inseminacoes')">Inseminações</button>
+                <button class="tab-btn" onclick="mudarTab('ultrassons')">Ultrassons</button>
+                <button class="tab-btn" onclick="mudarTab('partos')">Partos</button>
+                <button class="tab-btn" onclick="mudarTab('abortos')">Abortos</button>
+            </div>
+            <div id="tabInseminacoes" class="tab-content ativo"><ul class="timeline" id="listaInseminacoes"></ul></div>
+            <div id="tabUltrassons" class="tab-content"><ul class="timeline" id="listaUltrassons"></ul></div>
+            <div id="tabPartos" class="tab-content"><ul class="timeline" id="listaPartos"></ul></div>
+            <div id="tabAbortos" class="tab-content"><ul class="timeline" id="listaAbortos"></ul></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAIS -->
+<div class="modal-overlay" id="modalUltrassom"><div class="modal-box">
+    <div class="modal-titulo"><i class="fa-solid fa-stethoscope" style="color:#2563eb;"></i> Agendar / Registrar Ultrassom</div>
+    <div class="form-group"><label>Data do Ultrassom</label><input type="date" id="ultraData"></div>
+    <div class="form-group"><label>Resultado (opcional)</label>
+        <select id="ultraResultado">
+            <option value="">Ainda não realizado</option>
+            <option value="prenhe">Prenhe ✅</option>
+            <option value="vazia">Vazia ❌</option>
+        </select>
+    </div>
+    <div class="modal-btns">
+        <button class="btn-secondary" onclick="fecharModal('modalUltrassom')">Cancelar</button>
+        <button class="btn-primary" id="btnSalvarUltrassom">Salvar</button>
+    </div>
+</div></div>
+
+<div class="modal-overlay" id="modalEditarCio"><div class="modal-box">
+    <div class="modal-titulo"><i class="fa-solid fa-calendar-pen" style="color:#7c3aed;"></i> Editar Data do Cio</div>
+    <div class="form-group"><label>Data Prevista do Cio</label><input type="date" id="cioPrevisto"></div>
+    <div class="form-group"><label>Data Real do Cio (se ocorreu)</label><input type="date" id="cioReal"></div>
+    <div class="modal-btns">
+        <button class="btn-secondary" onclick="fecharModal('modalEditarCio')">Cancelar</button>
+        <button class="btn-primary" id="btnSalvarCio">Salvar Cio</button>
+    </div>
+</div></div>
+
+<div class="modal-overlay" id="modalEditarParto"><div class="modal-box">
+    <div class="modal-titulo"><i class="fa-solid fa-baby" style="color:#059669;"></i> Editar Parto</div>
+    <div class="form-group"><label>Data Prevista do Parto</label><input type="date" id="partoPrevisto"></div>
+    <div class="form-group"><label>Data Real do Parto</label><input type="date" id="partoReal"></div>
+    <div class="form-group"><label>Observações</label><textarea id="partoObs" placeholder="Ex: parto normal..."></textarea></div>
+    <div class="modal-btns">
+        <button class="btn-secondary" onclick="fecharModal('modalEditarParto')">Cancelar</button>
+        <button class="btn-primary" id="btnSalvarParto">Salvar Parto</button>
+    </div>
+</div></div>
+
+<div class="modal-overlay" id="modalRegistrarAborto"><div class="modal-box">
+    <div class="modal-titulo"><i class="fa-solid fa-triangle-exclamation" style="color:#dc2626;"></i> Registrar Aborto</div>
+    <div class="form-group"><label>Data do Aborto</label><input type="date" id="abortoData"></div>
+    <div class="form-group"><label>Possível causa</label><input type="text" id="abortoCausa" placeholder="Ex: estresse térmico..."></div>
+    <div class="form-group"><label>Reprodutor (opcional)</label><input type="text" id="abortoReprodutor" placeholder="Nome / código do reprodutor"></div>
+    <div class="form-group"><label>Observações</label><textarea id="abortoObs"></textarea></div>
+    <div class="modal-btns">
+        <button class="btn-secondary" onclick="fecharModal('modalRegistrarAborto')">Cancelar</button>
+        <button class="btn-primary" id="btnSalvarAborto">Registrar Aborto</button>
+    </div>
+</div></div>
+
+<div class="modal-overlay" id="modalRegistrarNascimento"><div class="modal-box">
+    <div class="modal-titulo"><i class="fa-solid fa-star" style="color:#d97706;"></i> Registrar Nascimento</div>
+    <div class="form-group"><label>Data do Nascimento</label><input type="date" id="nascData"></div>
+    <div class="form-group"><label>Número de crias nascidas</label><input type="number" id="nascQtd" min="1" value="1"></div>
+    <div class="form-group"><label>Sexo das crias</label>
+        <select id="nascSexo">
+            <option value="">—</option>
+            <option value="Macho">Macho</option>
+            <option value="Fêmea">Fêmea</option>
+            <option value="Misto">Misto</option>
+        </select>
+    </div>
+    <div class="form-group"><label>Raça (opcional)</label><input type="text" id="nascRaca"></div>
+    <div class="form-group"><label>Observações</label><textarea id="nascObs"></textarea></div>
+    <div class="modal-btns">
+        <button class="btn-secondary" onclick="fecharModal('modalRegistrarNascimento')">Cancelar</button>
+        <button class="btn-primary" id="btnSalvarNascimento">Registrar Nascimento</button>
+    </div>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../backend/database.js"></script>
+<script src="../backend/auth.js"></script>
+<script src="../backend/fazenda.js"></script>
+<script src="../backend/fazenda-ui.js"></script>
+<script src="../backend/painel_animal.js"></script>
+<script src="../backend/chatbot-floating.js"></script>
+</body>
+</html>

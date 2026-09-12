@@ -1,0 +1,502 @@
+/* ==========================================================================
+   POTYGEN — DESIGN SYSTEM v3.1 "TERRA PRO"
+   navbar-style.css · Tokens, shell, sidebar, top bar, modais, formulários
+   + correções de responsividade global e overflow lateral
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700;8..60,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+
+/* ── DESIGN TOKENS ───────────────────────────────────────────────────────── */
+:root {
+    /* Forest greens */
+    --forest-950: #04231a;
+    --forest-900: #062f23;
+    --forest-800: #0a4d2e;
+    --forest-700: #0f6839;
+    --forest-600: #168047;
+    --forest-500: #21a35a;
+    --forest-300: #7ed4a3;
+    --forest-100: #d8f0e2;
+    --forest-50:  #eef9f3;
+
+    --lime-500: #84cc16;
+    --lime-300: #bef264;
+
+    --cream-50:  #faf8f3;
+    --cream-100: #f3efe6;
+    --cream-200: #e8e1d2;
+    --sand-300:  #c9bfa8;
+
+    --ink-900: #0f1f17;
+    --ink-700: #2b3a32;
+    --ink-500: #586a60;
+    --ink-300: #94a298;
+    --ink-200: #b8c2bb;
+
+    --surface:       #ffffff;
+    --bg:            var(--cream-50);
+    --border:        #eae4d6;
+    --border-strong: #d8d0bd;
+
+    --red-500:   #dc2626;  --red-50:    #fef2f2;
+    --amber-500: #d97706;  --amber-50:  #fffaeb;
+    --blue-500:  #2563eb;  --blue-50:   #eff6ff;
+    --plum-500:  #7c3aed;  --plum-50:   #f5f0ff;
+
+    --shadow-xs:    0 1px 2px rgba(15, 31, 23, 0.04);
+    --shadow-sm:    0 2px 6px rgba(15, 31, 23, 0.05), 0 1px 2px rgba(15, 31, 23, 0.04);
+    --shadow-md:    0 8px 24px -8px rgba(15, 31, 23, 0.10), 0 2px 6px rgba(15, 31, 23, 0.04);
+    --shadow-lg:    0 24px 60px -16px rgba(15, 31, 23, 0.18), 0 6px 16px rgba(15, 31, 23, 0.06);
+    --shadow-forest: 0 12px 32px -10px rgba(10, 77, 46, 0.35);
+
+    --r-xs: 6px;  --r-sm: 10px;  --r: 14px;
+    --r-lg: 20px; --r-xl: 28px;  --r-2xl: 36px;
+
+    --sidebar-w:     280px;
+    --sidebar-w-sm:  248px;
+    --topbar-h:      72px;
+
+    --ease:     cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur:      0.32s;
+    --dur-fast: 0.18s;
+
+    /* TIPOGRAFIA FORMAL: Source Serif 4 (institucional) + Inter (UI) */
+    --font-sans:    'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-display: 'Source Serif 4', 'Georgia', serif;
+    --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+    --grad-forest: linear-gradient(135deg, var(--forest-800) 0%, var(--forest-600) 100%);
+    --grad-lime:   linear-gradient(135deg, var(--forest-700) 0%, var(--lime-500) 100%);
+    --grad-cream:  linear-gradient(180deg, #ffffff 0%, var(--cream-50) 100%);
+}
+
+/* ── RESET + GLOBAL OVERFLOW LOCK ────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;          /* mata scroll lateral em qualquer página */
+}
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    background-image:
+        radial-gradient(at 12% 6%, rgba(33, 163, 90, 0.06) 0px, transparent 50%),
+        radial-gradient(at 95% 92%, rgba(132, 204, 22, 0.05) 0px, transparent 55%);
+    background-attachment: fixed;
+    color: var(--ink-700);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+}
+/* No mobile/tablet trava scroll de fundo enquanto drawer está aberto */
+body.nav-locked,
+body.nav-open,
+body:has(.potygen-sidebar.nav-open),
+body:has(.potygen-sidebar.open),
+body:has(.potygen-sidebar.active),
+body:has(.potygen-sidebar.is-open) { overflow: hidden; }
+
+/* ── DESKTOP: empurra a página em vez de sobrepor ────────────────────────── */
+@media (min-width: 1025px) {
+    /* libera scroll vertical no desktop quando o menu está aberto */
+    body.nav-locked,
+    body.nav-open,
+    body:has(.potygen-sidebar.nav-open),
+    body:has(.potygen-sidebar.open),
+    body:has(.potygen-sidebar.active),
+    body:has(.potygen-sidebar.is-open) { overflow: auto; }
+
+    /* PUSH: empurra o conteúdo para o lado, sem barra horizontal.            */
+    /* Cobre várias convenções de classe que o JS possa estar usando.         */
+    body.nav-locked .app-container,
+    body.nav-open .app-container,
+    body:has(.potygen-sidebar.nav-open) .app-container,
+    body:has(.potygen-sidebar.open) .app-container,
+    body:has(.potygen-sidebar.active) .app-container,
+    body:has(.potygen-sidebar.is-open) .app-container {
+        padding-left: var(--sidebar-w);
+    }
+
+    /* Esconde overlay no desktop quando empurrando */
+    body.nav-locked .nav-overlay,
+    body.nav-open .nav-overlay,
+    body:has(.potygen-sidebar.nav-open) .nav-overlay,
+    body:has(.potygen-sidebar.open) .nav-overlay,
+    body:has(.potygen-sidebar.active) .nav-overlay,
+    body:has(.potygen-sidebar.is-open) .nav-overlay {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none;
+    }
+}
+
+img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
+
+::selection { background: var(--forest-100); color: var(--forest-900); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--cream-200); border-radius: 10px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-thumb:hover { background: var(--sand-300); }
+
+/* ── APP SHELL ───────────────────────────────────────────────────────────── */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
+    overflow-x: hidden;
+    transition: padding-left var(--dur) var(--ease);
+}
+
+/* ── HAMBURGER ───────────────────────────────────────────────────────────── */
+.nav-menu-toggle {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    width: 44px;
+    height: 44px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    color: var(--forest-800);
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    z-index: 1200;
+    transition: all var(--dur-fast) var(--ease);
+}
+.nav-menu-toggle:hover {
+    background: var(--forest-800);
+    color: var(--cream-50);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-forest);
+}
+
+/* ── OVERLAY (sempre por trás da sidebar) ────────────────────────────────── */
+.nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 35, 26, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--dur) var(--ease), visibility var(--dur) var(--ease);
+}
+.nav-overlay.visible { opacity: 1; visibility: visible; }
+
+/* ── SIDEBAR (drawer em todas as resoluções) ─────────────────────────────── */
+.potygen-sidebar {
+    width: var(--sidebar-w);
+    max-width: 88vw;             /* nunca passa da viewport no mobile */
+    background: linear-gradient(180deg, #ffffff 0%, var(--cream-50) 100%);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 26px 18px 22px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    height: 100dvh;              /* respeita barra de endereço mobile */
+    transform: translateX(-105%);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+    z-index: 1150;
+    overflow-y: auto;
+    overflow-x: hidden;
+    will-change: transform;
+}
+.potygen-sidebar.nav-open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-lg);
+}
+
+.nav-logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 10px 22px;
+    margin-bottom: 8px;
+    border-bottom: 1px dashed var(--border);
+    position: relative;
+}
+.nav-logo-wrap::after {
+    content: 'AGRO · GENÉTICA';
+    position: absolute;
+    bottom: 6px;
+    right: 12px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--forest-600);
+    opacity: 0.75;
+}
+.nav-logo { width: 140px; max-width: 100%; height: auto; object-fit: contain; flex-shrink: 0; }
+
+.potygen-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    padding-top: 14px;
+}
+.potygen-nav::before {
+    content: 'Navegação';
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-300);
+    padding: 4px 14px 14px;
+}
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: var(--r-sm);
+    text-decoration: none;
+    color: var(--ink-500);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1;
+    transition: all var(--dur-fast) var(--ease);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    position: relative;
+    outline: none;
+}
+.nav-item i { width: 22px; text-align: center; font-size: 15px; flex-shrink: 0; color: var(--ink-300); transition: color var(--dur-fast) var(--ease); }
+.nav-item span { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.005em; }
+.nav-item:hover { background: var(--cream-100); color: var(--forest-900); }
+.nav-item:hover i { color: var(--forest-700); }
+.nav-item.active { background: var(--grad-forest); color: #fff; font-weight: 600; box-shadow: var(--shadow-forest); }
+.nav-item.active i { color: var(--lime-300); }
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    right: 12px; top: 50%;
+    transform: translateY(-50%);
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--lime-300);
+    box-shadow: 0 0 8px var(--lime-500);
+}
+
+.nav-footer { padding-top: 14px; border-top: 1px solid var(--border); margin-top: 12px; }
+.logout-btn { color: var(--red-500) !important; }
+.logout-btn i { color: var(--red-500) !important; }
+.logout-btn:hover { background: var(--red-50) !important; color: var(--red-500) !important; }
+
+/* ── MAIN CONTENT ────────────────────────────────────────────────────────── */
+.main-content {
+    flex: 1;
+    min-width: 0;                /* impede que filhos grandes estourem o flex */
+    min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;          /* sem barra horizontal */
+    position: relative;
+}
+
+/* ── TOP BAR ─────────────────────────────────────────────────────────────── */
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px 0 78px;   /* 78px reserva espaço para o hamburger */
+    background: transparent;
+    min-height: var(--topbar-h);
+    gap: 16px;
+}
+
+/* ── MODALS ──────────────────────────────────────────────────────────────── */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 35, 26, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+    overflow-y: auto;
+}
+.modal-content {
+    background: var(--surface);
+    border-radius: var(--r-xl);
+    padding: 32px;
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 560px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    position: relative;
+    border: 1px solid var(--border);
+    animation: modalIn .32s var(--ease) both;
+}
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(16px) scale(.97); }
+    to   { opacity: 1; transform: none; }
+}
+.modal-large { max-width: 620px; }
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    gap: 16px;
+}
+.modal-header h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink-900);
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+}
+.modal-header p { font-size: 13px; color: var(--ink-500); margin-top: 4px; }
+
+.btn-close {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--cream-100);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 20px;
+    color: var(--ink-500);
+    cursor: pointer;
+    line-height: 1;
+    transition: all var(--dur-fast) var(--ease);
+    flex-shrink: 0;
+}
+.btn-close:hover { background: var(--red-50); color: var(--red-500); border-color: #fecaca; }
+
+.modal-footer-actions {
+    display: flex; justify-content: flex-end; gap: 12px;
+    margin-top: 26px; padding-top: 18px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+
+.btn-cancel {
+    padding: 11px 20px;
+    background: var(--cream-100);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-family: var(--font-sans);
+    font-size: 14px; font-weight: 600;
+    color: var(--ink-700);
+    cursor: pointer;
+    transition: all var(--dur-fast) var(--ease);
+}
+.btn-cancel:hover { background: var(--cream-200); border-color: var(--border-strong); }
+
+.btn-submit-pri {
+    padding: 11px 24px;
+    background: var(--grad-forest);
+    border: none;
+    border-radius: var(--r-sm);
+    font-family: var(--font-sans);
+    font-size: 14px; font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: all var(--dur-fast) var(--ease);
+    box-shadow: var(--shadow-forest);
+}
+.btn-submit-pri:hover { transform: translateY(-2px); box-shadow: 0 18px 36px -10px rgba(10, 77, 46, 0.45); }
+.btn-submit-pri:active { transform: translateY(0); }
+
+.form-section { margin-bottom: 20px; }
+.form-section:not(:first-child) { padding-top: 18px; border-top: 1px solid var(--border); }
+.form-section h3 {
+    font-family: var(--font-mono);
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--forest-700);
+    margin-bottom: 16px;
+}
+
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.input-row.three-cols { grid-template-columns: 1.2fr 1fr 1fr; }
+
+.input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.input-group label { font-size: 12.5px; font-weight: 600; color: var(--ink-700); }
+.input-group input,
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: 14px;
+    font-family: var(--font-sans);
+    color: var(--ink-900);
+    background: var(--surface);
+    outline: none;
+    transition: all var(--dur-fast) var(--ease);
+}
+.input-group input::placeholder,
+.input-group textarea::placeholder { color: var(--ink-300); }
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+    border-color: var(--forest-700);
+    box-shadow: 0 0 0 4px rgba(15, 104, 57, 0.12);
+}
+.input-group textarea { resize: vertical; min-height: 86px; line-height: 1.5; }
+
+/* ── ACCESSIBILITY ───────────────────────────────────────────────────────── */
+.nav-menu-toggle:focus-visible,
+.nav-item:focus-visible,
+.btn-submit-pri:focus-visible,
+.btn-cancel:focus-visible,
+.btn-close:focus-visible {
+    outline: 2px solid var(--forest-700);
+    outline-offset: 3px;
+}
+
+/* ── RESPONSIVO ──────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .top-bar { padding: 18px 20px 0 74px; }
+    .modal-content { padding: 26px 20px; }
+}
+@media (max-width: 768px) {
+    :root { --topbar-h: 64px; }
+    .top-bar { padding: 16px 16px 0 70px; }
+    .input-row, .input-row.three-cols { grid-template-columns: 1fr; }
+    .modal-content { padding: 22px 16px; border-radius: var(--r-lg); }
+    .modal-header h2 { font-size: 19px; }
+    .modal-footer-actions { justify-content: stretch; }
+    .modal-footer-actions .btn-cancel,
+    .modal-footer-actions .btn-submit-pri { flex: 1; text-align: center; justify-content: center; }
+}
+@media (max-width: 480px) {
+    .potygen-sidebar { width: 86vw; padding: 22px 14px 18px; }
+    .nav-menu-toggle { top: 14px; left: 14px; width: 42px; height: 42px; }
+    .top-bar { padding: 14px 14px 0 66px; }
+}

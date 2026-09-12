@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potygen | Gestão de Animais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style/navbar-style.css">
+    <link rel="stylesheet" href="../style/style-gestao.css">
+    <link rel="stylesheet" href="../style/fazenda-modal.css">
+    <link rel="stylesheet" href="../style/chatbot-floating.css">
+</head>
+<body>
+
+<div class="app-container">
+    <!-- NAVBAR CARREGADA DINAMICAMENTE -->
+    
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content" id="mainContent">
+        <header class="content-header">
+            <div class="header-text">
+                
+                <h1>Gestão de Animais</h1>
+                <p>
+                    Cadastro e monitoramento do rebanho
+                    <span id="headerFazendaBadge" class="header-fazenda-badge" onclick="abrirModalTrocarFazenda()" title="Clique para trocar a fazenda">
+                        <i class="fa-solid fa-tractor"></i>
+                        <span>Carregando...</span>
+                    </span>
+                </p>
+            </div>
+            <button class="btn-primary" id="btnNovoAnimal">
+                <i class="fa-solid fa-plus"></i> Cadastrar Animal
+            </button>
+        </header>
+
+        <div class="toolbar-premium">
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Pesquisar identificação ou lote..." id="busca">
+            </div>
+            <div class="filter-group">
+                <div class="custom-dropdown" id="especieDropdown">
+                    <button class="dropdown-btn" id="dropdownBtn">
+                        <i class="fa-solid fa-filter"></i>
+                        <span id="selectedEspecie">Todas as Espécies</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <div class="dropdown-item selected" data-value="todas">Todas as Espécies</div>
+                        <div class="dropdown-item" data-value="Bovino">Bovinos</div>
+                        <div class="dropdown-item" data-value="Ovino">Ovinos</div>
+                        <div class="dropdown-item" data-value="Caprino">Caprinos</div>
+                    </div>
+                </div>
+                
+                <button class="btn-ordenar" id="btnOrdenar">
+                    <i class="fa-solid fa-arrow-down-wide-short"></i> Ordenar
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="animais-table">
+                <thead>
+                    <tr>
+                        <th>ANIMAL</th>
+                        <th>RAÇA / ESPÉCIE</th>
+                        <th>IDADE</th>
+                        <th>PESO ATUAL</th>
+                        <th>SEXO</th>
+                        <th>FINALIDADE</th>
+                        <th>LOTE</th>
+                        <th>PELAGEM</th>
+                        <th>STATUS</th>
+                        <th style="text-align: right;">AÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaAnimais">
+                    <!-- Dados serão inseridos via JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<!-- MODAL CADASTRO COMPLETO COM CAMPOS DINÂMICOS -->
+<div id="modalForm" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <h2 id="modalTitle">Cadastrar Novo Animal</h2>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="section-title">Identificação</div>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label class="required-field">Código de Identificação</label>
+                    <input type="text" id="formCodigo" placeholder="Ex: BR001234">
+                </div>
+                <div class="input-group">
+                    <label>Nome</label>
+                    <input type="text" id="formNome" placeholder="Nome do animal (opcional)">
+                </div>
+            </div>
+
+            <div class="section-title">Características Genéticas</div>
+            <div class="form-grid">
+                <div class="input-group">
+    <label class="required-field">Espécie</label>
+    <select id="formEspecie" onchange="toggleCamposPorSexo()">
+        <option value="">Selecione...</option>
+        <option>Bovino</option>
+        <option>Ovino</option>
+        <option>Caprino</option>
+    </select>
+</div>
+                <div class="input-group">
+                 <label class="required-field">Raça</label>
+                 <div class="raca-busca-container">
+                      <input type="text" id="buscaRaca" 
+                      placeholder="Digite para buscar raça..."
+                      autocomplete="off"
+                      oninput="filtrarListaRacas(this.value)"
+                    onfocus="mostrarTodasRacas()">
+        <div id="listaRacasResultados" class="lista-racas-dropdown"></div>
+    </div>
+    <input type="hidden" id="formRaca" value="">
+    <div class="help-text">Digite para filtrar - Clique na raça para selecionar</div>
+</div>
+                <div class="input-group">
+                    <label class="required-field">Grau de Sangue</label>
+                    <select id="formGrauSangue">
+                        <option value="">Selecione...</option>
+                        <option>Puro de Origem (PO)</option>
+                        <option>Puro por Cruza (PC)</option>
+                        <option>Cruzamento F1</option>
+                        <option>3/4 (Três Quartos)</option>
+                        <option>5/8</option>
+                        <option>7/8</option>
+                        <option>15/16</option>
+                        <option>SRD (Sem Raça Definida)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Pelagem</label>
+                    <input type="text" id="formPelagem" placeholder="Ex: Branca, Preta, Malhada">
+                </div>
+            </div>
+
+            <div class="section-title">Dados de Nascimento</div>
+            <div class="form-grid grid-3">
+                <div class="input-group">
+                 <label class="required-field">Data de Nascimento</label>
+                 <input type="date" id="formDataNascimento" onchange="calcularIdadeAnimal()" oninput="calcularIdadeAnimal()">
+                 <div id="idadeAnimalPreview" class="help-text" style="color: #0d8a4f; margin-top: 8px;"></div>
+                </div>
+                <div class="input-group">
+                    <label>Peso ao Nascer (kg)</label>
+                    <input type="number" id="formPesoNascer" step="0.1" placeholder="0.0">
+                </div>
+                <div class="input-group">
+                    <label>Peso Atual (kg)</label>
+                    <input type="number" id="formPesoAtual" step="0.1" placeholder="0.0">
+                </div>
+            </div>
+
+            <div class="section-title">Classificação</div>
+            <div class="form-grid">
+                <div class="input-group">
+    <label class="required-field">Sexo</label>
+    <select id="formSexo" onchange="toggleCamposPorSexo()">
+        <option value="">Selecione...</option>
+        <option value="Macho">Macho</option>
+        <option value="Fêmea">Fêmea</option>
+    </select>
+            </div>
+                <div class="input-group">
+                 <label>Finalidade</label>
+                 <select id="formFinalidade">
+                   <option value="">Selecione uma espécie primeiro</option>
+                </select>
+              </div>
+                <div class="input-group">
+                    <label>Lote</label>
+                    <input type="text" id="formLote" placeholder="Ex: Lote A, Pasto 1">
+                </div>
+            </div>
+
+            <!-- CAMPOS DINÂMICOS PARA FÊMEA -->
+         <div id="camposFemea" style="display: none;">
+    <div class="dynamic-fields">
+        <div class="section-title">Dados Reprodutivos da Fêmea</div>
+        
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Categoria Reprodutiva</label>
+                <select id="formCategoriaFemea" onchange="toggleCamposNascimentosPorCategoria()">
+                    <option value="">Selecione...</option>
+                    <option value="nulipara">Nulípara (Novilha/Borrega)</option>
+                    <option value="primipara">Primípara (1ª cria)</option>
+                    <option value="multipara">Multípara</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Escore de Condição Corporal (ECC)</label>
+                <select id="formECC">
+                    <option value="">Selecione...</option>
+                    <option value="1.0">1.0 - Muito Magra</option>
+                    <option value="1.5">1.5</option>
+                    <option value="2.0">2.0 - Magra</option>
+                    <option value="2.5">2.5</option>
+                    <option value="3.0">3.0 - Ideal</option>
+                    <option value="3.25">3.25 - Ideal</option>
+                    <option value="3.5">3.5 - Ideal</option>
+                    <option value="3.75">3.75 - Ideal</option>
+                    <option value="4.0">4.0 - Gorda</option>
+                    <option value="4.5">4.5</option>
+                    <option value="5.0">5.0 - Obesa</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-grid">
+            <div class="input-group datalist-input">
+                <label>Identificação da Mãe</label>
+                <input type="text" id="formMae" list="listaMatrizes" placeholder="Código ou nome da mãe (opcional)">
+                <datalist id="listaMatrizes"></datalist>
+                <div class="help-text">Deixe em branco se for comprada de fora</div>
+            </div>
+            <div class="input-group datalist-input">
+                <label>Identificação do Pai</label>
+                <input type="text" id="formPai" list="listaReprodutores" placeholder="Código ou nome do pai (opcional)">
+                <datalist id="listaReprodutores"></datalist>
+                <div class="help-text">Deixe em branco se não souber ou for sêmen de central</div>
+            </div>
+        </div>
+        
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Histórico de Aborto</label>
+                <select id="formHistoricoAborto">
+                    <option value="nao">Não</option>
+                    <option value="sim">Sim</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Quantidade de Crias</label>
+                <input type="number" id="formQtdNascimentos" min="0" max="10000" value="0" step="1" oninput="gerarCamposNascimentos()">
+                <div class="help-text">Digite quantas crias este animal já teve</div>
+            </div>
+        </div>
+
+        <div id="listaNascimentosContainer"></div>
+
+        <div id="subCamposAborto" style="display: none;" class="sub-block">
+            <h4><i class="fa-solid fa-exclamation-triangle" style="color: #dc3545;"></i> Registro de Abortos</h4>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Quantidade de Abortos</label>
+                    <input type="number" id="formQtdAbortos" min="0" value="0" step="1">
+                </div>
+            </div>
+            <div id="listaAbortosContainer"></div>
+        </div>
+        
+        <div class="section-title" style="margin-top: 15px;">Histórico de Doenças</div>
+        <div id="listaDoencasContainer"></div>   
+    </div>
+</div> <div id="camposMacho" style="display: none;"> <div class="dynamic-fields">
+        <div class="section-title">Dados Reprodutivos do Macho</div>
+        
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Tipo de Reprodutor</label>
+                <select id="formTipoMacho">
+                    <option value="">Selecione...</option>
+                    <option value="ativo">Reprodutor Ativo (Touro/Bode/Carneiro)</option>
+                    <option value="rufiao">Rufião (Macho modificado)</option>
+                    <option value="castrado">Castrado (Não reprodutor)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Exame Andrológico em Dia</label>
+                <select id="formExameAndrologico">
+                    <option value="">Selecione...</option>
+                    <option value="sim">Sim - Apto para reprodução</option>
+                    <option value="nao">Não ou Vencido</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- PAI E MÃE DO MACHO (Genealogia) -->
+        <div class="form-grid">
+            <div class="input-group datalist-input">
+                <label>Identificação da Mãe</label>
+                <input type="text" id="formMaeMacho" list="listaMatrizes" placeholder="Código ou nome da mãe (opcional)">
+                <datalist id="listaMatrizesMacho"></datalist>
+                <div class="help-text">Deixe em branco se for comprado de fora</div>
+            </div>
+            <div class="input-group datalist-input">
+                <label>Identificação do Pai</label>
+                <input type="text" id="formPaiMacho" list="listaReprodutores" placeholder="Código ou nome do pai (opcional)">
+                <datalist id="listaReprodutoresMacho"></datalist>
+                <div class="help-text">Deixe em branco se não souber ou for sêmen de central</div>
+            </div>
+        </div>
+
+        <!-- Descendência / Crias do Macho -->
+        <div class="section-title" style="margin-top: 15px;">Descendência / Crias</div>
+        
+        <div class="form-grid">
+            <div class="input-group">
+                <label>Quantidade de Crias/Descendentes</label>
+                <input type="number" id="formQtdCriasMacho" min="0" max="500" value="0" step="1" oninput="buscarCriasPorPai()">
+                <div class="help-text">Digite ou será preenchido automaticamente se o pai for conhecido</div>
+            </div>
+        </div>
+
+        <!-- Lista de crias do macho -->
+        <div id="listaCriasMachoContainer" style="margin-top: 15px;"></div>
+
+        <!-- Histórico de Doenças para Macho -->
+        <div class="section-title" style="margin-top: 15px;">Histórico de Doenças</div>
+        <div id="listaDoencasContainerMacho"></div>
+    </div>
+</div>
+
+            <div class="input-group">
+                <label>Observações</label>
+                <textarea id="formObs" rows="3" placeholder="Informações adicionais sobre o animal..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary btn-close-modal">Cancelar</button>
+            <button class="btn-save-main" id="btnSalvar">Cadastrar Animal</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL VISUALIZAR -->
+<div id="modalVisualizar" class="modal">
+    <div class="modal-content wide">
+        <div class="modal-header">
+            <h2>Detalhes do Animal</h2>
+            <span class="close" style="cursor:pointer;font-size:22px;">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="detail-cards">
+                <div class="d-card green"><span>Sexo</span><strong id="viewStatus">-</strong></div>
+                <div class="d-card blue"><span>Peso Atual</span><strong id="viewPeso">-</strong></div>
+                <div class="d-card purple"><span>Idade</span><strong id="viewIdade">-</strong></div>
+            </div>
+
+            <div class="info-block">
+                <p class="block-title"><i class="fa-solid fa-circle-info"></i> Informações Básicas</p>
+                <div class="info-grid">
+                    <div><label>Código</label><p id="viewCodigo">-</p></div>
+                    <div><label>Nome</label><p id="viewNome">-</p></div>
+                    <div><label>Espécie</label><p id="viewEspecie">-</p></div>
+                    <div><label>Raça</label><p id="viewRaca">-</p></div>
+                    <div><label>Pelagem</label><p id="viewPelagem">-</p></div>
+                    <div><label>Lote</label><p id="viewLote">-</p></div>
+                    <div><label>Finalidade</label><p id="viewFinalidade">-</p></div>
+                    <div><label>Grau de Sangue</label><p id="viewGrauSangue">-</p></div>
+                </div>
+            </div>
+
+            <div class="info-block" id="viewFemeaInfo" style="display:none;">
+                <p class="block-title"><i class="fa-solid fa-venus"></i> Dados Reprodutivos (Fêmea)</p>
+                <div class="info-grid">
+                    <div><label>Categoria</label><p id="viewCategoria">-</p></div>
+                    <div><label>ECC</label><p id="viewECC">-</p></div>
+                    <div><label>Qtd. de Crias</label><p id="viewQtdCrias">0</p></div>
+                    <div><label>Histórico de Aborto</label><p id="viewAborto">-</p></div>
+                    <div><label>Mãe</label><p id="viewMae">-</p></div>
+                    <div><label>Pai</label><p id="viewPai">-</p></div>
+                </div>
+                <div id="viewNascimentosContainer" style="display:none;margin-top:16px;">
+                    <p class="block-title"><i class="fa-solid fa-baby"></i> Nascimentos</p>
+                    <div id="viewListaNascimentos"></div>
+                </div>
+            </div>
+
+            <div class="info-block" id="viewMachoInfo" style="display:none;">
+                <p class="block-title"><i class="fa-solid fa-mars"></i> Dados Reprodutivos (Macho)</p>
+                <div class="info-grid">
+                    <div><label>Tipo de Reprodutor</label><p id="viewTipoMacho">-</p></div>
+                    <div><label>Exame Andrológico</label><p id="viewExameAndrologico">-</p></div>
+                    <div><label>ECC</label><p id="viewECCMacho">-</p></div>
+                    <div><label>Qtd. Descendentes</label><p id="viewQtdDescendentes">0</p></div>
+                    <div><label>Mãe</label><p id="viewMaeMacho">-</p></div>
+                    <div><label>Pai</label><p id="viewPaiMacho">-</p></div>
+                    <div><label>Laboratório</label><p id="viewLaboratorio">-</p></div>
+                </div>
+                <div id="viewDescendentesContainer" style="display:none;margin-top:16px;">
+                    <p class="block-title"><i class="fa-solid fa-dna"></i> Descendentes</p>
+                    <div id="viewListaDescendentes"></div>
+                </div>
+            </div>
+
+            <div class="info-block">
+                <p class="block-title"><i class="fa-solid fa-notes-medical"></i> Doenças Registradas</p>
+                <div id="viewListaDoencas"><p style="color:#64748b;">Nenhuma doença registrada</p></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary btn-close-modal">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPT PRINCIPAL COM LÓGICA DOS CAMPOS DINÂMICOS -->
+ <!-- ============================================================ -->
+<!-- MODAL: TROCAR FAZENDA                                        -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="modalTrocarFazenda" style="display:none;">
+    <div class="modal-content">
+        <header class="modal-header">
+            <div>
+                <h2>Suas Fazendas</h2>
+                <p>Selecione uma fazenda para gerenciar</p>
+            </div>
+            <button class="btn-close" onclick="fecharModal('modalTrocarFazenda')">&times;</button>
+        </header>
+        <section class="modal-body">
+            <div class="fazendas-lista" id="fazendasLista">
+                <div class="fazendas-lista-vazia">
+                    <i class="fa-solid fa-tractor" style="font-size:28px;margin-bottom:8px;opacity:0.3;display:block;"></i>
+                    Carregando fazendas...
+                </div>
+            </div>
+            <button class="btn-nova-fazenda-lista" onclick="abrirModalCadastrarFazenda()">
+                <i class="fa-solid fa-plus"></i> Cadastrar nova fazenda
+            </button>
+        </section>
+        <div class="modal-footer-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalTrocarFazenda')">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: CADASTRAR FAZENDA                                     -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="modalCadastrarFazenda" style="display:none;">
+    <div class="modal-content">
+        <header class="modal-header">
+            <div>
+                <h2><i class="fa-solid fa-tractor" style="color:#0d8a4f;margin-right:8px;"></i>Cadastrar Nova Fazenda</h2>
+                <p>Preencha os dados da propriedade</p>
+            </div>
+            <button class="btn-close" onclick="fecharModalCadastro()">&times;</button>
+        </header>
+
+        <section class="modal-body">
+            <!-- IDENTIFICAÇÃO -->
+            <p class="form-section-label">Identificação</p>
+            <div class="input-row-fazenda">
+                <div class="input-group-f">
+                    <label>Nome da Fazenda <span class="req">*</span></label>
+                    <input type="text" id="fzNome" placeholder="Ex: Fazenda São João" maxlength="150">
+                </div>
+            </div>
+            <div class="input-row-fazenda cols-2" style="margin-top:12px;">
+                <div class="input-group-f">
+                    <label>Nome do Proprietário</label>
+                    <input type="text" id="fzProprietario" readonly placeholder="—">
+                </div>
+                <div class="input-group-f">
+                    <label>CNPJ / CPF</label>
+                    <input type="text" id="fzCpf" readonly placeholder="—">
+                </div>
+            </div>
+
+            <!-- CARACTERÍSTICAS -->
+            <p class="form-section-label" style="margin-top:20px;">Características</p>
+            <div class="input-row-fazenda cols-3">
+                <div class="input-group-f">
+                    <label>Tipo de Criação <span class="req">*</span></label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-leaf"></i>
+                        <select id="fzTipoCriacao">
+                            <option value="">Selecione...</option>
+                            <option value="Bovinos">Bovinos</option>
+                            <option value="Ovinos">Ovinos</option>
+                            <option value="Caprinos">Caprinos</option>
+                            <option value="Misto">Misto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group-f">
+                    <label>Área (hectares)</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-ruler-combined"></i>
+                        <input type="number" id="fzArea" placeholder="0" min="0" step="0.01">
+                    </div>
+                </div>
+                <div class="input-group-f">
+                    <label>Telefone</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="text" id="fzTelefone" placeholder="(00) 00000-0000" maxlength="20">
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOCALIZAÇÃO -->
+            <p class="form-section-label" style="margin-top:20px;">
+                <i class="fa-solid fa-location-dot" style="margin-right:4px;"></i>Localização
+            </p>
+            <div class="input-row-fazenda cols-2">
+                <div class="input-group-f">
+                    <label>CEP</label>
+                    <input type="text" id="fzCep" placeholder="00000-000" maxlength="10">
+                </div>
+                <div class="input-group-f">
+                    <label>Endereço / Localidade</label>
+                    <input type="text" id="fzEndereco" placeholder="Zona rural, estrada, km..." maxlength="200">
+                </div>
+            </div>
+            <div class="input-row-fazenda cols-2" style="margin-top:12px;">
+                <div class="input-group-f">
+                    <label>Cidade</label>
+                    <input type="text" id="fzCidade" placeholder="Crateús" maxlength="100">
+                </div>
+                <div class="input-group-f">
+                    <label>Estado</label>
+                    <select id="fzEstado">
+                        <option value="">Selecione...</option>
+                        <option value="AC">AC</option><option value="AL">AL</option>
+                        <option value="AP">AP</option><option value="AM">AM</option>
+                        <option value="BA">BA</option><option value="CE">CE</option>
+                        <option value="DF">DF</option><option value="ES">ES</option>
+                        <option value="GO">GO</option><option value="MA">MA</option>
+                        <option value="MT">MT</option><option value="MS">MS</option>
+                        <option value="MG">MG</option><option value="PA">PA</option>
+                        <option value="PB">PB</option><option value="PR">PR</option>
+                        <option value="PE">PE</option><option value="PI">PI</option>
+                        <option value="RJ">RJ</option><option value="RN">RN</option>
+                        <option value="RS">RS</option><option value="RO">RO</option>
+                        <option value="RR">RR</option><option value="SC">SC</option>
+                        <option value="SP">SP</option><option value="SE">SE</option>
+                        <option value="TO">TO</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- DESCRIÇÃO -->
+            <div class="input-group-f" style="margin-top:16px;">
+                <label>Descrição / Observações</label>
+                <textarea id="fzDescricao" placeholder="Informações adicionais sobre a fazenda..." rows="3"></textarea>
+            </div>
+        </section>
+
+        <div class="modal-footer-actions">
+            <button class="btn-cancel" onclick="fecharModalCadastro()">Cancelar</button>
+            <button class="btn-submit-pri" id="btnSalvarFazenda" onclick="salvarFazenda()">
+                <i class="fa-solid fa-tractor"></i> Cadastrar Fazenda
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../backend/database.js"></script>
+<script src="../backend/auth.js"></script>
+<script src="../backend/fazenda.js"></script>
+<script src="../backend/fazenda-ui.js"></script>
+<script src="../backend/script-gestao.js"></script>
+<!-- Navbar Loading -->
+<script src="../backend/navbar-loader.js"></script>
+<!-- Navbar Script Global -->
+<script src="../backend/navbar-script.js"></script>
+<script src="../backend/logout.js"></script>
+<script src="../backend/chatbot-floating.js"></script>
+
+</body>
+</html>

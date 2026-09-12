@@ -1,0 +1,220 @@
+/* ==========================================================================
+   POTYGEN PRO - DESIGN SYSTEM "TERRA PRO"
+   Ficheiro: style-agenda.css (Tabelas e Cronogramas)
+   ========================================================================== */
+
+:root {
+    --green-accent: #00b34e;
+    --dark-blue-poty: #002144;
+    --alert-blue: #2f80ed;
+    --alert-orange: #f2994a;
+    --bg-light-gray: #f8f9fa;
+    --border-color: #e9edf7;
+    
+    /* Cores do ecossistema Potygen Pro */
+    --forest-700: #0f6839;
+    --forest-50:  #eef9f3;
+    --ink-900: #1b2559;
+    --ink-700: #475467;
+}
+
+/* ── 1. BARRA DE FILTROS E PESQUISA ──────────────────────────────────────── */
+.filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    background: #ffffff;
+    padding: 16px 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(112, 144, 176, 0.04);
+    border: 1px solid var(--border-color);
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    max-width: 450px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a3aed0;
+    font-size: 16px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 16px 12px 46px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--ink-900);
+    background-color: #f4f7fe;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: var(--forest-700);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(15, 104, 57, 0.1);
+}
+
+.btn-filter {
+    background: #ffffff;
+    color: var(--ink-700);
+    border: 1px solid var(--border-color);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-filter:hover {
+    background: #f4f7fe;
+    color: var(--ink-900);
+}
+
+/* ── 2. CARD DE CONTEÚDO E TABELA MODERNIZADA ────────────────────────────── */
+.content-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(112, 144, 176, 0.04);
+    border: 1px solid var(--border-color);
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.animals-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.animals-table th {
+    padding: 16px;
+    color: #a3aed0;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.animals-table td {
+    padding: 18px 16px;
+    color: var(--ink-700);
+    font-size: 14px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.animals-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Elementos internos da tabela */
+.badge-lote {
+    background: #f4f7fe;
+    color: var(--dark-blue-poty);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.btn-view-agenda {
+    background: var(--forest-50);
+    color: var(--forest-700);
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-view-agenda:hover {
+    background: var(--forest-700) !important;
+    color: #ffffff !important;
+}
+
+/* ── 3. TIMELINE E GRID (Mantidos para compatibilidade) ──────────────────── */
+.agenda-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
+}
+
+@media (max-width: 992px) {
+    .agenda-layout-grid { grid-template-columns: 1fr; }
+}
+
+.feed-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    text-align: center;
+    color: #999;
+}
+
+.feed-placeholder i { font-size: 48px; margin-bottom: 16px; color: #ccc; }
+.feed-placeholder p { font-size: 14px; line-height: 1.5; max-width: 320px; }
+.feed-timeline { display: flex; flex-direction: column; gap: 16px; margin-top: 15px; }
+
+.timeline-item {
+    display: flex;
+    gap: 16px;
+    background: var(--bg-light-gray);
+    border-left: 5px solid var(--green-accent);
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    transition: transform 0.2s ease;
+}
+
+.timeline-item:hover { transform: translateY(-2px); }
+.timeline-item.window-optimal { border-left-color: var(--green-accent); background-color: #e8f9f0; }
+.timeline-item.window-alert { border-left-color: var(--alert-orange); background-color: #fff9f3; }
+.timeline-item.window-info { border-left-color: var(--alert-blue); background-color: #f0f6ff; }
+
+.timeline-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    font-size: 16px;
+}
+
+.window-optimal .timeline-icon { color: var(--green-accent); }
+.window-alert .timeline-icon { color: var(--alert-orange); }
+.window-info .timeline-icon { color: var(--alert-blue); }
+
+.timeline-content { flex: 1; }
+.timeline-content h4 { font-size: 15px; font-weight: 700; color: var(--dark-blue-poty); margin-bottom: 4px; }
+.timeline-content p { font-size: 13px; color: #555; margin-bottom: 6px; line-height: 1.4; }
+.timeline-time-badge { display: inline-block; font-size: 11px; font-weight: 600; background: rgba(0,0,0,0.05); padding: 3px 8px; border-radius: 4px; color: #444; }

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potygen Pro | Agenda Reprodutiva</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style/navbar-style.css">
+    <link rel="stylesheet" href="../style/fazenda-modal.css">
+    <link rel="stylesheet" href="../style/chatbot-floating.css">
+    <style>
+        * { box-sizing: border-box; }
+
+        .calendario-card {
+            background: #ffffff; border-radius: 16px; padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 24px;
+        }
+        .calendario-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+        }
+        .text-navy { color: #2b3674; }
+        .calendario-controles { display: flex; align-items: center; gap: 8px; }
+        .btn-nav-mes {
+            background: #f1f5f9; border: none; color: #475569;
+            width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-nav-mes:hover { background: #e2e8f0; color: #0d8a4f; }
+        .select-data {
+            background: #f1f5f9; border: none; outline: none;
+            padding: 4px 12px; border-radius: 8px; font-weight: 700;
+            color: #475569; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .calendario-grade { width: 100%; border-collapse: collapse; }
+        .calendario-grade th {
+            text-align: center; font-weight: 700; color: #a3aed0;
+            font-size: 13px; padding-bottom: 12px; text-transform: uppercase;
+        }
+        .calendario-grade td { width: 14.28%; padding: 4px; vertical-align: top; }
+        .dia-card {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+            min-height: 60px; padding: 6px;
+            display: flex; flex-direction: column; gap: 4px;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .dia-card:hover { background: #edf2f7; border-color: #cbd5e1; transform: translateY(-1px); }
+        .dia-card.hoje { border: 2px solid #0d8a4f; background: #f0fdf4; }
+        .dia-card.hoje .dia-numero { color: #0d8a4f; font-weight: 800; }
+        .dia-numero { font-weight: 700; color: #475569; font-size: 14px; }
+        .dia-vazio { background: transparent !important; border: none !important; cursor: default !important; }
+        .bolinhas-dia { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 2px; }
+        .ponto-evento { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+        .ponto-ins       { background-color: #ffb800; }
+        .ponto-cio       { background-color: #e11d48; }
+        .ponto-ultrassom { background-color: #2f80ed; }
+        .ponto-prenhe    { background-color: #7c3aed; }
+        .ponto-parto     { background-color: #10b981; }
+        .ponto-aborto    { background-color: #64748b; }
+        .legenda-container {
+            display: flex; gap: 12px; justify-content: center;
+            margin-top: 15px; font-size: 12px; color: #64748b;
+            border-top: 1px solid #f1f5f9; padding-top: 12px; flex-wrap: wrap;
+        }
+        .legenda-item { display: flex; align-items: center; gap: 5px; }
+
+        /* NOVO CARD: INFORMAÇÕES DE CICLO E GESTAÇÃO */
+        .info-ciclos-card {
+            background: #ffffff; border-radius: 16px; padding: 20px 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 24px;
+        }
+        .info-ciclos-header {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 18px; border-bottom: 1px solid #edf2f7; padding-bottom: 12px;
+        }
+        .info-ciclos-header i {
+            font-size: 24px; color: #0d8a4f; background: #e8f5ef; padding: 10px;
+            border-radius: 14px;
+        }
+        .info-ciclos-header h3 {
+            margin: 0; font-size: 18px; font-weight: 800; color: #1e293b;
+        }
+        .grid-ciclos {
+            display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;
+        }
+        .card-especie {
+            flex: 1; min-width: 180px; background: #fefdf9;
+            border-radius: 20px; padding: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #f1f3f6;
+        }
+        .card-especie:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); background: #ffffff; }
+        .especie-icon {
+            font-size: 32px; margin-bottom: 12px; display: inline-block;
+        }
+        .card-especie h4 {
+            font-size: 20px; font-weight: 800; margin: 0 0 12px 0;
+            color: #2b3674; display: flex; align-items: center; gap: 8px;
+        }
+        .info-row {
+            display: flex; justify-content: space-between; align-items: baseline;
+            margin-bottom: 12px; font-size: 14px;
+        }
+        .info-label {
+            font-weight: 600; color: #64748b;
+        }
+        .info-value {
+            font-weight: 700; color: #1e293b; background: #f1f5f9;
+            padding: 4px 10px; border-radius: 40px;
+        }
+        .gestacao-value {
+            background: #e6f7ef; color: #0d8a4f;
+        }
+        @media (max-width: 700px) {
+            .grid-ciclos { flex-direction: column; }
+            .card-especie { width: 100%; }
+        }
+
+        /* Tabela */
+        .content-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .animals-table { width: 100%; border-collapse: collapse; }
+        .animals-table th { color: #a3aed0; font-size: 13px; text-align: left; padding: 10px 14px; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
+        .animals-table td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        .animals-table tr:hover td { background: #f8fafc; }
+        .badge-status { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .badge-Agendada          { background:#fef9c3; color:#ca8a04; }
+        .badge-Realizada         { background:#dbeafe; color:#1d4ed8; }
+        .badge-alta_prenhez      { background:#ede9fe; color:#7c3aed; }
+        .badge-prenhe            { background:#d1fae5; color:#059669; }
+        .badge-vazia             { background:#f1f5f9; color:#475569; }
+        .badge-parto             { background:#ccfbf1; color:#0f766e; }
+        .badge-cio               { background:#fee2e2; color:#dc2626; }
+        .badge-aborto            { background:#f1f5f9; color:#64748b; }
+        .btn-ver { background:#0d8a4f; color:#fff; padding:5px 10px; border-radius:7px; text-decoration:none; font-size:12px; font-weight:600; }
+        .btn-ver:hover { background:#0a6b3d; color:#fff; }
+        .filter-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
+        .search-box { display:flex; align-items:center; gap:8px; background:#fff; padding:7px 14px; border-radius:40px; border:1px solid #e2e8f0; }
+        .search-box input { border:none; outline:none; font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; width:200px; }
+
+        /* Modais */
+        .modal-overlay {
+            display:none; position:fixed; inset:0;
+            background:rgba(0,0,0,0.45); z-index:9999;
+            align-items:center; justify-content:center; padding:16px;
+        }
+        .modal-overlay.aberto { display:flex; }
+        .modal-box {
+            background:#fff; border-radius:16px; padding:28px;
+            max-width:520px; width:100%;
+            box-shadow:0 20px 60px rgba(0,0,0,0.2);
+            max-height:90vh; overflow-y:auto;
+        }
+        .modal-titulo { font-size:17px; font-weight:800; color:#2b3674; margin:0 0 18px 0; display:flex; align-items:center; gap:10px; }
+        .modal-form-group { margin-bottom:14px; }
+        .modal-form-group label { display:block; font-size:13px; font-weight:600; color:#475569; margin-bottom:5px; }
+        .modal-form-group input, .modal-form-group select, .modal-form-group textarea {
+            width:100%; padding:9px 12px; border:1px solid #cbd5e1; border-radius:8px;
+            font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; outline:none;
+        }
+        .modal-form-group input:focus, .modal-form-group select:focus { border-color:#0d8a4f; }
+        .modal-form-group textarea { resize:vertical; min-height:70px; }
+        .modal-btns { display:flex; gap:10px; justify-content:flex-end; margin-top:18px; flex-wrap:wrap; }
+        .btn-primary { background:#0d8a4f; color:#fff; border:none; padding:9px 18px; border-radius:9px; font-weight:700; cursor:pointer; font-size:14px; font-family:'Plus Jakarta Sans',sans-serif; }
+        .btn-primary:hover { background:#0a6b3d; }
+        .btn-secondary { background:#f1f5f9; color:#475569; border:none; padding:9px 18px; border-radius:9px; font-weight:600; cursor:pointer; font-size:14px; font-family:'Plus Jakarta Sans',sans-serif; }
+        .btn-danger { background:#fee2e2; color:#dc2626; border:none; padding:9px 18px; border-radius:9px; font-weight:600; cursor:pointer; font-size:14px; font-family:'Plus Jakarta Sans',sans-serif; }
+
+        .eventos-dia-lista { list-style:none; padding:0; margin:0; }
+        .eventos-dia-lista li {
+            padding:10px 12px; border-radius:10px; margin-bottom:8px; cursor:pointer;
+            display:flex; align-items:center; gap:10px;
+            border:1px solid #e2e8f0; transition:background 0.15s;
+        }
+        .eventos-dia-lista li:hover { background:#f8fafc; }
+        .ev-label { font-weight:600; font-size:14px; color:#2b3674; }
+        .ev-sub { font-size:12px; color:#64748b; }
+
+        .op-radio-group { display:flex; gap:10px; margin-top:6px; }
+        .op-radio-btn {
+            flex:1; padding:10px; border-radius:10px; border:2px solid #e2e8f0;
+            background:#f8fafc; text-align:center; cursor:pointer;
+            font-weight:600; font-size:14px; color:#475569;
+            font-family:'Plus Jakarta Sans',sans-serif; transition:all 0.15s;
+        }
+        .op-radio-btn:hover { border-color:#0d8a4f; color:#0d8a4f; }
+        .op-radio-btn.selecionado { border-color:#0d8a4f; background:#f0fdf4; color:#0d8a4f; }
+        .op-radio-btn.vermelho:hover { border-color:#e11d48; color:#e11d48; }
+        .op-radio-btn.vermelho.selecionado { border-color:#e11d48; background:#fff1f2; color:#e11d48; }
+
+        .alerta-cio {
+            background:#fef9c3; border:1px solid #fde047;
+            border-radius:10px; padding:12px; margin:12px 0;
+            font-size:13px; color:#854d0e;
+        }
+        .alerta-cio strong { display:block; margin-bottom:4px; }
+
+        /* Toast / Loading */
+        .toast {
+            position:fixed; bottom:24px; right:24px; background:#1e293b; color:#fff;
+            padding:12px 20px; border-radius:12px; font-size:14px; font-weight:600;
+            z-index:99999; box-shadow:0 8px 24px rgba(0,0,0,0.2);
+            transform:translateY(80px); opacity:0; transition:all 0.3s ease;
+            font-family:'Plus Jakarta Sans',sans-serif;
+        }
+        .toast.show { transform:translateY(0); opacity:1; }
+        .loading-overlay {
+            position:fixed; inset:0; background:rgba(255,255,255,0.7);
+            z-index:9998; display:none; align-items:center; justify-content:center;
+        }
+        .loading-overlay.ativo { display:flex; }
+        .spinner {
+            width:40px; height:40px; border:4px solid #e2e8f0;
+            border-top-color:#0d8a4f; border-radius:50%;
+            animation:spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .empty-row td { text-align:center; padding:40px; color:#94a3b8; font-size:14px; }
+    </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+<div class="toast" id="toast"></div>
+
+<div class="app-container">
+    <!-- ============================================ -->
+    <!-- NAVBAR CARREGADA DINAMICAMENTE -->
+    <!-- ============================================ -->
+    
+    <!-- ============================================ -->
+    <!-- CONTEÚDO PRINCIPAL -->
+    <!-- ============================================ -->
+    
+    <main class="main-content" id="mainContent">
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <div>
+                    <h1 class="top-bar-title">Agenda Reprodutiva</h1>
+                    <p class="top-bar-subtitle">Acompanhamento de ciclos reprodutivos</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- CALENDÁRIO -->
+        <div class="calendario-card">
+            <div class="calendario-header">
+                <h5 class="text-navy fw-bold" style="margin:0;font-size:18px;">
+                    <i class="fa-solid fa-calendar-days" style="color:#0d8a4f;margin-right:8px;"></i>
+                    Agenda Geral Coletiva
+                </h5>
+                <div class="calendario-controles">
+                    <button class="btn-nav-mes" id="btnMesAnterior"><i class="fa-solid fa-chevron-left"></i></button>
+                    <select id="selectMes" class="select-data">
+                        <option value="0">Janeiro</option><option value="1">Fevereiro</option>
+                        <option value="2">Março</option><option value="3">Abril</option>
+                        <option value="4">Maio</option><option value="5">Junho</option>
+                        <option value="6">Julho</option><option value="7">Agosto</option>
+                        <option value="8">Setembro</option><option value="9">Outubro</option>
+                        <option value="10">Novembro</option><option value="11">Dezembro</option>
+                    </select>
+                    <input type="number" id="selectAno" class="select-data" style="width:80px;text-align:center;" min="1900" max="2100">
+                    <button class="btn-nav-mes" id="btnMesProximo"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="calendario-grade">
+                    <thead>
+                        <tr><th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th></tr>
+                    </thead>
+                    <tbody id="corpoCalendarioGeral"></tbody>
+                </table>
+            </div>
+            <div class="legenda-container">
+                <div class="legenda-item"><span class="ponto-evento ponto-ins"></span> Inseminação</div>
+                <div class="legenda-item"><span class="ponto-evento ponto-cio"></span> Retorno ao Cio</div>
+                <div class="legenda-item"><span class="ponto-evento ponto-ultrassom"></span> Ultrassom</div>
+                <div class="legenda-item"><span class="ponto-evento ponto-prenhe"></span> Gestação Confirmada</div>
+                <div class="legenda-item"><span class="ponto-evento ponto-parto"></span> Parto Previsto</div>
+                <div class="legenda-item"><span class="ponto-evento ponto-aborto"></span> Aborto</div>
+            </div>
+        </div>
+
+        <!-- ===== NOVA SEÇÃO: INFORMAÇÕES DE CICLO E GESTAÇÃO (entre agenda e tabela) ===== -->
+        <div class="info-ciclos-card">
+            <div class="info-ciclos-header">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>Ciclos de Cio e Período de Gestação</h3>
+            </div>
+            <div class="grid-ciclos">
+                <!-- Bovina -->
+                <div class="card-especie">
+                    <div class="especie-icon">🐄</div>
+                    <h4>Vaca</h4>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fa-regular fa-clock"></i> Ciclo de cio:</span>
+                        <span class="info-value">18 – 24 dias</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fa-solid fa-baby"></i> Gestação média:</span>
+                        <span class="info-value gestacao-value">283 dias</span>
+                    </div>
+                </div>
+                <!-- Caprino -->
+                <div class="card-especie">
+                    <div class="especie-icon">🐐</div>
+                    <h4>Cabra</h4>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fa-regular fa-clock"></i> Ciclo de cio:</span>
+                        <span class="info-value">18 – 23 dias</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fa-solid fa-baby"></i> Gestação média:</span>
+                        <span class="info-value gestacao-value">150 dias</span>
+                    </div>
+                </div>
+                <!-- Ovino -->
+                <div class="card-especie">
+                    <div class="especie-icon">🐑</div>
+                    <h4>Ovelha</h4>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fa-regular fa-clock"></i> Ciclo de cio:</span>
+                        <span class="info-value">14 – 20 dias</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label"><i class="fa-solid fa-baby"></i> Gestação média:</span>
+                        <span class="info-value gestacao-value">147 dias</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- FIM DA NOVA SEÇÃO -->
+
+        <!-- TABELA -->
+        <div class="content-card">
+            <div class="filter-bar">
+                <h5 class="text-navy" style="margin:0;font-size:16px;font-weight:800;">
+                    <i class="fa-solid fa-list-check" style="color:#0d8a4f;margin-right:8px;"></i>
+                    Fêmeas em Acompanhamento
+                </h5>
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass" style="color:#a3aed0;"></i>
+                    <input type="text" id="inputBusca" placeholder="Buscar por nome ou código...">
+                </div>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="animals-table">
+                    <thead>
+                        <tr>
+                            <th>Código Fêmea</th>
+                            <th>Nome</th>
+                            <th>Espécie</th>
+                            <th>Data Inseminação</th>
+                            <th>Status Agenda</th>
+                            <th>Próximo Evento</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaAcompanhamento"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- ===== MODAL: EVENTOS DO DIA ===== -->
+<div class="modal-overlay" id="modalDia">
+    <div class="modal-box">
+        <div class="modal-titulo">
+            <i class="fa-solid fa-calendar-day" style="color:#0d8a4f;"></i>
+            <span id="modalDiaTitulo">Eventos do dia</span>
+        </div>
+        <ul class="eventos-dia-lista" id="listaEventosDia"></ul>
+        <div class="modal-btns">
+            <button class="btn-secondary" onclick="fecharModal('modalDia')">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: VERIFICAR CIO ===== -->
+<div class="modal-overlay" id="modalCio">
+    <div class="modal-box">
+        <div class="modal-titulo">
+            <i class="fa-solid fa-circle-exclamation" style="color:#e11d48;"></i>
+            <span>Verificação de Retorno ao Cio</span>
+        </div>
+        <p style="color:#475569;font-size:14px;margin:0 0 14px;" id="modalCioAnimal"></p>
+        <div class="modal-form-group">
+            <label>A fêmea apresentou cio?</label>
+            <div class="op-radio-group">
+                <div class="op-radio-btn vermelho" id="btnCioSim" onclick="selecionarOpcao('cio','sim')">
+                    <i class="fa-solid fa-check"></i> Sim
+                </div>
+                <div class="op-radio-btn" id="btnCioNao" onclick="selecionarOpcao('cio','nao')">
+                    <i class="fa-solid fa-times"></i> Não
+                </div>
+            </div>
+        </div>
+        <div class="alerta-cio">
+            <strong><i class="fa-solid fa-lightbulb"></i> Sinais de Cio:</strong>
+            Inquietação, monta outras fêmeas ou aceita ser montada, secreção mucosa transparente, vulva avermelhada e edematosa, queda na produção de leite.
+        </div>
+        <div id="blocoUltraCio" style="display:none;">
+            <div class="modal-form-group">
+                <label>Agendar ultrassom para (opcional)</label>
+                <input type="date" id="inputDataUltraCio">
+            </div>
+        </div>
+        <div class="modal-btns">
+            <button class="btn-secondary" onclick="fecharModal('modalCio')">Cancelar</button>
+            <button class="btn-primary" id="btnConfirmarCio">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: RESULTADO ULTRASSOM ===== -->
+<div class="modal-overlay" id="modalUltrassom">
+    <div class="modal-box">
+        <div class="modal-titulo">
+            <i class="fa-solid fa-stethoscope" style="color:#2f80ed;"></i>
+            <span>Resultado do Ultrassom</span>
+        </div>
+        <p style="color:#475569;font-size:14px;margin:0 0 14px;" id="modalUltraAnimal"></p>
+        <div class="modal-form-group">
+            <label>A fêmea está grávida?</label>
+            <div class="op-radio-group">
+                <div class="op-radio-btn" id="btnUltraSim" onclick="selecionarOpcao('ultra','sim')">
+                    <i class="fa-solid fa-check"></i> Sim
+                </div>
+                <div class="op-radio-btn vermelho" id="btnUltraNao" onclick="selecionarOpcao('ultra','nao')">
+                    <i class="fa-solid fa-times"></i> Não
+                </div>
+            </div>
+        </div>
+        <div class="modal-form-group">
+            <label>Data do Ultrassom</label>
+            <input type="date" id="inputDataUltrassom">
+        </div>
+        <div class="modal-btns">
+            <button class="btn-secondary" onclick="fecharModal('modalUltrassom')">Cancelar</button>
+            <button class="btn-primary" id="btnSalvarUltrassom">Salvar Resultado</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: AGENDAR ULTRASSOM ===== -->
+<div class="modal-overlay" id="modalAgendarUltrassom">
+    <div class="modal-box">
+        <div class="modal-titulo">
+            <i class="fa-solid fa-calendar-plus" style="color:#2f80ed;"></i>
+            <span>Agendar Ultrassom</span>
+        </div>
+        <p style="color:#475569;font-size:14px;margin:0 0 14px;" id="modalAgUltraAnimal"></p>
+        <div class="modal-form-group">
+            <label>Data do Ultrassom</label>
+            <input type="date" id="inputAgendaUltrassom">
+        </div>
+        <div class="modal-btns">
+            <button class="btn-secondary" onclick="fecharModal('modalAgendarUltrassom')">Cancelar</button>
+            <button class="btn-primary" id="btnConfirmarAgUltrassom">Confirmar Agendamento</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: REGISTRAR PARTO ===== -->
+<div class="modal-overlay" id="modalParto">
+    <div class="modal-box">
+        <div class="modal-titulo">
+            <i class="fa-solid fa-baby" style="color:#10b981;"></i>
+            <span>Registrar Parto</span>
+        </div>
+        <p style="color:#475569;font-size:14px;margin:0 0 14px;" id="modalPartoAnimal"></p>
+        <div class="modal-form-group">
+            <label>Data Real do Parto</label>
+            <input type="date" id="inputDataParto">
+        </div>
+        <div class="modal-form-group">
+            <label>Quantidade de Crias</label>
+            <input type="number" id="inputQtdCrias" min="1" value="1">
+        </div>
+        <div class="modal-form-group">
+            <label>Sexo das Crias</label>
+            <select id="selectSexoCrias">
+                <option value="macho">Macho(s)</option>
+                <option value="femea">Fêmea(s)</option>
+                <option value="misto">Misto</option>
+            </select>
+        </div>
+        <div class="modal-form-group">
+            <label>Observações</label>
+            <textarea id="inputObsParto" placeholder="Detalhes do parto..."></textarea>
+        </div>
+        <div class="modal-btns">
+            <button class="btn-secondary" onclick="fecharModal('modalParto')">Cancelar</button>
+            <button class="btn-primary" id="btnSalvarParto">Registrar Parto</button>
+        </div>
+    </div>
+</div>
+
+ <!-- ============================================================ -->
+<!-- MODAL: TROCAR FAZENDA                                        -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="modalTrocarFazenda" style="display:none;">
+    <div class="modal-content">
+        <header class="modal-header">
+            <div>
+                <h2>Suas Fazendas</h2>
+                <p>Selecione uma fazenda para gerenciar</p>
+            </div>
+            <button class="btn-close" onclick="fecharModal('modalTrocarFazenda')">&times;</button>
+        </header>
+        <section class="modal-body">
+            <div class="fazendas-lista" id="fazendasLista">
+                <div class="fazendas-lista-vazia">
+                    <i class="fa-solid fa-tractor" style="font-size:28px;margin-bottom:8px;opacity:0.3;display:block;"></i>
+                    Carregando fazendas...
+                </div>
+            </div>
+            <button class="btn-nova-fazenda-lista" onclick="abrirModalCadastrarFazenda()">
+                <i class="fa-solid fa-plus"></i> Cadastrar nova fazenda
+            </button>
+        </section>
+        <div class="modal-footer-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalTrocarFazenda')">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: CADASTRAR FAZENDA                                     -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="modalCadastrarFazenda" style="display:none;">
+    <div class="modal-content">
+        <header class="modal-header">
+            <div>
+                <h2><i class="fa-solid fa-tractor" style="color:#0d8a4f;margin-right:8px;"></i>Cadastrar Nova Fazenda</h2>
+                <p>Preencha os dados da propriedade</p>
+            </div>
+            <button class="btn-close" onclick="fecharModalCadastro()">&times;</button>
+        </header>
+
+        <section class="modal-body">
+            <!-- IDENTIFICAÇÃO -->
+            <p class="form-section-label">Identificação</p>
+            <div class="input-row-fazenda">
+                <div class="input-group-f">
+                    <label>Nome da Fazenda <span class="req">*</span></label>
+                    <input type="text" id="fzNome" placeholder="Ex: Fazenda São João" maxlength="150">
+                </div>
+            </div>
+            <div class="input-row-fazenda cols-2" style="margin-top:12px;">
+                <div class="input-group-f">
+                    <label>Nome do Proprietário</label>
+                    <input type="text" id="fzProprietario" readonly placeholder="—">
+                </div>
+                <div class="input-group-f">
+                    <label>CNPJ / CPF</label>
+                    <input type="text" id="fzCpf" readonly placeholder="—">
+                </div>
+            </div>
+
+            <!-- CARACTERÍSTICAS -->
+            <p class="form-section-label" style="margin-top:20px;">Características</p>
+            <div class="input-row-fazenda cols-3">
+                <div class="input-group-f">
+                    <label>Tipo de Criação <span class="req">*</span></label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-leaf"></i>
+                        <select id="fzTipoCriacao">
+                            <option value="">Selecione...</option>
+                            <option value="Bovinos">Bovinos</option>
+                            <option value="Ovinos">Ovinos</option>
+                            <option value="Caprinos">Caprinos</option>
+                            <option value="Misto">Misto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group-f">
+                    <label>Área (hectares)</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-ruler-combined"></i>
+                        <input type="number" id="fzArea" placeholder="0" min="0" step="0.01">
+                    </div>
+                </div>
+                <div class="input-group-f">
+                    <label>Telefone</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="text" id="fzTelefone" placeholder="(00) 00000-0000" maxlength="20">
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOCALIZAÇÃO -->
+            <p class="form-section-label" style="margin-top:20px;">
+                <i class="fa-solid fa-location-dot" style="margin-right:4px;"></i>Localização
+            </p>
+            <div class="input-row-fazenda cols-2">
+                <div class="input-group-f">
+                    <label>CEP</label>
+                    <input type="text" id="fzCep" placeholder="00000-000" maxlength="10">
+                </div>
+                <div class="input-group-f">
+                    <label>Endereço / Localidade</label>
+                    <input type="text" id="fzEndereco" placeholder="Zona rural, estrada, km..." maxlength="200">
+                </div>
+            </div>
+            <div class="input-row-fazenda cols-2" style="margin-top:12px;">
+                <div class="input-group-f">
+                    <label>Cidade</label>
+                    <input type="text" id="fzCidade" placeholder="Crateús" maxlength="100">
+                </div>
+                <div class="input-group-f">
+                    <label>Estado</label>
+                    <select id="fzEstado">
+                        <option value="">Selecione...</option>
+                        <option value="AC">AC</option><option value="AL">AL</option>
+                        <option value="AP">AP</option><option value="AM">AM</option>
+                        <option value="BA">BA</option><option value="CE">CE</option>
+                        <option value="DF">DF</option><option value="ES">ES</option>
+                        <option value="GO">GO</option><option value="MA">MA</option>
+                        <option value="MT">MT</option><option value="MS">MS</option>
+                        <option value="MG">MG</option><option value="PA">PA</option>
+                        <option value="PB">PB</option><option value="PR">PR</option>
+                        <option value="PE">PE</option><option value="PI">PI</option>
+                        <option value="RJ">RJ</option><option value="RN">RN</option>
+                        <option value="RS">RS</option><option value="RO">RO</option>
+                        <option value="RR">RR</option><option value="SC">SC</option>
+                        <option value="SP">SP</option><option value="SE">SE</option>
+                        <option value="TO">TO</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- DESCRIÇÃO -->
+            <div class="input-group-f" style="margin-top:16px;">
+                <label>Descrição / Observações</label>
+                <textarea id="fzDescricao" placeholder="Informações adicionais sobre a fazenda..." rows="3"></textarea>
+            </div>
+        </section>
+
+        <div class="modal-footer-actions">
+            <button class="btn-cancel" onclick="fecharModalCadastro()">Cancelar</button>
+            <button class="btn-submit-pri" id="btnSalvarFazenda" onclick="salvarFazenda()">
+                <i class="fa-solid fa-tractor"></i> Cadastrar Fazenda
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../backend/database.js"></script>
+<script src="../backend/auth.js"></script>
+<script src="../backend/fazenda.js"></script>
+<script src="../backend/fazenda-ui.js"></script>
+<script src="../backend/script-agenda.js"></script>
+<!-- Navbar Loading -->
+<script src="../backend/navbar-loader.js"></script>
+<script src="../backend/navbar-script.js"></script>
+<script src="../backend/logout.js"></script>
+<script src="../backend/chatbot-floating.js"></script>
+</body>
+</html>

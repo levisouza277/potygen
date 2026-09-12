@@ -1,0 +1,314 @@
+/* ==========================================================================
+   POTYGEN PRO - DESIGN SYSTEM "TERRA PRO" (v3.1)
+   Ficheiro: style_registrar.css (Manejo Reprodutivo e Inseminação)
+   ========================================================================== */
+
+:root {
+    /* Cores do ecossistema de alta fidelidade Potygen Pro */
+    --forest-950: #04231a;
+    --forest-900: #062f23;
+    --forest-800: #0a4d2e;
+    --forest-700: #0f6839;       /* Verde Potygen Principal */
+    --forest-500: #21a35a;       /* Verde Sucesso */
+    --forest-100: #d8f0e2;
+    --forest-50:  #eef9f3;       /* Fundo de Badges */
+    
+    --ink-900: #1b2559;          /* Azul Navy para Títulos */
+    --ink-700: #475467;          /* Cinza Corpo */
+    --ink-300: #a3aed0;          /* Cinza Secundário/Placeholders */
+    
+    --bg-main: #f4f7fe;          /* Fundo do Sistema */
+    --white: #ffffff;
+    --border-color: #e9edf7;
+    
+    --shadow-soft: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+    --shadow-glow: 0px 10px 25px rgba(15, 104, 57, 0.15);
+}
+
+/* ── 1. REESTRUTURAÇÃO DO LAYOUT & CABEÇALHO (MUDANÇA RADICAL) ───────────────── */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--ink-900);
+    min-height: 100vh;
+}
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    padding: 45px 40px;
+    background: var(--bg-main);
+    overflow-y: auto;
+    height: 100vh;
+}
+
+/* Transformação radical dos textos centralizados originais para alinhamento premium de Dashboard */
+.main-content h2.text-center {
+    text-align: left !important;
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    color: var(--ink-900) !important;
+    letter-spacing: -0.8px !important;
+    margin-bottom: 4px !important;
+    position: relative;
+}
+
+.main-content p.text-secondary.text-center {
+    text-align: left !important;
+    font-size: 15px !important;
+    color: var(--ink-700) !important;
+    margin-bottom: 35px !important;
+}
+
+/* Adiciona um detalhe decorativo acima do título usando a hierarquia do form */
+.main-content .container-fluid::before {
+    content: "MANEJO REPRODUTIVO OTIMIZADO";
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--forest-700);
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+}
+
+/* ── 2. CARDS DO FORMULÁRIO (EFEITO ULTRA FLUTUANTE) ────────────────────────── */
+.dash-card {
+    background: var(--white);
+    border-radius: 24px !important;
+    box-shadow: var(--shadow-soft) !important;
+    border: 1px solid rgba(233, 237, 247, 0.7) !important;
+    padding: 38px !important;
+    margin-bottom: 0px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dash-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 14px 24px 45px 10px rgba(112, 144, 176, 0.14) !important;
+}
+
+/* Borda vertical verde de destaque do Passo 1 */
+.border-start.border-success {
+    border-left: 6px solid var(--forest-700) !important;
+}
+
+/* Títulos internos dos passos (H5) */
+.dash-card h5 {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: var(--ink-900) !important;
+    letter-spacing: -0.3px;
+    margin-bottom: 28px !important;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--border-color);
+    display: flex;
+    align-items: center;
+}
+
+.dash-card h5 i {
+    color: var(--forest-700) !important;
+    margin-right: 10px !important;
+    font-size: 18px;
+}
+
+/* ── 3. FORMULÁRIOS PREMIUM & DESIGN DE ENTRADAS ────────────────────────── */
+.form-label {
+    color: var(--ink-900) !important;
+    font-weight: 700 !important;
+    font-size: 13.5px !important;
+    margin-bottom: 8px !important;
+    text-transform: none;
+    letter-spacing: -0.1px;
+}
+
+.form-control {
+    border: 1px solid var(--border-color) !important;
+    border-radius: 14px !important;
+    padding: 14px 18px !important;
+    font-size: 14.5px !important;
+    color: var(--ink-900) !important;
+    background-color: #f8fafc !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease-in-out !important;
+    box-shadow: none !important;
+}
+
+.form-control:focus {
+    border-color: var(--forest-700) !important;
+    background-color: var(--white) !important;
+    box-shadow: 0 0 0 4px rgba(15, 104, 57, 0.08) !important;
+}
+
+/* Inputs de Data e Hora refinados */
+.form-control[type="date"], .form-control[type="time"] {
+    color: var(--ink-900) !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+}
+
+.help-text {
+    font-size: 11px !important;
+    color: var(--ink-300) !important;
+    margin-top: 6px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.help-text::before {
+    content: "\f05a";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: var(--ink-300);
+}
+
+/* ── 4. DROPDOWNS DE BUSCA DE ANIMAIS (SAAS PREMIUM) ─────────────────────── */
+.busca-animal-container {
+    position: relative;
+}
+
+.lista-animais-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 16px !important;
+    max-height: 280px !important;
+    overflow-y: auto !important;
+    z-index: 1060 !important;
+    box-shadow: 0 12px 35px rgba(27, 37, 89, 0.12) !important;
+    padding: 6px !important;
+}
+
+.lista-animais-dropdown .animal-item {
+    padding: 12px 16px !important;
+    cursor: pointer !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--ink-900) !important;
+    transition: all 0.2s ease !important;
+    border-bottom: 1px solid rgba(233, 237, 247, 0.3) !important;
+}
+
+.lista-animais-dropdown .animal-item:last-child {
+    border-bottom: none !important;
+}
+
+.lista-animais-dropdown .animal-item:hover {
+    background-color: var(--forest-50) !important;
+    color: var(--forest-700) !important;
+    padding-left: 20px !important;
+}
+
+/* ── 5. CARDS DE FEEDBACK E VALIDAÇÃO DINÂMICA ────────────────────────────── */
+#containerFeedback, #containerFeedbackReprodutor {
+    background: #f8fafc !important;
+    border: 1px solid var(--border-color) !important;
+    border-left: 4px solid var(--ink-300) !important;
+    border-radius: 14px !important;
+    padding: 16px 20px !important;
+    margin-top: 8px !important;
+    margin-bottom: 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Estilização interna dos elementos de feedback */
+#containerFeedback small, #containerFeedbackReprodutor small {
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.6px !important;
+    color: var(--ink-700) !important;
+    font-weight: 700 !important;
+}
+
+#containerFeedback span, #containerFeedbackReprodutor span {
+    font-size: 13.5px !important;
+    color: var(--ink-700) !important;
+    display: block !important;
+    margin-top: 3px !important;
+}
+
+/* Seletor inteligente para simular estado ativo/preenchido caso o texto mude */
+#containerFeedback:not(:contains("Selecione")), 
+#containerFeedbackReprodutor:not(:contains("Selecione")) {
+    background: var(--forest-50) !important;
+    border-color: rgba(15, 104, 57, 0.15) !important;
+    border-left-color: var(--forest-700) !important;
+}
+
+/* ── 6. BOTÃO DE ENVIO HERO ACTION (MUDANÇA RADICAL) ────────────────────────── */
+.text-end.pt-3 {
+    text-align: left !important; /* Alinhamento fluido e integrado */
+    padding-top: 15px !important;
+}
+
+.btn-submit-pri {
+    background: var(--forest-700) !important;
+    color: var(--white) !important;
+    border: none !important;
+    border-radius: 16px !important;
+    padding: 16px 32px !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    letter-spacing: -0.1px !important;
+    box-shadow: var(--shadow-glow) !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-submit-pri::before {
+    content: "\f0c7";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.btn-submit-pri:hover {
+    background: var(--forest-800) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0px 12px 28px rgba(15, 104, 57, 0.25) !important;
+}
+
+.btn-submit-pri:active {
+    transform: translateY(0) !important;
+}
+
+/* ── 7. RESPONSIVIDADE MAXIMIZADA E CORREÇÕES DE TELA ───────────────────────── */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 90px 24px 30px 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content h2.text-center {
+        font-size: 26px !important;
+    }
+    
+    .dash-card {
+        padding: 26px 20px !important;
+    }
+    
+    .btn-submit-pri {
+        width: 100% !important;
+    }
+}

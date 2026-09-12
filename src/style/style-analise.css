@@ -1,0 +1,462 @@
+/* ==========================================================================
+   POTYGEN PRO - DESIGN SYSTEM "TERRA PRO" (v3.1)
+   Ficheiro: style-analise.css (Análise Genética & Predicional IA)
+   ========================================================================== */
+
+:root {
+    /* Cores do ecossistema de alta fidelidade Potygen Pro */
+    --forest-950: #04231a;
+    --forest-900: #062f23;
+    --forest-800: #0a4d2e;
+    --forest-700: #0f6839;       /* Verde Potygen Principal */
+    --forest-600: #168047;
+    --forest-500: #21a35a;       /* Verde Sucesso / Destaques */
+    --forest-300: #7ed4a3;
+    --forest-100: #d8f0e2;
+    --forest-50:  #eef9f3;       
+    
+    --ink-900: #1b2559;          /* Azul Navy para Títulos Executivos */
+    --ink-700: #475467;          /* Cinza para Texto de Corpo */
+    --ink-500: #687693;          /* Cinza Intermediário */
+    --ink-300: #a3aed0;          /* Cinza Secundário / Placeholders */
+    
+    --bg-main: #f4f7fe;          /* Fundo do Sistema */
+    --white: #ffffff;
+    --border-color: #e9edf7;
+    
+    /* Alertas Semânticos */
+    --alert-blue: #3b82f6;
+    --alert-orange: #f97316;
+    --alert-green: #10b981;
+    
+    /* Elevação e Efeitos */
+    --shadow-soft: 14px 17px 40px 4px rgba(112, 144, 176, 0.06);
+    --shadow-glow: 0px 10px 25px rgba(15, 104, 57, 0.15);
+}
+
+/* ── ESTRUTURA BASE DA VIEW ─────────────────────────────────────────────── */
+.main-content {
+    flex: 1;
+    padding: 32px;
+    background: var(--bg-main);
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar para Consistência UI */
+.main-content::-webkit-scrollbar {
+    width: 6px;
+}
+.main-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+.main-content::-webkit-scrollbar-thumb {
+    background: var(--ink-300);
+    border-radius: 10px;
+}
+
+/* Top Bar & Localização */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--ink-900);
+    letter-spacing: -0.5px;
+}
+
+.user-location-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--white);
+    padding: 10px 18px;
+    border-radius: 14px;
+    box-shadow: var(--shadow-soft);
+    color: var(--ink-900);
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid var(--border-color);
+}
+
+.user-location-badge i {
+    color: var(--forest-700);
+}
+
+/* ── GRID DE LAYOUT CORPORATIVO ─────────────────────────────────────────── */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.analysis-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 28px;
+}
+
+/* ── CARDS DO DESIGN SYSTEM ─────────────────────────────────────────────── */
+.card-analise {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-header-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 14px;
+}
+
+.card-header-title i {
+    font-size: 20px;
+    color: var(--forest-700);
+}
+
+.card-header-title h2 {
+    font-size: 18px;
+    color: var(--ink-900);
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+/* ── FORMULÁRIOS & CAMPOS DE ENTRADA ───────────────────────────────────── */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.input-group label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-900);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-group select {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    background-color: var(--white);
+    color: var(--ink-700);
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.01);
+}
+
+.input-group select:focus {
+    border-color: var(--forest-700);
+    box-shadow: 0 0 0 4px var(--forest-100);
+    color: var(--ink-900);
+}
+
+/* ── BOTÕES DE ALTA FIDELIDADE ─────────────────────────────────────────── */
+.btn-analisar {
+    width: 100%;
+    height: 52px;
+    background-color: var(--forest-700);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.25s ease;
+    margin-top: 12px;
+    box-shadow: 0px 4px 12px rgba(15, 104, 57, 0.15);
+}
+
+.btn-analisar:hover {
+    background-color: var(--forest-800);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+.btn-analisar:active {
+    transform: translateY(0);
+}
+
+/* ── BIOCLIMATOLOGIA REAL-TIME ─────────────────────────────────────────── */
+.weather-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.metric-box {
+    background: var(--bg-main);
+    padding: 18px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.metric-box:hover {
+    background: var(--white);
+    border-color: var(--forest-300);
+}
+
+.metric-label {
+    font-size: 12px;
+    color: var(--ink-500);
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.metric-value {
+    font-size: 26px;
+    color: var(--ink-900);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+/* Painel de ITU Premium */
+.itu-container {
+    background: var(--bg-main);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 18px;
+    border-left: 5px solid var(--ink-300);
+    border-top: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.itu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-900);
+    margin-bottom: 12px;
+}
+
+.itu-badge {
+    background: var(--ink-900);
+    color: var(--white);
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 12px;
+}
+
+.itu-status-text {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--ink-900);
+}
+
+.update-timestamp {
+    font-size: 12px;
+    color: var(--ink-500);
+    text-align: center;
+    margin-top: 12px;
+}
+
+/* ── CARD DE RESULTADOS DA MOTOR IA ────────────────────────────────────── */
+.result-card {
+    border-left: 6px solid var(--forest-500);
+    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.score-flex-container {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 24px;
+}
+
+.score-gauge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-main);
+    padding: 20px;
+    border-radius: 18px;
+    min-width: 140px;
+    border: 1px solid var(--border-color);
+}
+
+.score-number {
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--forest-700);
+    letter-spacing: -1px;
+}
+
+.score-label {
+    font-size: 11px;
+    color: var(--ink-500);
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 4px;
+    letter-spacing: 0.3px;
+}
+
+.progress-bar-wrapper {
+    flex: 1;
+}
+
+.barra-fundo {
+    width: 100%;
+    height: 16px;
+    background-color: var(--border-color);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.barra-preenchimento {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--forest-600), var(--forest-500));
+    border-radius: 20px;
+    transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Estilização da Nova Secção: Eficácia pela Finalidade */
+.eficacia-container {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px dashed var(--border-color);
+}
+
+.eficacia-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink-900);
+}
+
+.eficacia-header i {
+    color: var(--alert-blue);
+}
+
+#lblEficacia {
+    color: var(--alert-blue);
+}
+
+#lblBarraEficacia {
+    background: linear-gradient(90deg, var(--alert-blue), #60a5fa);
+}
+
+/* Caixa de Recomendação Zootécnica */
+.recomendacao-box {
+    display: flex;
+    gap: 18px;
+    background-color: var(--forest-50);
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid var(--forest-100);
+    line-height: 1.6;
+    align-items: center;
+}
+
+.rec-icon {
+    font-size: 24px;
+    color: var(--forest-700);
+    background: var(--white);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(15, 104, 57, 0.05);
+    flex-shrink: 0;
+}
+
+.recomendacao-texto {
+    font-size: 14px;
+    color: var(--forest-900);
+    font-weight: 600;
+}
+
+/* ── ANIMAÇÕES DO MOTOR PREDITIVO ──────────────────────────────────────── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── RESPONSIVIDADE E SUPORTE MÓVEL ────────────────────────────────────── */
+@media (max-width: 992px) {
+    .analysis-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 16px;
+        height: auto;
+    }
+    
+    .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .user-location-badge {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .score-flex-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+    
+    .score-gauge {
+        width: 100%;
+    }
+}

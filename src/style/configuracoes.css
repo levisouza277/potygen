@@ -1,0 +1,45 @@
+/* Transições suaves para mudança de tema */
+* {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+html.light { color-scheme: light; }
+html.light * { --tw-bg-opacity: 1; }
+.dark\:bg-gray-900 { background-color: #f3f4f6 !important; }
+.dark\:bg-gray-800 { background-color: #ffffff !important; }
+.dark\:text-gray-100 { color: #374151 !important; }
+.dark\:text-white { color: #1f2937 !important; }
+.dark\:text-gray-400 { color: #6b7280 !important; }
+.dark\:text-gray-300 { color: #4b5563 !important; }
+.dark\:bg-gray-750 { background-color: #f9fafb !important; }
+.dark\:border-gray-700 { border-color: #e5e7eb !important; }
+.dark\:bg-gray-800\/60 { background-color: #f3f4f6 !important; }
+.dark\:bg-emerald-900\/30 { background-color: #ecfdf5 !important; }
+
+.fazenda-modal-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    opacity: 0.3;
+    display: block;
+}
+
+.fazenda-title-icon {
+    color: #0d8a4f;
+    margin-right: 8px;
+}
+
+.fazenda-row-top {
+    margin-top: 12px;
+}
+
+.fazenda-section-top {
+    margin-top: 20px;
+}
+
+.fazenda-field-top {
+    margin-top: 16px;
+}
+
+.fazenda-icon-right {
+    margin-right: 4px;
+}

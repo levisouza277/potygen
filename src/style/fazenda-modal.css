@@ -1,0 +1,276 @@
+/* ==========================================================================
+   POTYGEN — FAZENDA-MODAL.CSS
+   Estilos dos modais do sistema de fazendas (Cadastrar / Trocar).
+   Inclua este arquivo em QUALQUER página que use os modais de fazenda:
+
+       <link rel="stylesheet" href="../style/fazenda-modal.css">
+
+   Depende apenas de Font Awesome para os ícones.
+   Também usado pelo modal de exclusão de conta (.pg-modal-*).
+   ========================================================================== */
+
+/* ===== Overlay e container ===== */
+.pg-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    display: none; align-items: center; justify-content: center;
+    z-index: 1000; padding: 16px;
+    isolation: isolate;
+}
+.pg-modal-overlay.aberto,
+.pg-modal-overlay.show,
+.pg-modal-overlay.active { display: flex; }
+
+.pg-modal {
+    background: #fff; border-radius: 18px;
+    width: 100%; max-width: 560px; max-height: 90vh;
+    overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    animation: pgModalIn .18s ease-out;
+}
+@keyframes pgModalIn {
+    from { transform: translateY(8px); opacity: 0; }
+    to   { transform: translateY(0);   opacity: 1; }
+}
+
+/* ===== Cabeçalho / corpo / rodapé ===== */
+.pg-modal-header {
+    padding: 20px 24px; border-bottom: 1px solid #e5e7eb;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.pg-modal-header h3 {
+    font-size: 1.1rem; font-weight: 700; color: #0f172a;
+    display: flex; align-items: center; gap: 10px;
+}
+.pg-modal-body   { padding: 20px 24px; }
+.pg-modal-footer {
+    padding: 16px 24px; border-top: 1px solid #e5e7eb;
+    display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
+}
+.pg-close-btn {
+    background: none; border: none; cursor: pointer;
+    color: #6b7280; font-size: 1.2rem;
+}
+
+/* ===== Form controls ===== */
+.pg-input, .pg-select {
+    width: 100%; padding: 10px 12px;
+    border: 1px solid #e5e7eb; border-radius: 10px;
+    font-size: .9rem; background: #f9fafb;
+}
+.pg-input:focus, .pg-select:focus {
+    outline: none; border-color: #00a859;
+    box-shadow: 0 0 0 3px rgba(0,168,89,.15); background: #fff;
+}
+.pg-label {
+    font-size: .75rem; font-weight: 600; color: #475569;
+    margin-bottom: 4px; display: block;
+}
+.pg-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (max-width: 540px) { .pg-grid-2 { grid-template-columns: 1fr; } }
+
+/* ===== Botões ===== */
+.pg-btn {
+    padding: 10px 18px; border-radius: 10px;
+    font-weight: 600; font-size: .875rem;
+    cursor: pointer; border: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all .15s;
+}
+.pg-btn-primary   { background: #00a859; color: #fff; }
+.pg-btn-primary:hover   { background: #008f4c; }
+.pg-btn-secondary { background: #f1f5f9; color: #334155; }
+.pg-btn-secondary:hover { background: #e2e8f0; }
+.pg-btn-danger    { background: #dc2626; color: #fff; }
+.pg-btn-danger:hover    { background: #b91c1c; }
+
+/* ===== Lista de fazendas (modal de troca) ===== */
+.fazendas-lista {
+    max-height: 360px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 8px;
+}
+.fazenda-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px; border: 2px solid #e5e7eb; border-radius: 12px;
+    cursor: pointer; transition: all .15s;
+}
+.fazenda-item:hover { border-color: #00a859; background: #f0fdf4; }
+.fazenda-item.ativa { border-color: #00a859; background: #ecfdf5; }
+.fazenda-item.ativa .fi-check { display: block; color: #00a859; }
+
+.fi-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: #ecfdf5; color: #00a859;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.fi-info  { flex: 1; min-width: 0; }
+.fi-nome  { font-weight: 600; color: #0f172a; font-size: .9rem; }
+.fi-sub   { font-size: .75rem; color: #64748b; }
+.fi-check { display: none; }
+
+.fazendas-lista-vazia {
+    text-align: center; padding: 32px 16px;
+    color: #94a3b8; font-size: .85rem;
+}
+
+/* Compatibilidade com classes usadas em outras páginas */
+.modal-backdrop, .pg-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    display: none; align-items: center; justify-content: center;
+    z-index: 1000; padding: 16px;
+    /* Removido backdrop-filter — causa stacking context que torna modal-content transparente */
+    isolation: isolate;
+}
+.modal-backdrop.open, .modal-backdrop.aberto, .pg-modal-overlay.aberto { display: flex; }
+
+.modal-content, .pg-modal {
+    background: #fff; border-radius: 18px;
+    width: 100%; max-width: 560px; max-height: 90vh;
+    overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    animation: pgModalIn .18s ease-out;
+}
+
+.modal-header, .pg-modal-header {
+    padding: 20px 24px; border-bottom: 1px solid #e5e7eb;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.modal-header h3, .modal-header h2, .pg-modal-header h3 {
+    font-size: 1.1rem; font-weight: 700; color: #0f172a;
+    display: flex; align-items: center; gap: 10px;
+}
+.modal-body, .pg-modal-body { padding: 20px 24px; }
+.modal-footer-actions, .pg-modal-footer {
+    padding: 16px 24px; border-top: 1px solid #e5e7eb;
+    display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
+}
+.btn-close, .pg-close-btn {
+    background: none; border: none; cursor: pointer;
+    color: #6b7280; font-size: 1.2rem;
+}
+
+/* Botões auxiliares presentes em páginas */
+.btn-nova-fazenda-lista { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px; border: 1px dashed #e5e7eb; background: #fff; cursor: pointer; }
+.btn-nova-fazenda-lista:hover { border-color: #00a859; background: #f0fdf4; }
+
+/* Regras específicas por ID para garantir prioridade quando necessário */
+#modalTrocarFazenda, #modalCadastrarFazenda {
+    position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+    background: rgba(15,23,42,0.85) !important; opacity: 1 !important;
+    z-index: 99999; padding: 16px;
+    /* Removido backdrop-filter para evitar stacking context transparente */
+    isolation: isolate;
+}
+
+#modalTrocarFazenda.modal-backdrop, #modalCadastrarFazenda.modal-backdrop {
+    background: rgba(15,23,42,0.95) !important;
+    z-index: 99999 !important;
+}
+
+#modalTrocarFazenda.show, #modalTrocarFazenda.active, #modalTrocarFazenda.aberto,
+#modalCadastrarFazenda.show, #modalCadastrarFazenda.active, #modalCadastrarFazenda.aberto {
+    display: flex !important;
+}
+
+#modalTrocarFazenda[style*="display: block"],
+#modalCadastrarFazenda[style*="display: block"] {
+    display: flex !important;
+}
+
+#modalTrocarFazenda .modal-content, #modalCadastrarFazenda .modal-content {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    opacity: 1 !important;
+    border-radius: 18px; width: 100%; max-width: 560px; max-height: 90vh;
+    overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+    isolation: isolate;
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== Estilos específicos do Modal de Cadastro (mantém escopo apenas para o ID) ===== */
+#modalCadastrarFazenda .modal-content {
+    background-color: #ffffff !important;
+    opacity: 1 !important;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    max-width: 650px;
+    width: 95%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    isolation: isolate;
+    position: relative;
+    z-index: 1;
+}
+
+#modalCadastrarFazenda .modal-header {
+    padding: 28px 32px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #f8f9fa;
+}
+
+#modalCadastrarFazenda .modal-header > div { display: flex; flex-direction: column; }
+
+#modalCadastrarFazenda .modal-header h2 { font-size: 24px; font-weight: 700; color: #1a1a1a; margin: 0 0 6px 0; }
+#modalCadastrarFazenda .modal-header p { font-size: 14px; color: #666; margin: 0; }
+
+#modalCadastrarFazenda .btn-close { background: none; border: none; font-size: 28px; color: #999; cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; }
+#modalCadastrarFazenda .btn-close:hover { color: #333; }
+
+#modalCadastrarFazenda .modal-body { flex: 1; overflow-y: auto; padding: 28px 32px; font-family: 'Segoe UI', sans-serif; }
+
+#modalCadastrarFazenda .form-section-label { font-size: 12px; font-weight: 700; color: #0d8a4f; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; margin-top: 20px; }
+#modalCadastrarFazenda .form-section-label:first-of-type { margin-top: 0; }
+
+#modalCadastrarFazenda .input-row-fazenda { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+#modalCadastrarFazenda .input-row-fazenda.cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 0; }
+#modalCadastrarFazenda .input-row-fazenda.cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 0; }
+
+#modalCadastrarFazenda .input-group-f { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+#modalCadastrarFazenda .input-group-f label { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 8px; }
+#modalCadastrarFazenda .req { color: #e74c3c; font-weight: 700; }
+
+#modalCadastrarFazenda .input-with-icon { display: flex; align-items: center; border: 1px solid #d4d4d4; border-radius: 10px; padding: 0 12px; height: 44px; background-color: #ffffff; transition: all 0.3s ease; }
+#modalCadastrarFazenda .input-with-icon:focus-within { border-color: #00b34e; box-shadow: 0 0 0 3px rgba(0, 179, 78, 0.1); background-color: #fafafa; }
+#modalCadastrarFazenda .input-with-icon i { color: #aaa; margin-right: 10px; font-size: 16px; flex-shrink: 0; }
+
+#modalCadastrarFazenda .input-group-f input, #modalCadastrarFazenda .input-group-f select, #modalCadastrarFazenda .input-group-f textarea {
+    border: 1px solid #d4d4d4; border-radius: 10px; padding: 11px 14px; font-size: 14px; color: #333; font-family: 'Segoe UI', sans-serif; transition: all 0.3s ease; background-color: #ffffff;
+}
+
+#modalCadastrarFazenda .input-with-icon input, #modalCadastrarFazenda .input-with-icon select { border: none; padding: 11px 0; background: transparent; }
+
+#modalCadastrarFazenda .input-group-f input:focus, #modalCadastrarFazenda .input-group-f select:focus, #modalCadastrarFazenda .input-group-f textarea:focus { outline: none; border-color: #00b34e; box-shadow: 0 0 0 3px rgba(0, 179, 78, 0.1); background-color: #fafafa; }
+#modalCadastrarFazenda .input-with-icon input:focus, #modalCadastrarFazenda .input-with-icon select:focus { box-shadow: none; background-color: transparent; }
+#modalCadastrarFazenda .input-group-f textarea { resize: vertical; min-height: 80px; font-family: 'Segoe UI', sans-serif; }
+
+#modalCadastrarFazenda .modal-footer-actions { padding: 20px 32px; border-top: 1px solid #e2e8f0; display: flex; gap: 12px; justify-content: flex-end; background-color: #f8f9fa; flex-shrink: 0; }
+
+#modalCadastrarFazenda .btn-cancel { padding: 11px 24px; border: 1px solid #d4d4d4; background-color: #f0f0f0; color: #333; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+#modalCadastrarFazenda .btn-cancel:hover { background-color: #e0e0e0; border-color: #aaa; }
+
+#modalCadastrarFazenda .btn-submit-pri { padding: 11px 28px; background-color: #00b34e; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+#modalCadastrarFazenda .btn-submit-pri:hover { background-color: #009641; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 179, 78, 0.25); }
+#modalCadastrarFazenda .btn-submit-pri:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* Scrollbar customizado apenas para o modal */
+#modalCadastrarFazenda .modal-body::-webkit-scrollbar { width: 8px; }
+#modalCadastrarFazenda .modal-body::-webkit-scrollbar-track { background: transparent; }
+#modalCadastrarFazenda .modal-body::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
+#modalCadastrarFazenda .modal-body::-webkit-scrollbar-thumb:hover { background-color: #999; }
+
+/* Responsivo para modal de cadastro */
+@media (max-width: 768px) {
+    #modalCadastrarFazenda .modal-content { max-width: 95%; max-height: 95vh; }
+    #modalCadastrarFazenda .modal-header { padding: 20px 24px; }
+    #modalCadastrarFazenda .modal-header h2 { font-size: 20px; }
+    #modalCadastrarFazenda .modal-body { padding: 20px 24px; }
+    #modalCadastrarFazenda .modal-footer-actions { padding: 16px 24px; flex-wrap: wrap; justify-content: stretch; }
+    #modalCadastrarFazenda .btn-cancel, #modalCadastrarFazenda .btn-submit-pri { flex: 1; }
+    #modalCadastrarFazenda .input-row-fazenda.cols-2, #modalCadastrarFazenda .input-row-fazenda.cols-3 { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,765 @@
+/* ==========================================================================
+   POTYGEN PRO - DESIGN SYSTEM "TERRA PRO" (v3.1)
+   Ficheiro: style-gestao.css (Gestão e Monitorização de Animais)
+   ========================================================================== */
+
+:root {
+    /* Cores do ecossistema de alta fidelidade Potygen Pro */
+    --forest-950: #04231a;
+    --forest-900: #062f23;
+    --forest-800: #0a4d2e;
+    --forest-700: #0f6839;       /* Verde Potygen Principal */
+    --forest-600: #168047;
+    --forest-500: #21a35a;       /* Verde Sucesso */
+    --forest-300: #7ed4a3;
+    --forest-100: #d8f0e2;
+    --forest-50:  #eef9f3;       /* Fundo de Badges */
+    
+    --ink-900: #1b2559;          /* Azul Navy para Títulos */
+    --ink-700: #475467;          /* Cinza Corpo */
+    --ink-300: #a3aed0;          /* Cinza Secundário/Placeholders */
+    
+    --bg-main: #f4f7fe;          /* Fundo do Sistema */
+    --white: #ffffff;
+    --border-color: #e9edf7;
+    
+    --shadow-soft: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+    --shadow-glow: 0px 10px 25px rgba(15, 104, 57, 0.15);
+    --logout-red: #ee4444;
+}
+
+/* ── 1. RESET & CORPO DO DASHBOARD ───────────────────────────────────────── */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--ink-900);
+    min-height: 100vh;
+}
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    padding: 45px 40px;
+    background: var(--bg-main);
+    overflow-y: auto;
+    height: 100vh;
+}
+
+/* ── 2. CABEÇALHO DA PÁGINA & BADGES PREMIUM ─────────────────────────────── */
+.content-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    margin-bottom: 35px;
+    gap: 24px;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.header-text h1 {
+    font-size: 32px !important;
+    font-weight: 800 !important;
+    color: var(--ink-900) !important;
+    letter-spacing: -0.8px !important;
+    margin-bottom: 4px !important;
+    margin-top: 15px;
+}
+
+.header-text p {
+    font-size: 15px !important;
+    color: var(--ink-700) !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Badge Premium da Fazenda Ativa */
+.header-fazenda-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--forest-50) !important;
+    color: var(--forest-700) !important;
+    border: 1px solid rgba(15, 104, 57, 0.15) !important;
+    border-radius: 30px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 6px rgba(15, 104, 57, 0.04);
+}
+
+.header-fazenda-badge:hover {
+    background: var(--forest-100) !important;
+    transform: translateY(-1px);
+    border-color: rgba(15, 104, 57, 0.3) !important;
+}
+
+/* ── 3. BOTÕES DA APLICAÇÃO ──────────────────────────────────────────────── */
+.btn-primary {
+    background: var(--forest-700) !important;
+    color: var(--white) !important;
+    border: none !important;
+    padding: 14px 28px !important;
+    border-radius: 14px !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    cursor: pointer;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-glow) !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-primary:hover {
+    background: var(--forest-800) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0px 12px 28px rgba(15, 104, 57, 0.25) !important;
+}
+
+/* ── 4. FILTROS & BARRA DE FERRAMENTAS (TOOLBAR) ────────────────────────── */
+.toolbar-premium {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.search-container {
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 14px !important;
+    padding: 0 18px !important;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 280px;
+    box-shadow: 0 2px 8px rgba(112, 144, 176, 0.04);
+    transition: all 0.2s ease;
+}
+
+.search-container:focus-within {
+    border-color: var(--forest-700) !important;
+    box-shadow: 0 0 0 4px rgba(15, 104, 57, 0.08) !important;
+}
+
+.search-container i {
+    color: var(--ink-300);
+    font-size: 16px;
+}
+
+.search-container input {
+    border: none !important;
+    padding: 14px 10px !important;
+    width: 100%;
+    outline: none !important;
+    background: transparent !important;
+    font-size: 14.5px;
+    color: var(--ink-900);
+    font-weight: 500;
+}
+
+.search-container input::placeholder {
+    color: var(--ink-300);
+}
+
+.filter-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Dropdowns e Seletores Premium */
+.custom-dropdown {
+    position: relative;
+}
+
+.dropdown-btn, .btn-ordenar {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px !important;
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 14px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--ink-700) !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 180px;
+    box-shadow: 0 2px 8px rgba(112, 144, 176, 0.04);
+}
+
+.dropdown-btn:hover, .btn-ordenar:hover {
+    border-color: var(--forest-700) !important;
+    color: var(--forest-700) !important;
+    background: var(--forest-50) !important;
+}
+
+.dropdown-btn .fa-chevron-down {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--ink-300);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 35px rgba(27, 37, 89, 0.12) !important;
+    overflow: hidden;
+    z-index: 1060;
+    min-width: 220px;
+    padding: 6px !important;
+}
+
+.dropdown-item {
+    padding: 12px 16px !important;
+    cursor: pointer;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--ink-900) !important;
+    border-radius: 10px !important;
+    transition: all 0.15s ease;
+}
+
+.dropdown-item:hover {
+    background: var(--forest-50) !important;
+    color: var(--forest-700) !important;
+}
+
+.dropdown-item.selected {
+    background: var(--forest-100) !important;
+    color: var(--forest-700) !important;
+    font-weight: 700 !important;
+}
+
+/* ── 5. TABELA EXECUTIVA DE ALTA FIDELIDADE ─────────────────────────────── */
+.table-container {
+    background: var(--white) !important;
+    border-radius: 24px !important;
+    padding: 14px !important;
+    border: 1px solid rgba(233, 237, 247, 0.7) !important;
+    box-shadow: var(--shadow-soft) !important;
+    overflow-x: auto;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    padding: 18px 20px !important;
+    font-size: 11.5px !important;
+    font-weight: 800 !important;
+    color: var(--ink-300) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    border-bottom: 2px solid var(--border-color) !important;
+}
+
+td {
+    padding: 18px 20px !important;
+    font-size: 14.5px !important;
+    color: var(--ink-900) !important;
+    font-weight: 600 !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    vertical-align: middle;
+}
+
+tr:hover td {
+    background-color: #fbfcfe;
+}
+
+.weight-tag {
+    background: var(--bg-main) !important;
+    color: var(--ink-900) !important;
+    padding: 6px 12px !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    display: inline-block;
+    font-size: 13.5px;
+}
+
+.badge {
+    padding: 6px 14px !important;
+    border-radius: 30px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    display: inline-flex;
+    align-items: center;
+}
+
+.badge.blue {
+    background: #eef2ff !important;
+    color: #4338ca !important;
+}
+
+/* Botões de Ação na Tabela */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px !important;
+    border-radius: 10px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    border: 1px solid transparent !important;
+    transition: all 0.2s ease;
+}
+
+.action-btn.action-view {
+    background: var(--bg-main) !important;
+    color: var(--ink-700) !important;
+}
+.action-btn.action-view:hover {
+    background: var(--ink-900) !important;
+    color: var(--white) !important;
+}
+
+.action-btn.action-edit {
+    background: var(--forest-50) !important;
+    color: var(--forest-700) !important;
+    border-color: rgba(15, 104, 57, 0.1) !important;
+}
+.action-btn.action-edit:hover {
+    background: var(--forest-700) !important;
+    color: var(--white) !important;
+}
+
+.action-btn.action-delete {
+    background: #fff5f5 !important;
+    color: var(--logout-red) !important;
+    border-color: rgba(238, 68, 68, 0.1) !important;
+}
+.action-btn.action-delete:hover {
+    background: var(--logout-red) !important;
+    color: var(--white) !important;
+}
+
+/* ── 6. MODAIS SAAS REATIVOS (EFEITO LUXO) ────────────────────────────────── */
+.modal, .modal-confirmacao {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 19, 43, 0.4) !important;
+    backdrop-filter: blur(6px) !important;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content, .modal-confirmacao-content {
+    background: var(--white) !important;
+    width: 100%;
+    max-width: 560px;
+    border-radius: 24px !important;
+    box-shadow: 0 24px 50px rgba(27, 37, 89, 0.18) !important;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    border: 1px solid var(--border-color) !important;
+    animation: premiumPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) ease;
+    overflow: hidden;
+}
+
+#modalForm, #modalVisualizar {
+    position: fixed !important;
+    inset: 0 !important;
+    display: none;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 20px !important;
+}
+#modalForm[style*="display: flex"], #modalVisualizar[style*="display: flex"] {
+    display: flex !important;
+}
+#modalForm .modal-content, #modalVisualizar .modal-content {
+    margin: 0 auto !important;
+    position: relative;
+    left: auto;
+    right: auto;
+}
+
+.modal-content.wide {
+    max-width: 760px !important;
+}
+
+@keyframes premiumPop {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-header, .modal-confirmacao-header {
+    padding: 24px 32px !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fafbfe;
+}
+
+.modal-header h2, .modal-confirmacao-header h3 {
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    color: var(--ink-900) !important;
+    letter-spacing: -0.4px;
+}
+
+.close {
+    font-size: 22px !important;
+    cursor: pointer;
+    color: var(--ink-300);
+    transition: color 0.15s ease;
+}
+.close:hover {
+    color: var(--logout-red);
+}
+
+.modal-body, .modal-confirmacao-body {
+    padding: 32px !important;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Formulários nos Modais */
+.section-title {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: var(--forest-700) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px !important;
+    margin-top: 10px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 24px;
+}
+.form-grid.grid-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.input-group label, .input-group-f label {
+    display: block;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: var(--ink-900) !important;
+    margin-bottom: 8px !important;
+}
+
+.input-group input, .input-group select, .input-group textarea,
+.input-group-f input, .input-group-f select, .input-group-f textarea {
+    width: 100%;
+    padding: 12px 16px !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    outline: none !important;
+    background: #f8fafc !important;
+    font-size: 14px !important;
+    color: var(--ink-900) !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease;
+}
+
+.input-group input:focus, .input-group select:focus, .input-group textarea:focus,
+.input-group-f input:focus, .input-group-f select:focus, .input-group-f textarea:focus {
+    border-color: var(--forest-700) !important;
+    background-color: var(--white) !important;
+    box-shadow: 0 0 0 4px rgba(15, 104, 57, 0.08) !important;
+}
+
+.input-group textarea {
+    height: 110px !important;
+    resize: vertical !important;
+}
+
+/* Ícones dentro de Inputs */
+.input-with-icon {
+    position: relative;
+}
+.input-with-icon i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-300);
+    font-size: 14px;
+}
+.input-with-icon input, .input-with-icon select {
+    padding-left: 40px !important;
+}
+
+/* Rodapé dos Modais */
+.modal-footer, .modal-confirmacao-footer {
+    padding: 20px 32px !important;
+    border-top: 1px solid var(--border-color) !important;
+    display: flex;
+    gap: 14px;
+    background: #fafbfe;
+}
+
+.btn-secondary, .btn-confirmar-cancelar {
+    flex: 1;
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    color: var(--ink-700) !important;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+}
+.btn-secondary:hover, .btn-confirmar-cancelar:hover {
+    background: #f1f5f9 !important;
+    color: var(--ink-900) !important;
+}
+
+.btn-save-main, .btn-confirmar-ok, .btn-submit-pri {
+    flex: 1;
+    background: var(--forest-700) !important;
+    color: var(--white) !important;
+    border: none !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+.btn-save-main:hover, .btn-confirmar-ok:hover, .btn-submit-pri:hover {
+    background: var(--forest-800) !important;
+}
+
+.btn-confirmar-excluir {
+    flex: 1;
+    background: var(--logout-red) !important;
+    color: var(--white) !important;
+    border: none !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.btn-confirmar-excluir:hover {
+    background: #cc3333 !important;
+}
+
+/* ── 7. DETALHES, BADGES DE RAÇA E SUB-BLOCOS DADOS DINÂMICOS ─────────────── */
+.detail-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+.d-card {
+    padding: 22px !important;
+    border-radius: 18px !important;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+.d-card span {
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    font-weight: 800 !important;
+    opacity: 0.8;
+    display: block;
+    margin-bottom: 4px;
+}
+.d-card strong {
+    font-size: 18px !important;
+    font-weight: 800;
+}
+.d-card.green { background: var(--forest-50) !important; color: var(--forest-700) !important; }
+.d-card.blue { background: #eff6ff !important; color: #1e40af !important; }
+.d-card.purple { background: #f5f3ff !important; color: #5b21b6 !important; }
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    background: #f8fafc !important;
+    padding: 24px !important;
+    border-radius: 16px !important;
+    border: 1px solid var(--border-color);
+}
+
+.raca-busca-container { position: relative; }
+.lista-racas-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(27,37,89,0.1);
+    z-index: 1050;
+    padding: 4px;
+}
+.raca-item {
+    padding: 11px 14px;
+    font-size: 14px;
+    color: var(--ink-900);
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+}
+.raca-item:hover { background: var(--forest-50); color: var(--forest-700); }
+
+.raca-selecionada-badge {
+    display: none;
+    margin-top: 8px;
+    padding: 8px 14px;
+    background: var(--forest-50);
+    color: var(--forest-700);
+    border: 1px solid rgba(15, 104, 57, 0.15);
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+.sub-block, .dynamic-fields {
+    margin-top: 16px;
+    padding: 18px !important;
+    background: #f8fafc !important;
+    border-radius: 14px !important;
+    border: 1px solid var(--border-color) !important;
+}
+.sub-block {
+    border-left: 4px solid var(--forest-700) !important;
+}
+.sub-block h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--ink-900);
+}
+
+/* ---------- GERENCIADOR DE FAZENDAS INTERNO ---------- */
+.fazendas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.fazenda-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px !important;
+    background: #f8fafc !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 14px !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.fazenda-item:hover {
+    border-color: var(--forest-700) !important;
+    background: var(--forest-50) !important;
+}
+.fazenda-item.ativa {
+    background: var(--forest-50) !important;
+    border-color: var(--forest-700) !important;
+}
+.fazenda-item .fi-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--forest-700);
+    color: var(--white);
+    font-size: 16px;
+}
+.fi-nome { font-weight: 700; color: var(--ink-900); font-size: 14.5px; }
+.fi-sub  { font-size: 12px; color: var(--ink-700); margin-top: 2px; }
+.fi-check { color: var(--forest-700); }
+
+.btn-nova-fazenda-lista {
+    width: 100%;
+    padding: 14px;
+    background: var(--white);
+    border: 2px dashed var(--forest-700) !important;
+    border-radius: 14px;
+    color: var(--forest-700);
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+.btn-nova-fazenda-lista:hover {
+    background: var(--forest-50);
+}
+
+/* ── 8. RESPONSIVIDADE MAXIMIZADA ────────────────────────────────────────── */
+@media (max-width: 1024px) {
+    .main-content { padding: 90px 24px 30px 24px; }
+}
+@media (max-width: 768px) {
+    .form-grid, .form-grid.grid-3, .info-grid, .detail-cards {
+        grid-template-columns: 1fr !important;
+    }
+    .toolbar-premium {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .dropdown-btn, .btn-ordenar, .search-container {
+        width: 100% !important;
+    }
+    .modal-footer, .modal-confirmacao-footer {
+        flex-direction: column;
+    }
+}

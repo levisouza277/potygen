@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Controle Econômico — Potygen</title>
+  <link rel="stylesheet" href="../style/navbar-style.css"/>
+  <link rel="stylesheet" href="../style/controle-economico.css"/>
+  <link rel="stylesheet" href="../style/fazenda-modal.css"/>
+  <link rel="stylesheet" href="../style/chatbot-floating.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- CONTEÚDO -->
+<div class="app-container">
+  <main class="main-content" id="mainContent">
+
+    <div class="page-header page-header-center">
+      <div>
+        <h1 class="page-title">Controle Econômico</h1>
+        <p class="page-sub">Gerencie receitas, despesas, produção e gere relatórios financeiros</p>
+      </div>
+    </div>
+
+    <div class="main-tabs">
+      <button class="main-tab active" id="tabFinanceiro" onclick="trocarMainTab('financeiro')">
+        <i class="fa-solid fa-dollar-sign"></i> Transações Financeiras
+      </button>
+      <button class="main-tab" id="tabProducao" onclick="trocarMainTab('producao')">
+        <i class="fa-solid fa-chart-simple"></i> Controle de Produção
+      </button>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PAINEL FINANCEIRO                                              -->
+    <!-- ============================================================= -->
+    <div id="painelFinanceiro">
+
+      <!-- Card de filtro unificado -->
+      <div class="prod-filter-card">
+        <div class="prod-filter-row">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="inputBusca" placeholder="Buscar transações..." oninput="filtrarTabela()"/>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn-pdf" onclick="abrirModal('modalPDF')">
+              <i class="fa-solid fa-file-pdf"></i> Relatório PDF
+            </button>
+            <button class="btn-csv" onclick="exportarCSVTransacoes()">
+              <i class="fa-solid fa-file-csv"></i> Exportar CSV
+            </button>
+            <button class="btn-nova" onclick="abrirNovaTransacao()">
+              <i class="fa-solid fa-plus"></i> Nova Transação
+            </button>
+          </div>
+        </div>
+
+        <div class="prod-filter-row">
+          <i class="fa-solid fa-filter" style="color:#94a3b8;"></i>
+          <span class="filtro-label">Filtrar por:</span>
+          <button class="filtro-btn active" id="finTipoTodos"    onclick="setFinTipo('todos')">Todos</button>
+          <button class="filtro-btn"        id="finTipoMes"      onclick="setFinTipo('mes')">Mês</button>
+          <button class="filtro-btn"        id="finTipoSemestre" onclick="setFinTipo('semestre')">Semestre</button>
+          <button class="filtro-btn"        id="finTipoAno"      onclick="setFinTipo('ano')">Ano</button>
+
+          <select id="finMes" class="prod-select" style="display:none">
+            <option value="1">Janeiro</option><option value="2">Fevereiro</option>
+            <option value="3">Março</option><option value="4">Abril</option>
+            <option value="5">Maio</option><option value="6">Junho</option>
+            <option value="7">Julho</option><option value="8">Agosto</option>
+            <option value="9">Setembro</option><option value="10">Outubro</option>
+            <option value="11">Novembro</option><option value="12">Dezembro</option>
+          </select>
+
+          <select id="finSemestre" class="prod-select" style="display:none">
+            <option value="1">1º Semestre</option>
+            <option value="2">2º Semestre</option>
+          </select>
+
+          <select id="finAno" class="prod-select" style="display:none"></select>
+
+          <span class="filtro-ativo" id="finPeriodoChip" style="display:none">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span id="finPeriodoLabel">—</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Cards de resumo -->
+      <div class="resumo-grid">
+        <div class="resumo-card">
+          <div class="resumo-left">
+            <span class="resumo-label">Total Receitas</span>
+            <strong class="resumo-valor green" id="totalReceitas">R$ 0,00</strong>
+            <span class="resumo-qtd" id="qtdReceitas">0 transações</span>
+          </div>
+          <div class="resumo-icon green"><i class="fa-solid fa-arrow-trend-up"></i></div>
+        </div>
+        <div class="resumo-card">
+          <div class="resumo-left">
+            <span class="resumo-label">Total Despesas</span>
+            <strong class="resumo-valor red" id="totalDespesas">R$ 0,00</strong>
+            <span class="resumo-qtd" id="qtdDespesas">0 transações</span>
+          </div>
+          <div class="resumo-icon red"><i class="fa-solid fa-arrow-trend-down"></i></div>
+        </div>
+        <div class="resumo-card">
+          <div class="resumo-left">
+            <span class="resumo-label">Saldo</span>
+            <strong class="resumo-valor green" id="totalSaldo">R$ 0,00</strong>
+            <span class="resumo-qtd">No período filtrado</span>
+          </div>
+          <div class="resumo-icon green" id="iconeSaldo"><i class="fa-solid fa-dollar-sign"></i></div>
+        </div>
+      </div>
+
+      <!-- Tabela -->
+      <div class="secao-titulo-wrap">
+        <h2 class="secao-titulo">Transações <span id="badgeTotal" class="badge-total">0</span></h2>
+      </div>
+      <div class="table-wrap">
+        <table class="transacoes-table">
+          <thead>
+            <tr>
+              <th>TIPO</th>
+              <th>DESCRIÇÃO</th>
+              <th>CATEGORIA</th>
+              <th>DATA</th>
+              <th>QTD</th>
+              <th>VALOR TOTAL</th>
+              <th>AÇÕES</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyTransacoes">
+            <tr><td colspan="7" class="empty-row">
+              <i class="fa-solid fa-inbox" style="font-size:28px;color:#e2e8f0;display:block;margin-bottom:8px;"></i>
+              Nenhuma transação encontrada.
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- PAINEL PRODUÇÃO                                                -->
+    <!-- ============================================================= -->
+    <div id="painelProducao" style="display:none">
+
+      <!-- Card de filtro unificado (igual ao financeiro) -->
+      <div class="prod-filter-card">
+        <div class="prod-filter-row">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="inputBuscaProducao" placeholder="Buscar produção..." oninput="filtrarProducao()"/>
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn-pdf" onclick="abrirModal('modalPDFProd')">
+              <i class="fa-solid fa-file-pdf"></i> Relatório PDF
+            </button>
+            <button class="btn-csv" onclick="exportarCSVProducao()">
+              <i class="fa-solid fa-file-csv"></i> Exportar CSV
+            </button>
+            <button class="btn-nova" onclick="abrirNovaProducao()">
+              <i class="fa-solid fa-plus"></i> Registrar Produção
+            </button>
+          </div>
+        </div>
+
+        <div class="prod-filter-row">
+          <i class="fa-solid fa-filter" style="color:#94a3b8;"></i>
+          <span class="filtro-label">Filtrar por:</span>
+          <button class="filtro-btn active" id="prodTipoTodos"    onclick="setProdTipo('todos')">Todos</button>
+          <button class="filtro-btn"        id="prodTipoMes"      onclick="setProdTipo('mes')">Mês</button>
+          <button class="filtro-btn"        id="prodTipoSemestre" onclick="setProdTipo('semestre')">Semestre</button>
+          <button class="filtro-btn"        id="prodTipoAno"      onclick="setProdTipo('ano')">Ano</button>
+
+          <select id="prodMes" class="prod-select" style="display:none">
+            <option value="1">Janeiro</option><option value="2">Fevereiro</option>
+            <option value="3">Março</option><option value="4">Abril</option>
+            <option value="5">Maio</option><option value="6">Junho</option>
+            <option value="7">Julho</option><option value="8">Agosto</option>
+            <option value="9">Setembro</option><option value="10">Outubro</option>
+            <option value="11">Novembro</option><option value="12">Dezembro</option>
+          </select>
+
+          <select id="prodSemestre" class="prod-select" style="display:none">
+            <option value="1">1º Semestre</option>
+            <option value="2">2º Semestre</option>
+          </select>
+
+          <select id="prodAno" class="prod-select" style="display:none"></select>
+
+          <span class="filtro-ativo" id="prodPeriodoChip" style="display:none">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span id="prodPeriodoLabel">—</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- POR TIPO DE PRODUTO -->
+      <h3 class="prod-section-title">POR TIPO DE PRODUTO</h3>
+      <div class="prod-tipo-grid">
+        <div class="prod-card">
+          <div class="prod-card-head">
+            <span class="prod-ico ico-leite"><i class="fa-solid fa-bottle-droplet"></i></span>
+            <span class="prod-card-name">Leite</span>
+          </div>
+          <strong class="prod-card-qtd green" id="prodQtdLeite">0 L</strong>
+          <span class="prod-card-sub">Quantidade total</span>
+          <strong class="prod-card-val green" id="prodValLeite">R$ 0,00</strong>
+          <span class="prod-card-sub" id="prodCntLeite">0 registro(s)</span>
+        </div>
+        <div class="prod-card">
+          <div class="prod-card-head">
+            <span class="prod-ico ico-carne"><i class="fa-solid fa-weight-hanging"></i></span>
+            <span class="prod-card-name">Carne</span>
+          </div>
+          <strong class="prod-card-qtd red" id="prodQtdCarne">0 Kg</strong>
+          <span class="prod-card-sub">Quantidade total</span>
+          <strong class="prod-card-val green" id="prodValCarne">R$ 0,00</strong>
+          <span class="prod-card-sub" id="prodCntCarne">0 registro(s)</span>
+        </div>
+        <div class="prod-card">
+          <div class="prod-card-head">
+            <span class="prod-ico ico-couro"><i class="fa-solid fa-box"></i></span>
+            <span class="prod-card-name">Couro</span>
+          </div>
+          <strong class="prod-card-qtd amber" id="prodQtdCouro">0 Un</strong>
+          <span class="prod-card-sub">Quantidade total</span>
+          <strong class="prod-card-val green" id="prodValCouro">R$ 0,00</strong>
+          <span class="prod-card-sub" id="prodCntCouro">0 registro(s)</span>
+        </div>
+        <div class="prod-card">
+          <div class="prod-card-head">
+            <span class="prod-ico ico-la"><i class="fa-solid fa-scissors"></i></span>
+            <span class="prod-card-name">Lã</span>
+          </div>
+          <strong class="prod-card-qtd purple" id="prodQtdLa">0 Kg</strong>
+          <span class="prod-card-sub">Quantidade total</span>
+          <strong class="prod-card-val green" id="prodValLa">R$ 0,00</strong>
+          <span class="prod-card-sub" id="prodCntLa">0 registro(s)</span>
+        </div>
+      </div>
+
+      <!-- POR ESPÉCIE -->
+      <h3 class="prod-section-title">POR ESPÉCIE</h3>
+      <div class="prod-especie-grid">
+        <div class="esp-card esp-bovino">
+          <div class="esp-head"><strong>Bovino</strong> <i class="fa-solid fa-cow"></i></div>
+          <strong class="esp-val" id="espValBovino">R$ 0,00</strong>
+          <span class="esp-sub">Valor estimado total</span>
+          <span class="esp-cnt" id="espCntBovino">0 registro(s) no período</span>
+        </div>
+        <div class="esp-card esp-ovino">
+          <div class="esp-head"><strong>Ovino</strong> <i class="fa-solid fa-paw"></i></div>
+          <strong class="esp-val" id="espValOvino">R$ 0,00</strong>
+          <span class="esp-sub">Valor estimado total</span>
+          <span class="esp-cnt" id="espCntOvino">0 registro(s) no período</span>
+        </div>
+        <div class="esp-card esp-caprino">
+          <div class="esp-head"><strong>Caprino</strong> <i class="fa-solid fa-paw"></i></div>
+          <strong class="esp-val" id="espValCaprino">R$ 0,00</strong>
+          <span class="esp-sub">Valor estimado total</span>
+          <span class="esp-cnt" id="espCntCaprino">0 registro(s) no período</span>
+        </div>
+      </div>
+
+      <!-- Tabela de registros -->
+      <div class="table-wrap prod-table-wrap">
+        <div class="prod-table-head">
+          <h2 class="secao-titulo">Registros de Produção <span class="badge-total" id="prodBadgeTotal">0</span></h2>
+          <span class="prod-periodo-label" id="prodPeriodoLabelTabela">—</span>
+        </div>
+        <table class="transacoes-table prod-table">
+          <thead>
+            <tr>
+              <th>PRODUTO</th>
+              <th>ESPÉCIE</th>
+              <th>ANIMAL</th>
+              <th>DATA/HORA</th>
+              <th>QUANTIDADE</th>
+              <th>QUALIDADE</th>
+              <th>ORIGEM/DESTINO</th>
+              <th>LOTE</th>
+              <th>VALOR</th>
+              <th>AÇÕES</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyProducao">
+            <tr><td colspan="10" class="empty-row">
+              <i class="fa-solid fa-inbox" style="font-size:28px;color:#e2e8f0;display:block;margin-bottom:8px;"></i>
+              Nenhum registro de produção no período.
+            </td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL — Nova / Editar Transação -->
+<div class="modal-overlay" id="modalTransacao">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modalTitulo">Nova Transação</h2>
+      <button class="modal-close" onclick="fecharModal('modalTransacao')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="field-label">Tipo de Transação</p>
+      <div class="tipo-selector">
+        <button class="tipo-btn active" id="btnReceita" onclick="setTipo('receita')">
+          <i class="fa-solid fa-arrow-trend-up"></i> Receita
+        </button>
+        <button class="tipo-btn" id="btnDespesa" onclick="setTipo('despesa')">
+          <i class="fa-solid fa-arrow-trend-down"></i> Despesa
+        </button>
+      </div>
+      <input type="hidden" id="tipoTransacao" value="receita"/>
+      <input type="hidden" id="editandoId" value=""/>
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Categoria</label>
+          <select id="categoria"><option value="">Selecione uma categoria</option></select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Data</label>
+          <input type="date" id="dataTransacao"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Hora</label>
+          <input type="time" id="horaTransacao"/>
+        </div>
+      </div>
+      <div class="field-group full">
+        <label class="field-label">Descrição</label>
+        <input type="text" id="descricao" placeholder="Ex: Venda de novilho, Compra de ração..." maxlength="200"/>
+      </div>
+      <div class="form-row tres">
+        <div class="field-group">
+          <label class="field-label">Quantidade</label>
+          <input type="number" id="quantidade" value="1" min="1" max="999999" step="1" oninput="calcularTotal()"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Preço Unitário (R$)</label>
+          <input type="number" id="precoUnitario" placeholder="0,00" min="0" max="99999999" step="0.01" oninput="calcularTotal()"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Valor Total</label>
+          <input type="text" id="valorTotal" placeholder="R$ 0,00" readonly class="input-readonly"/>
+        </div>
+      </div>
+      <div class="field-group full">
+        <label class="field-label">Observações (opcional)</label>
+        <textarea id="observacoes" placeholder="Informações adicionais..." rows="3" maxlength="500"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modalTransacao')">Cancelar</button>
+      <button class="btn-salvar" onclick="salvarTransacao()">
+        <i class="fa-solid fa-floppy-disk"></i> Salvar Transação
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — Relatório PDF (Financeiro) -->
+<div class="modal-overlay" id="modalPDF">
+  <div class="modal-box modal-box-sm">
+    <div class="modal-header">
+      <h2>Gerar Relatório Financeiro</h2>
+      <button class="modal-close" onclick="fecharModal('modalPDF')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="field-label" style="margin-bottom:14px;">Selecione o período do relatório</p>
+      <div class="opcoes-pdf">
+        <label class="opcao-pdf active">
+          <input type="radio" name="periodoRelatorio" value="mensal" checked onchange="selecionarOpcaoPDF(this)"/>
+          <i class="fa-regular fa-calendar"></i>
+          <div><strong>Relatório Mensal</strong><span>Últimos 30 dias</span></div>
+        </label>
+        <label class="opcao-pdf">
+          <input type="radio" name="periodoRelatorio" value="semestral" onchange="selecionarOpcaoPDF(this)"/>
+          <i class="fa-regular fa-calendar"></i>
+          <div><strong>Relatório Semestral</strong><span>Últimos 6 meses</span></div>
+        </label>
+        <label class="opcao-pdf">
+          <input type="radio" name="periodoRelatorio" value="anual" onchange="selecionarOpcaoPDF(this)"/>
+          <i class="fa-regular fa-calendar"></i>
+          <div><strong>Relatório Anual</strong><span>Últimos 12 meses</span></div>
+        </label>
+      </div>
+      <div class="pdf-info">
+        <i class="fa-solid fa-circle-info"></i>
+        O relatório será gerado em PDF com cabeçalho da fazenda e todas as transações do período.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modalPDF')">Cancelar</button>
+      <button class="btn-salvar"   onclick="gerarPDF()">
+        <i class="fa-solid fa-download"></i> Baixar PDF
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — Relatório PDF (Produção) -->
+<div class="modal-overlay" id="modalPDFProd">
+  <div class="modal-box modal-box-sm">
+    <div class="modal-header">
+      <h2>Gerar Relatório de Produção</h2>
+      <button class="modal-close" onclick="fecharModal('modalPDFProd')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="field-label" style="margin-bottom:14px;">Selecione o período do relatório</p>
+      <div class="opcoes-pdf">
+        <label class="opcao-pdf active">
+          <input type="radio" name="periodoRelatorioProd" value="mensal" checked onchange="selecionarOpcaoPDF(this)"/>
+          <i class="fa-regular fa-calendar"></i>
+          <div><strong>Relatório Mensal</strong><span>Últimos 30 dias</span></div>
+        </label>
+        <label class="opcao-pdf">
+          <input type="radio" name="periodoRelatorioProd" value="semestral" onchange="selecionarOpcaoPDF(this)"/>
+          <i class="fa-regular fa-calendar"></i>
+          <div><strong>Relatório Semestral</strong><span>Últimos 6 meses</span></div>
+        </label>
+        <label class="opcao-pdf">
+          <input type="radio" name="periodoRelatorioProd" value="anual" onchange="selecionarOpcaoPDF(this)"/>
+          <i class="fa-regular fa-calendar"></i>
+          <div><strong>Relatório Anual</strong><span>Últimos 12 meses</span></div>
+        </label>
+      </div>
+      <div class="pdf-info">
+        <i class="fa-solid fa-circle-info"></i>
+        O relatório será gerado em PDF com cabeçalho da fazenda e todos os registros de produção do período.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modalPDFProd')">Cancelar</button>
+      <button class="btn-salvar"   onclick="gerarPDFProducao()">
+        <i class="fa-solid fa-download"></i> Baixar PDF
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — Registrar Produção -->
+<div class="modal-overlay" id="modalProducao">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modalProducaoTitulo">Registrar Produção</h2>
+      <button class="modal-close" onclick="fecharModal('modalProducao')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editandoProducaoId" value=""/>
+
+      <p class="field-label">Tipo de Produção</p>
+      <div class="prod-tipo-selector">
+        <button type="button" class="prod-pick" data-tipo="leite" onclick="setProdProduto('leite')">
+          <i class="fa-solid fa-bottle-droplet"></i><span>Leite</span>
+        </button>
+        <button type="button" class="prod-pick" data-tipo="carne" onclick="setProdProduto('carne')">
+          <i class="fa-solid fa-weight-hanging"></i><span>Carne</span>
+        </button>
+        <button type="button" class="prod-pick" data-tipo="couro" onclick="setProdProduto('couro')">
+          <i class="fa-solid fa-box"></i><span>Couro</span>
+        </button>
+        <button type="button" class="prod-pick" data-tipo="la" onclick="setProdProduto('la')">
+          <i class="fa-solid fa-scissors"></i><span>Lã</span>
+        </button>
+      </div>
+      <input type="hidden" id="prodProduto" value="leite"/>
+
+      <p class="field-label" style="margin-top:14px;">Espécie Animal</p>
+      <div class="prod-especie-selector">
+        <button type="button" class="prod-pick esp" data-esp="bovino"  onclick="setProdEspecie('bovino')">
+          <i class="fa-solid fa-cow"></i><span>Bovino</span>
+        </button>
+        <button type="button" class="prod-pick esp" data-esp="ovino"   onclick="setProdEspecie('ovino')">
+          <i class="fa-solid fa-paw"></i><span>Ovino</span>
+        </button>
+        <button type="button" class="prod-pick esp" data-esp="caprino" onclick="setProdEspecie('caprino')">
+          <i class="fa-solid fa-paw"></i><span>Caprino</span>
+        </button>
+      </div>
+      <input type="hidden" id="prodEspecie" value="bovino"/>
+
+      <div class="field-group full" style="margin-top:14px;">
+        <label class="field-label">Animal (opcional)</label>
+        <select id="prodAnimal">
+          <option value="">— Nenhum (produção geral) —</option>
+        </select>
+        <small style="color:#94a3b8;font-size:12px;">Vincule a produção a um animal específico desta fazenda para detalhamento no relatório.</small>
+      </div>
+
+      <div class="form-row" style="margin-top:14px;">
+        <div class="field-group">
+          <label class="field-label">Data</label>
+          <input type="date" id="prodData"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Hora</label>
+          <input type="time" id="prodHora"/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Quantidade</label>
+          <input type="number" id="prodQuantidade" min="0" step="0.01" placeholder="0"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Unidade</label>
+          <select id="prodUnidade">
+            <option value="Litros">Litros</option>
+            <option value="Kg">Kg</option>
+            <option value="Unidades">Unidades</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Qualidade</label>
+          <select id="prodQualidade">
+            <option value="A">A - Excelente</option>
+            <option value="B">B - Boa</option>
+            <option value="C">C - Regular</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Valor Estimado (R$)</label>
+          <input type="number" id="prodValor" min="0" step="0.01" placeholder="0,00"/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Origem</label>
+          <input type="text" id="prodOrigem" placeholder="Ex: Ordenha Manhã, Tosquia Lote OV-12" maxlength="120"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Destino</label>
+          <input type="text" id="prodDestino" placeholder="Ex: Laticínio, Cooperativa Têxtil" maxlength="120"/>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Lote</label>
+          <input type="text" id="prodLote" placeholder="Ex: LT-2026-06-01" maxlength="60"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Temperatura (°C)</label>
+          <input type="number" id="prodTemperatura" step="0.1" placeholder="4.5"/>
+        </div>
+      </div>
+
+      <div class="field-group full">
+        <label class="field-label">Observações (opcional)</label>
+        <textarea id="prodObs" placeholder="Informações adicionais..." rows="3" maxlength="500"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal('modalProducao')">Cancelar</button>
+      <button class="btn-salvar" onclick="salvarProducao()">
+        <i class="fa-solid fa-floppy-disk"></i> Registrar Produção
+      </button>
+    </div>
+  </div>
+</div>
+
+ <!-- ============================================================ -->
+<!-- MODAL: TROCAR FAZENDA                                        -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="modalTrocarFazenda" style="display:none;">
+    <div class="modal-content">
+        <header class="modal-header">
+            <div>
+                <h2>Suas Fazendas</h2>
+                <p>Selecione uma fazenda para gerenciar</p>
+            </div>
+            <button class="btn-close" onclick="fecharModal('modalTrocarFazenda')">&times;</button>
+        </header>
+        <section class="modal-body">
+            <div class="fazendas-lista" id="fazendasLista">
+                <div class="fazendas-lista-vazia">
+                    <i class="fa-solid fa-tractor" style="font-size:28px;margin-bottom:8px;opacity:0.3;display:block;"></i>
+                    Carregando fazendas...
+                </div>
+            </div>
+            <button class="btn-nova-fazenda-lista" onclick="abrirModalCadastrarFazenda()">
+                <i class="fa-solid fa-plus"></i> Cadastrar nova fazenda
+            </button>
+        </section>
+        <div class="modal-footer-actions">
+            <button class="btn-cancel" onclick="fecharModal('modalTrocarFazenda')">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: CADASTRAR FAZENDA                                     -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="modalCadastrarFazenda" style="display:none;">
+    <div class="modal-content">
+        <header class="modal-header">
+            <div>
+                <h2><i class="fa-solid fa-tractor" style="color:#0d8a4f;margin-right:8px;"></i>Cadastrar Nova Fazenda</h2>
+                <p>Preencha os dados da propriedade</p>
+            </div>
+            <button class="btn-close" onclick="fecharModalCadastro()">&times;</button>
+        </header>
+
+        <section class="modal-body">
+            <!-- IDENTIFICAÇÃO -->
+            <p class="form-section-label">Identificação</p>
+            <div class="input-row-fazenda">
+                <div class="input-group-f">
+                    <label>Nome da Fazenda <span class="req">*</span></label>
+                    <input type="text" id="fzNome" placeholder="Ex: Fazenda São João" maxlength="150">
+                </div>
+            </div>
+            <div class="input-row-fazenda cols-2" style="margin-top:12px;">
+                <div class="input-group-f">
+                    <label>Nome do Proprietário</label>
+                    <input type="text" id="fzProprietario" readonly placeholder="—">
+                </div>
+                <div class="input-group-f">
+                    <label>CNPJ / CPF</label>
+                    <input type="text" id="fzCpf" readonly placeholder="—">
+                </div>
+            </div>
+
+            <!-- CARACTERÍSTICAS -->
+            <p class="form-section-label" style="margin-top:20px;">Características</p>
+            <div class="input-row-fazenda cols-3">
+                <div class="input-group-f">
+                    <label>Tipo de Criação <span class="req">*</span></label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-leaf"></i>
+                        <select id="fzTipoCriacao">
+                            <option value="">Selecione...</option>
+                            <option value="Bovinos">Bovinos</option>
+                            <option value="Ovinos">Ovinos</option>
+                            <option value="Caprinos">Caprinos</option>
+                            <option value="Misto">Misto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group-f">
+                    <label>Área (hectares)</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-ruler-combined"></i>
+                        <input type="number" id="fzArea" placeholder="0" min="0" step="0.01">
+                    </div>
+                </div>
+                <div class="input-group-f">
+                    <label>Telefone</label>
+                    <div class="input-with-icon">
+                        <i class="fa-solid fa-phone"></i>
+                        <input type="text" id="fzTelefone" placeholder="(00) 00000-0000" maxlength="20">
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOCALIZAÇÃO -->
+            <p class="form-section-label" style="margin-top:20px;">
+                <i class="fa-solid fa-location-dot" style="margin-right:4px;"></i>Localização
+            </p>
+            <div class="input-row-fazenda cols-2">
+                <div class="input-group-f">
+                    <label>CEP</label>
+                    <input type="text" id="fzCep" placeholder="00000-000" maxlength="10">
+                </div>
+                <div class="input-group-f">
+                    <label>Endereço / Localidade</label>
+                    <input type="text" id="fzEndereco" placeholder="Zona rural, estrada, km..." maxlength="200">
+                </div>
+            </div>
+            <div class="input-row-fazenda cols-2" style="margin-top:12px;">
+                <div class="input-group-f">
+                    <label>Cidade</label>
+                    <input type="text" id="fzCidade" placeholder="Crateús" maxlength="100">
+                </div>
+                <div class="input-group-f">
+                    <label>Estado</label>
+                    <select id="fzEstado">
+                        <option value="">Selecione...</option>
+                        <option value="AC">AC</option><option value="AL">AL</option>
+                        <option value="AP">AP</option><option value="AM">AM</option>
+                        <option value="BA">BA</option><option value="CE">CE</option>
+                        <option value="DF">DF</option><option value="ES">ES</option>
+                        <option value="GO">GO</option><option value="MA">MA</option>
+                        <option value="MT">MT</option><option value="MS">MS</option>
+                        <option value="MG">MG</option><option value="PA">PA</option>
+                        <option value="PB">PB</option><option value="PR">PR</option>
+                        <option value="PE">PE</option><option value="PI">PI</option>
+                        <option value="RJ">RJ</option><option value="RN">RN</option>
+                        <option value="RS">RS</option><option value="RO">RO</option>
+                        <option value="RR">RR</option><option value="SC">SC</option>
+                        <option value="SP">SP</option><option value="SE">SE</option>
+                        <option value="TO">TO</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- DESCRIÇÃO -->
+            <div class="input-group-f" style="margin-top:16px;">
+                <label>Descrição / Observações</label>
+                <textarea id="fzDescricao" placeholder="Informações adicionais sobre a fazenda..." rows="3"></textarea>
+            </div>
+        </section>
+
+        <div class="modal-footer-actions">
+            <button class="btn-cancel" onclick="fecharModalCadastro()">Cancelar</button>
+            <button class="btn-submit-pri" id="btnSalvarFazenda" onclick="salvarFazenda()">
+                <i class="fa-solid fa-tractor"></i> Cadastrar Fazenda
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- Supabase SDK + cliente + auth (ORDEM IMPORTA) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../backend/database.js"></script>
+<script src="../backend/auth.js"></script>
+<script src="../backend/fazenda.js"></script>
+<script src="../backend/fazenda-ui.js"></script>
+<script src="../backend/controle-economico.js"></script>
+<script src="../backend/navbar-loader.js"></script>
+<script src="../backend/navbar-script.js"></script>
+<script src="../backend/logout.js"></script>
+<script src="../backend/chatbot-floating.js"></script>
+</body>
+</html>
