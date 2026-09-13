@@ -19,7 +19,7 @@ function setupLogout() {
             return;
         }
 
-        window.location.href = '../pages/index.html';
+        window.location.href = '../../index.html';
     });
 }
 
