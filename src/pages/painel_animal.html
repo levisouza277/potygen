@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../backend/theme-init.js"></script>
     <title>Potygen - Painel do Animal</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style/navbar-style.css">
     <link rel="stylesheet" href="../style/chatbot-floating.css">
     <style>
         * { box-sizing: border-box; }
@@ -158,6 +160,76 @@
             background: #f0fdf4; color: #0d8a4f;
             padding: 6px 12px; border-radius: 20px;
             font-size: 13px; font-weight: 700;
+        }
+
+        /* Painel do animal: layout próprio, mas conectado ao tema global. */
+        .app-page-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 32px 0;
+        }
+        .app-page-header .header-copy { display: flex; flex-direction: column; gap: 10px; }
+        .app-page-header .page-title { color: #1b2559; }
+        .painel-grid { padding: 24px 32px 48px; }
+
+        .dark-theme body { background: #0d1512 !important; color: #d0ddd5; }
+        .dark-theme .app-page-header { color: #d0ddd5; }
+        .dark-theme .app-page-header .page-title,
+        .dark-theme .section-title,
+        .dark-theme .animal-nome,
+        .dark-theme .modal-titulo,
+        .dark-theme .cal-mes-label,
+        .dark-theme .tl-label,
+        .dark-theme .info-valor { color: #f1f7f3 !important; }
+        .dark-theme .btn-back,
+        .dark-theme .fazenda-badge,
+        .dark-theme .cal-nav-btn,
+        .dark-theme .tabs,
+        .dark-theme .tab-btn.ativo,
+        .dark-theme .btn-secondary {
+            background: #1d2b25 !important;
+            color: #d0ddd5 !important;
+            border-color: #2a3b32 !important;
+        }
+        .dark-theme .dash-card,
+        .dark-theme .modal-box,
+        .dark-theme .dia-card {
+            background: #18231f !important;
+            color: #d0ddd5 !important;
+            border-color: #2a3b32 !important;
+            box-shadow: 0 12px 30px rgba(0,0,0,.24);
+        }
+        .dark-theme .info-row,
+        .dark-theme .timeline li { border-color: #2a3b32 !important; }
+        .dark-theme .info-label,
+        .dark-theme .animal-brinco,
+        .dark-theme .tl-sub,
+        .dark-theme .form-group label { color: #a6b8ad !important; }
+        .dark-theme .calendario-grade th,
+        .dark-theme .dia-num,
+        .dark-theme .tab-btn { color: #82968a !important; }
+        .dark-theme .form-group input,
+        .dark-theme .form-group select,
+        .dark-theme .form-group textarea {
+            background: #101a16 !important;
+            color: #f1f7f3 !important;
+            border-color: #2a3b32 !important;
+        }
+        .dark-theme .modal-overlay { background: rgba(0,0,0,.74) !important; }
+        .dark-theme .loading-overlay { background: rgba(0,0,0,.72) !important; }
+        .dark-theme .btn-acao-cinza { background: #24332c; color: #d0ddd5; }
+
+        @media (max-width: 700px) {
+            .app-page-header { padding: 18px 16px 0 52px; }
+            .painel-grid { padding: 18px 16px 36px; gap: 16px; }
+            .dash-card { padding: 18px; border-radius: 14px; }
+            .app-page-header .header-actions { width: 100%; }
+            .modal-overlay { padding: 12px; }
+            .modal-box { max-height: 92vh; padding: 18px; border-radius: 14px; }
+            .modal-btns { flex-direction: column-reverse; }
+            .modal-btns button { width: 100%; }
+            .acoes-grid { gap: 8px; }
+            .btn-acao { min-height: 72px; }
         }
     </style>
 </head>

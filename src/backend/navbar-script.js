@@ -48,20 +48,26 @@ function initNavbar() {
     
     console.log('✅ Elementos encontrados!');
 
-    const userNameElements = document.querySelectorAll('#userNameDisplay');
-    if (typeof supabaseClient !== 'undefined') {
-        supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
-            if (!session) return;
-            const { data: usuario } = await supabaseClient
-                .from('usuarios')
-                .select('nome')
-                .eq('id', session.user.id)
-                .single();
-            userNameElements.forEach(element => {
-                if (usuario?.nome) element.textContent = usuario.nome;
-            });
-        }).catch(() => {});
-    }
+    const carregarPerfilCabecalho = async () => {
+        if (typeof supabaseClient === 'undefined') return false;
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) return false;
+        const { data: usuario } = await supabaseClient
+            .from('usuarios')
+            .select('nome')
+            .eq('id', session.user.id)
+            .maybeSingle();
+        if (!usuario?.nome) return false;
+        document.querySelectorAll('#userNameDisplay').forEach(element => { element.textContent = usuario.nome; });
+        return true;
+    };
+
+    (async () => {
+        for (let tentativa = 0; tentativa < 4; tentativa += 1) {
+            if (await carregarPerfilCabecalho()) break;
+            await new Promise(resolve => setTimeout(resolve, 250));
+        }
+    })();
     
     const isDesktop = () => window.innerWidth > 1024;
     

@@ -1663,11 +1663,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    document.getElementById('formCategoriaFemea').addEventListener('change', toggleCamposNascimentosPorCategoria);
-    document.getElementById('formQtdNascimentos').addEventListener('input', gerarCamposNascimentos);
-    document.getElementById('formHistoricoAborto').addEventListener('change', toggleCamposAborto);
-    document.getElementById('formQtdAbortos').addEventListener('input', gerarCamposAborto);
-    document.getElementById('formQtdDescendentes').addEventListener('input', gerarCamposDescendentes);
+    document.getElementById('formCategoriaFemea')?.addEventListener('change', toggleCamposNascimentosPorCategoria);
+    document.getElementById('formQtdNascimentos')?.addEventListener('input', gerarCamposNascimentos);
+    document.getElementById('formHistoricoAborto')?.addEventListener('change', toggleCamposAborto);
+    document.getElementById('formQtdAbortos')?.addEventListener('input', gerarCamposAborto);
+    document.getElementById('formQtdDescendentes')?.addEventListener('input', gerarCamposDescendentes);
     document.getElementById('formPaiMacho')?.addEventListener('input', buscarCriasPorPai);
 
     // Filtros
@@ -1693,7 +1693,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }); 
     }
 
-    document.getElementById('busca').addEventListener('input', executarFiltroGeral);
+    document.getElementById('busca')?.addEventListener('input', executarFiltroGeral);
 
     function executarFiltroGeral() {
         const termo = document.getElementById('busca').value.toLowerCase();
