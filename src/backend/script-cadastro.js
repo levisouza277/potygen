@@ -149,8 +149,22 @@ if (cadastroForm) {
         });
 
         if (error) {
-            alert('Erro: ' + error.message);
-            console.log(error);
+            const mensagemErro = String(error.message || '').toLowerCase();
+            const emailJaCadastrado =
+                mensagemErro.includes('already registered') ||
+                mensagemErro.includes('already exists') ||
+                error.code === 'user_already_exists';
+
+            if (emailJaCadastrado) {
+                alert(
+                    'Este e-mail já está cadastrado no sistema. ' +
+                    'Verifique sua caixa de entrada para confirmar a conta ou use "Esqueci minha senha" para recuperar o acesso.'
+                );
+            } else {
+                alert('Erro ao criar a conta: ' + error.message);
+            }
+
+            console.error('Erro no cadastro:', error);
             botao.innerHTML = 'Criar Minha Conta';
             return;
         }
