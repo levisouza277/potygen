@@ -477,3 +477,109 @@
 
     .page-title { font-size: 22px; }
 }
+
+/* O HTML desta página possui estilos locais; estes overrides mantêm o tema escuro. */
+.dark-theme body,
+body.dark-theme {
+    background: #0d1512 !important;
+    color: #d0ddd5 !important;
+}
+
+.dark-theme .card-analise,
+.dark-theme .modal-card {
+    background: #18231f !important;
+    color: #d0ddd5 !important;
+    border-color: #2a3b32 !important;
+    box-shadow: 0 20px 35px -12px rgba(0, 0, 0, .32) !important;
+}
+
+.dark-theme .card-header-title {
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .card-header-title h2,
+.dark-theme .modal-card h3,
+.dark-theme .metric-value,
+.dark-theme .itu-status-text,
+.dark-theme .page-subtitle,
+.dark-theme .feedback-texto {
+    color: #f1f7f3 !important;
+}
+
+.dark-theme .input-busca-potygen,
+.dark-theme .input-group input,
+.dark-theme .input-group select,
+.dark-theme .input-group textarea,
+.dark-theme .modal-card select {
+    background: #101a16 !important;
+    color: #f1f7f3 !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .lista-animais-dropdown {
+    background: #18231f !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .animal-item,
+.dark-theme .animal-item strong,
+.dark-theme .animal-item small {
+    background: #1d2b25 !important;
+    color: #d0ddd5 !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .feedback-container-potygen,
+.dark-theme .metric-box,
+.dark-theme .barra-fundo {
+    background: #1d2b25 !important;
+    color: #d0ddd5 !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .feedback-label,
+.dark-theme .score-label,
+.dark-theme .metric-label,
+.dark-theme .update-timestamp {
+    color: #a6b8ad !important;
+}
+
+.dark-theme .recomendacao-box {
+    background: #1d2b25 !important;
+    color: #d0ddd5 !important;
+}
+
+.dark-theme #lblDetalheGeneticoBox {
+    background: #3a2a18 !important;
+}
+
+.dark-theme .itu-container,
+.dark-theme .recomendacao-climatica,
+.dark-theme .eficacia-container {
+    background: #1d2b25 !important;
+    color: #d0ddd5 !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .itu-header,
+.dark-theme .itu-status-text,
+.dark-theme .eficacia-header,
+.dark-theme .recomendacao-climatica span {
+    color: #d0ddd5 !important;
+}
+
+.dark-theme .itu-badge {
+    background: #285f45 !important;
+    color: #f1f7f3 !important;
+}
+
+.dark-theme .user-location-badge {
+    background: #18231f !important;
+    color: #d0ddd5 !important;
+    border-color: #2a3b32 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .24) !important;
+}
+
+.dark-theme .user-location-badge i {
+    color: #bef264 !important;
+}

@@ -352,3 +352,56 @@ body {
 @media (max-width: 380px) {
     .dash-card .row { grid-template-columns: 1fr; }
 }
+
+/* Componentes que possuem cores próprias precisam acompanhar o tema global. */
+.dark-theme .dash-card,
+.dark-theme .form-control,
+.dark-theme .lista-animais-dropdown,
+.dark-theme #containerFeedback,
+.dark-theme #containerFeedbackReprodutor {
+    background: #18231f !important;
+    background-color: #18231f !important;
+    border-color: #2a3b32 !important;
+    color: #d0ddd5 !important;
+}
+
+.dark-theme .form-control {
+    background-color: #101a16 !important;
+    color: #f1f7f3 !important;
+}
+
+.dark-theme #containerFeedback,
+.dark-theme #containerFeedbackReprodutor {
+    background: #1d2b25 !important;
+    border-left-color: #7ed4a3 !important;
+}
+
+.dark-theme #containerFeedback small,
+.dark-theme #containerFeedbackReprodutor small,
+.dark-theme #containerFeedback span,
+.dark-theme #containerFeedbackReprodutor span {
+    color: #d0ddd5 !important;
+}
+
+.dark-theme .lista-animais-dropdown .animal-item,
+.dark-theme .lista-animais-dropdown .animal-item[style] {
+    background-color: #18231f !important;
+    color: #d0ddd5 !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .lista-animais-dropdown .animal-item:hover,
+.dark-theme .lista-animais-dropdown .animal-item[style]:hover {
+    background-color: #21332a !important;
+}
+
+.dark-theme #modalMensagem .potygen-message-dialog {
+    background: #18231f !important;
+    color: #f1f7f3 !important;
+    border: 1px solid #2a3b32;
+}
+
+.dark-theme #modalMensagem .potygen-message-body,
+.dark-theme #modalMensagem .potygen-message-body p {
+    color: #d0ddd5 !important;
+}

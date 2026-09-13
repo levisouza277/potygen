@@ -8,11 +8,43 @@ function initNavbar() {
     const toggleBtn = document.getElementById('navToggleBtn');
     const sidebar = document.getElementById('potygen-sidebar');
     const overlay = document.getElementById('navOverlay');
+    const themeToggle = document.getElementById('themeToggleBtn');
+    const navLogo = document.getElementById('navLogo');
     
     if (!toggleBtn || !sidebar) {
         console.error('❌ Elementos não encontrados:', { toggleBtn: !!toggleBtn, sidebar: !!sidebar });
         return false;
     }
+
+    function applyTheme(isDark) {
+        document.documentElement.classList.toggle('dark-theme', isDark);
+        document.body.classList.toggle('dark-theme', isDark);
+
+        if (navLogo) {
+            navLogo.src = isDark ? '../assets/logo2.png' : '../assets/logo.png';
+        }
+
+        if (themeToggle) {
+            const icon = themeToggle.querySelector('i');
+            const label = themeToggle.querySelector('span');
+            themeToggle.setAttribute('aria-pressed', String(isDark));
+            themeToggle.setAttribute('aria-label', isDark ? 'Ativar tema claro' : 'Ativar tema escuro');
+            if (icon) {
+                icon.classList.toggle('fa-moon', !isDark);
+                icon.classList.toggle('fa-sun', isDark);
+            }
+            if (label) label.textContent = isDark ? 'Modo claro' : 'Modo escuro';
+        }
+    }
+
+    const savedTheme = localStorage.getItem('potygen_theme');
+    applyTheme(savedTheme === 'dark');
+
+    themeToggle?.addEventListener('click', () => {
+        const isDark = !document.documentElement.classList.contains('dark-theme');
+        localStorage.setItem('potygen_theme', isDark ? 'dark' : 'light');
+        applyTheme(isDark);
+    });
     
     console.log('✅ Elementos encontrados!');
     

@@ -315,6 +315,10 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
 .logout-btn i { color: var(--red-500) !important; }
 .logout-btn:hover { background: var(--red-50) !important; color: var(--red-500) !important; }
 
+.theme-toggle { color: var(--ink-500); }
+.theme-toggle i { color: var(--amber-500); }
+.theme-toggle:hover { color: var(--forest-900); }
+
 /* ── MAIN CONTENT ────────────────────────────────────────────────────────── */
 .main-content {
     flex: 1;
@@ -520,6 +524,239 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
     .modal-footer-actions { justify-content: stretch; }
     .modal-footer-actions .btn-cancel,
     .modal-footer-actions .btn-submit-pri { flex: 1; text-align: center; justify-content: center; }
+}
+
+/* ── TEMA ESCURO GLOBAL ─────────────────────────────────────────────────── */
+html.dark-theme,
+body.dark-theme {
+    --surface: #18231f;
+    --bg: #0d1512;
+    --cream-50: #0d1512;
+    --cream-100: #14201b;
+    --cream-200: #24332c;
+    --ink-900: #f1f7f3;
+    --ink-700: #d0ddd5;
+    --ink-500: #a6b8ad;
+    --ink-300: #82968a;
+    --border: #2a3b32;
+    --border-strong: #3c5547;
+    color-scheme: dark;
+}
+
+body.dark-theme {
+    background-color: var(--bg);
+    background-image: none;
+    color: var(--ink-700);
+}
+
+.dark-theme .potygen-sidebar,
+.dark-theme .modal-content,
+.dark-theme .card,
+.dark-theme .modal-box,
+.dark-theme .pg-modal,
+.dark-theme .stat-card,
+.dark-theme .chart-card-box,
+.dark-theme .content-card,
+.dark-theme .table-wrap,
+.dark-theme .resumo-card,
+.dark-theme .prod-card,
+.dark-theme .search-box,
+.dark-theme .input-wrap,
+.dark-theme .input-group input,
+.dark-theme .input-group select,
+.dark-theme .input-group textarea,
+.dark-theme .form-control,
+.dark-theme .dash-card,
+.dark-theme .filter-field select,
+.dark-theme .user-profile-box,
+.dark-theme .notification-bell {
+    background: var(--surface) !important;
+    color: var(--ink-700);
+    border-color: var(--border) !important;
+}
+
+.dark-theme .main-content,
+.dark-theme .dashboard-body,
+.dark-theme .app-container {
+    background: var(--bg);
+    color: var(--ink-700);
+}
+
+.dark-theme .potygen-sidebar {
+    background: linear-gradient(180deg, #18231f 0%, #101a16 100%);
+}
+
+.dark-theme .top-bar,
+.dark-theme .page-header,
+.dark-theme .welcome-section {
+    color: var(--ink-900);
+}
+
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme h4,
+.dark-theme h5,
+.dark-theme .page-title,
+.dark-theme .welcome-text h1,
+.dark-theme .stat-number,
+.dark-theme .chart-card-box h3,
+.dark-theme .secao-titulo,
+.dark-theme .modal-header h2,
+.dark-theme .modal-content h2,
+.dark-theme .modal-box h2,
+.dark-theme label,
+.dark-theme th,
+.dark-theme td,
+.dark-theme .nav-item {
+    color: var(--ink-900);
+}
+
+.dark-theme p,
+.dark-theme .page-sub,
+.dark-theme .welcome-text p,
+.dark-theme .stat-title,
+.dark-theme .resumo-label,
+.dark-theme .resumo-qtd,
+.dark-theme .prod-card-sub,
+.dark-theme .modal-header p,
+.dark-theme .user-farm {
+    color: var(--ink-500);
+}
+
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea {
+    color: var(--ink-900) !important;
+    background-color: #121c18 !important;
+    border-color: var(--border) !important;
+}
+
+.dark-theme input::placeholder,
+.dark-theme textarea::placeholder { color: var(--ink-300); }
+
+.dark-theme .table-wrap,
+.dark-theme .transacoes-table th,
+.dark-theme .transacoes-table td { border-color: var(--border); }
+
+.dark-theme .nav-item:hover,
+.dark-theme .btn-action-sec:hover,
+.dark-theme .dropdown-item:hover,
+.dark-theme .filtro-btn:not(.active):hover { background: #21332a !important; }
+
+.dark-theme .modal-backdrop,
+.dark-theme .modal-overlay,
+.dark-theme .pg-modal-overlay { background: rgba(0, 0, 0, .72); }
+
+.dark-theme .pg-modal-header h3,
+.dark-theme .pg-modal-header h3 i,
+.dark-theme .modal-header h2,
+.dark-theme .modal-header h3 {
+    color: #f1f7f3 !important;
+}
+
+.dark-theme .btn-close,
+.dark-theme .btn-cancel,
+.dark-theme .btn-cancelar,
+.dark-theme .pg-btn-secondary { background: #24332c; color: var(--ink-700); border-color: var(--border); }
+
+.dark-theme .nav-menu-toggle { background: var(--surface); color: var(--ink-900); border-color: var(--border); }
+
+.dark-theme .welcome-section { background: linear-gradient(135deg, #18231f 0%, #111b17 100%); border-color: var(--border); }
+
+.dark-theme .chatbot-window,
+.dark-theme .chatbot-panel { background: var(--surface); color: var(--ink-900); }
+
+/* Configurações usa utilitários do Tailwind em vez dos tokens do sistema. */
+.dark-theme.bg-gray-50,
+.dark-theme .bg-gray-50,
+.dark-theme .bg-gray-100,
+.dark-theme .bg-gray-200 { background-color: var(--bg) !important; }
+
+.dark-theme .bg-white { background-color: var(--surface) !important; }
+.dark-theme .text-gray-900,
+.dark-theme .text-gray-800,
+.dark-theme .text-gray-700,
+.dark-theme .text-gray-600 { color: var(--ink-900) !important; }
+.dark-theme .text-gray-500,
+.dark-theme .text-gray-400 { color: var(--ink-500) !important; }
+.dark-theme .border-gray-100,
+.dark-theme .border-gray-200,
+.dark-theme .border-gray-300 { border-color: var(--border) !important; }
+.dark-theme .shadow-sm,
+.dark-theme .shadow-2xl { box-shadow: 0 8px 24px rgba(0, 0, 0, .24) !important; }
+
+/* A Agenda Reprodutiva mantém parte do layout em estilos locais da página. */
+.dark-theme .calendario-card,
+.dark-theme .info-ciclos-card,
+.dark-theme .content-card,
+.dark-theme .card-especie,
+.dark-theme .search-box,
+.dark-theme .dia-card,
+.dark-theme .modal-box,
+.dark-theme .modal-form-group input,
+.dark-theme .modal-form-group select,
+.dark-theme .modal-form-group textarea,
+.dark-theme .op-radio-btn,
+.dark-theme .eventos-dia-lista li {
+    background: #18231f !important;
+    background-color: #18231f !important;
+    color: #d0ddd5 !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .calendario-header,
+.dark-theme .info-ciclos-header,
+.dark-theme .filter-bar,
+.dark-theme .legenda-container {
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .calendario-card h5,
+.dark-theme .info-ciclos-header h3,
+.dark-theme .card-especie h4,
+.dark-theme .modal-titulo,
+.dark-theme .ev-label,
+.dark-theme .info-value,
+.dark-theme .modal-form-group label,
+.dark-theme .op-radio-btn,
+.dark-theme .select-data,
+.dark-theme .search-box input {
+    color: #f1f7f3 !important;
+}
+
+.dark-theme .text-navy,
+.dark-theme .info-label,
+.dark-theme .ev-sub,
+.dark-theme .legenda-container,
+.dark-theme .animals-table td,
+.dark-theme .animals-table th {
+    color: #a6b8ad !important;
+}
+
+.dark-theme .select-data,
+.dark-theme .btn-nav-mes,
+.dark-theme .info-value {
+    background: #21332a !important;
+    background-color: #21332a !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .dia-card:hover,
+.dark-theme .card-especie:hover,
+.dark-theme .eventos-dia-lista li:hover,
+.dark-theme .op-radio-btn:hover {
+    background: #294033 !important;
+    background-color: #294033 !important;
+}
+
+.dark-theme .content-card .animals-table tr:hover td {
+    background: #21332a !important;
+}
+
+.dark-theme .modal-overlay,
+.dark-theme .loading-overlay {
+    background: rgba(0, 0, 0, .72) !important;
 }
 @media (max-width: 480px) {
     .potygen-sidebar { width: 86vw; padding: 22px 14px 18px; }

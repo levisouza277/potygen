@@ -168,3 +168,35 @@
         height: 390px;
     }
 }
+
+/* Tema escuro */
+.dark-theme .potygen-chat-panel {
+    background: #18231f;
+    border-color: #2a3b32;
+    box-shadow: 0 28px 45px rgba(0, 0, 0, 0.42);
+}
+
+.dark-theme .potygen-chat-messages {
+    background: #101a16;
+}
+
+.dark-theme .potygen-chat-message-bot .potygen-chat-bubble {
+    background: #1d2b25;
+    color: #f1f7f3;
+    border-color: #2a3b32;
+}
+
+.dark-theme .potygen-chat-compose {
+    background: #18231f;
+    border-top-color: #2a3b32;
+}
+
+.dark-theme .potygen-chat-compose input {
+    background: #101a16;
+    color: #f1f7f3;
+    border-color: #3c5547;
+}
+
+.dark-theme .potygen-chat-compose input::placeholder {
+    color: #82968a;
+}

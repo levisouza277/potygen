@@ -510,3 +510,27 @@ body { background: var(--bg); color: var(--text); }
 
   .modal-footer button { width: 100%; justify-content: center; }
 }
+
+/* Tema escuro para o card de filtros e seus campos. */
+.dark-theme .prod-filter-card {
+  background: #18231f !important;
+  border-color: #2a3b32 !important;
+  color: #d0ddd5 !important;
+}
+
+.dark-theme .prod-filter-card .search-box,
+.dark-theme .prod-filter-card .prod-select,
+.dark-theme .prod-filter-card .filtro-btn:not(.active) {
+  background: #101a16 !important;
+  color: #d0ddd5 !important;
+  border-color: #2a3b32 !important;
+}
+
+.dark-theme .prod-filter-card .search-box input,
+.dark-theme .prod-filter-card .filtro-label {
+  color: #d0ddd5 !important;
+}
+
+.dark-theme .prod-filter-card .search-box input::placeholder {
+  color: #82968a !important;
+}

@@ -595,11 +595,11 @@ function mostrarMensagem(mensagem, tipo = 'info', titulo = '') {
         modal.id = 'modalMensagem';
         modal.style.cssText = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(3px);";
         modal.innerHTML = `
-            <div style="background: white; border-radius: 20px; max-width: 550px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; animation: slideIn 0.3s ease;">
+            <div class="potygen-message-dialog" style="background: white; border-radius: 20px; max-width: 550px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; animation: slideIn 0.3s ease;">
                 <div id="modalHeader" style="padding: 20px; color: white;">
                     <h3 id="modalMensagemTitulo" style="margin: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 10px;"></h3>
                 </div>
-                <div style="padding: 30px;">
+                <div class="potygen-message-body" style="padding: 30px;">
                     <p id="modalMensagemTexto" style="white-space: pre-line; margin: 0 0 25px 0; line-height: 1.6; font-size: 1rem;"></p>
                     <button id="btnOkMensagem" class="btn" style="background: #0d8a4f; color: white; border: none; padding: 12px 35px; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 1rem;">OK</button>
                 </div>

@@ -274,3 +274,88 @@
     #modalCadastrarFazenda .btn-cancel, #modalCadastrarFazenda .btn-submit-pri { flex: 1; }
     #modalCadastrarFazenda .input-row-fazenda.cols-2, #modalCadastrarFazenda .input-row-fazenda.cols-3 { grid-template-columns: 1fr; }
 }
+
+/* Tema escuro: os modais de fazenda usam cores fixas para manter compatibilidade legada. */
+.dark-theme #modalTrocarFazenda .modal-content,
+.dark-theme #modalCadastrarFazenda .modal-content,
+.dark-theme .pg-modal,
+.dark-theme .modal-content {
+    background: #18231f !important;
+    background-color: #18231f !important;
+    color: #d0ddd5;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme #modalTrocarFazenda .modal-header,
+.dark-theme #modalCadastrarFazenda .modal-header,
+.dark-theme .modal-header,
+.dark-theme .pg-modal-header,
+.dark-theme #modalCadastrarFazenda .modal-footer-actions,
+.dark-theme .modal-footer-actions,
+.dark-theme .pg-modal-footer {
+    background: #14201b !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme #modalTrocarFazenda .modal-header h2,
+.dark-theme #modalCadastrarFazenda .modal-header h2,
+.dark-theme .modal-header h2,
+.dark-theme .modal-header h3,
+.dark-theme .pg-modal-header h3,
+.dark-theme #modalCadastrarFazenda .input-group-f label,
+.dark-theme .fi-nome {
+    color: #f1f7f3 !important;
+}
+
+.dark-theme #modalTrocarFazenda .modal-header p,
+.dark-theme #modalCadastrarFazenda .modal-header p,
+.dark-theme .fi-sub,
+.dark-theme .pg-label,
+.dark-theme .fazendas-lista-vazia {
+    color: #a6b8ad !important;
+}
+
+.dark-theme .fazenda-item,
+.dark-theme .btn-nova-fazenda-lista {
+    background: #14201b !important;
+    border-color: #2a3b32 !important;
+    color: #d0ddd5;
+}
+
+.dark-theme .fazenda-item:hover,
+.dark-theme .fazenda-item.ativa,
+.dark-theme .btn-nova-fazenda-lista:hover {
+    background: #21332a !important;
+    border-color: #00a859 !important;
+}
+
+.dark-theme #modalCadastrarFazenda .input-group-f input,
+.dark-theme #modalCadastrarFazenda .input-group-f select,
+.dark-theme #modalCadastrarFazenda .input-group-f textarea,
+.dark-theme .pg-input,
+.dark-theme .pg-select {
+    background: #101a16 !important;
+    color: #f1f7f3 !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme #modalCadastrarFazenda .input-with-icon {
+    background-color: #101a16 !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme #modalCadastrarFazenda .input-with-icon input,
+.dark-theme #modalCadastrarFazenda .input-with-icon select {
+    background: transparent !important;
+    color: #f1f7f3 !important;
+}
+
+.dark-theme #modalCadastrarFazenda .btn-cancel,
+.dark-theme .pg-btn-secondary {
+    background-color: #24332c !important;
+    color: #d0ddd5 !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .btn-close,
+.dark-theme .pg-close-btn { color: #a6b8ad !important; }

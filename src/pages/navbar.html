@@ -7,7 +7,7 @@
 
 <aside class="potygen-sidebar" id="potygen-sidebar">
     <div class="nav-logo-wrap">
-        <img src="../assets/logo.png" alt="Potygen" class="nav-logo"
+        <img src="../assets/logo.png" alt="Potygen" class="nav-logo" id="navLogo"
              onerror="this.onerror=null;this.src='https://placehold.co/140x48/ffffff/0d8a4f?text=Potygen';">
     </div>
 
@@ -43,6 +43,11 @@
     </nav>
 
     <div class="nav-footer">
+        <button type="button" class="nav-item theme-toggle" id="themeToggleBtn"
+                aria-label="Ativar tema escuro" aria-pressed="false">
+            <i class="fa-solid fa-moon" aria-hidden="true"></i>
+            <span>Modo escuro</span>
+        </button>
         <!-- ============================================ -->
         <!-- SISTEMA DE FAZENDAS (reutilizável em todas as páginas) -->
         <!-- Requer: fazenda.js + fazenda-ui.js carregados na página -->
