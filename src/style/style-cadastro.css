@@ -108,7 +108,21 @@
 }
 
 @media (max-width: 600px) {
+    html,
+    body {
+        height: auto;
+        min-height: 100%;
+        overflow-y: auto;
+    }
+
+    .main-wrapper {
+        height: auto;
+        min-height: 100dvh;
+        overflow: visible;
+    }
+
     .login-side {
+        overflow: visible;
         padding: 62px 22px 8px;
     }
 
