@@ -158,9 +158,10 @@ body { background: var(--bg); color: var(--text); }
 }
 .table-wrap {
   background: var(--white); border: 1px solid var(--border);
-  border-radius: 16px; overflow: hidden;
+  border-radius: 16px; overflow-x: auto; overflow-y: hidden;
 }
-.transacoes-table { width: 100%; border-collapse: collapse; }
+.transacoes-table { width: 100%; border-collapse: collapse; min-width: 760px; }
+.prod-table { min-width: 1080px; }
 .transacoes-table th {
   text-align: left; padding: 14px 18px;
   font-size: 11px; font-weight: 800; color: var(--text-muted);
@@ -429,8 +430,83 @@ body { background: var(--bg); color: var(--text); }
   .prod-especie-selector { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  .toolbar        { flex-direction: column; align-items: stretch; }
-  .toolbar-actions { justify-content: flex-end; }
+  .main-content { padding: 76px 12px 28px; }
+
+  .page-header {
+    padding-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .page-title { font-size: 23px; }
+  .page-sub { font-size: 12px; line-height: 1.45; }
+
+  .main-tabs {
+    width: 100%;
+    margin-bottom: 18px;
+  }
+
+  .main-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 11px 6px;
+    font-size: 11px;
+    gap: 5px;
+    white-space: nowrap;
+  }
+
+  .prod-filter-card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .prod-filter-row:first-child {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-box {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .toolbar-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .toolbar-actions button { justify-content: center; }
+
+  .prod-filter-row:nth-child(2) {
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .filtro-label { width: 100%; }
+  .filtro-btn { flex: 1; padding: 8px 10px; }
+  .prod-select { flex: 1; min-width: 0; }
+
+  .resumo-card { padding: 18px; }
+  .resumo-valor { font-size: 21px; }
+
   .form-row.tres  { grid-template-columns: 1fr; }
   .prod-tipo-grid { grid-template-columns: 1fr; }
+
+  .prod-table-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+  }
+
+  .modal-overlay { padding: 10px; }
+  .modal-box { max-height: 94vh; border-radius: 14px; }
+  .modal-header { padding: 16px; }
+  .modal-body { padding: 16px; }
+  .modal-footer {
+    flex-direction: column-reverse;
+    padding: 12px 16px 16px;
+  }
+
+  .modal-footer button { width: 100%; justify-content: center; }
 }

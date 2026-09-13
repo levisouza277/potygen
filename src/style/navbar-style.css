@@ -509,3 +509,16 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
     .nav-menu-toggle { top: 14px; left: 14px; width: 42px; height: 42px; }
     .top-bar { padding: 14px 14px 0 66px; }
 }
+
+/* Em telas pequenas o conteúdo precisa crescer com a página, não com a viewport. */
+@media (max-width: 768px) {
+    .app-container,
+    .main-content {
+        min-height: 0 !important;
+        height: auto !important;
+    }
+
+    .main-content {
+        overflow-y: visible !important;
+    }
+}

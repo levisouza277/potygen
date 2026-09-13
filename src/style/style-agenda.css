@@ -168,6 +168,20 @@
     .agenda-layout-grid { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 600px) {
+    .filter-bar {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 14px;
+    }
+
+    .search-box { max-width: none; }
+
+    .btn-filter { justify-content: center; }
+
+    .content-card { padding: 14px; }
+}
+
 .feed-placeholder {
     display: flex;
     flex-direction: column;

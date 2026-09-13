@@ -762,4 +762,19 @@ tr:hover td {
     .modal-footer, .modal-confirmacao-footer {
         flex-direction: column;
     }
+
+    .content-header {
+        align-items: stretch;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .header-text h1 { font-size: 27px !important; }
+
+    .content-header .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .table-container { border-radius: 16px !important; }
 }

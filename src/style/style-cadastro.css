@@ -123,11 +123,44 @@
 
     .login-side {
         overflow: visible;
-        padding: 62px 22px 8px;
+        padding: 72px 20px 28px;
     }
+
+    .login-box h1 { font-size: 32px; }
+
+    .field { margin-bottom: 12px; }
+
+    .field label {
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+
+    .input-wrap {
+        height: 48px;
+        padding: 0 12px;
+    }
+
+    .input-wrap input,
+    .input-wrap select { font-size: 14px; }
 
     .row {
         grid-template-columns: 1fr;
         gap: 0;
+    }
+
+    .terms-checkbox {
+        margin: 12px 0 16px;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+    .btn-submit {
+        height: 50px;
+        font-size: 14px;
+    }
+
+    .footer-link {
+        margin-top: 16px;
+        line-height: 1.45;
     }
 }

@@ -459,4 +459,11 @@
     .score-gauge {
         width: 100%;
     }
+
+    .card-analise {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .page-title { font-size: 22px; }
 }
