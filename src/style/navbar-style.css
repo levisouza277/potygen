@@ -337,6 +337,16 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
     gap: 16px;
 }
 
+/* Títulos principais seguem a mesma hierarquia em todas as telas. */
+.page-title {
+    font-family: var(--font-sans);
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--ink-900);
+}
+
 /* ── MODALS ──────────────────────────────────────────────────────────────── */
 .modal-backdrop {
     position: fixed;

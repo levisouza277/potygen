@@ -63,6 +63,15 @@ body {
     position: relative;
 }
 
+.top-bar .page-title {
+    font-family: var(--font-sans);
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--ink-900);
+    line-height: 1.2;
+    letter-spacing: 0;
+}
+
 .main-content p.text-secondary.text-center {
     text-align: left !important;
     font-size: 15px !important;
@@ -305,10 +314,39 @@ body {
     }
     
     .dash-card {
-        padding: 26px 20px !important;
+        padding: 20px 16px !important;
+    }
+
+    .dash-card h5 {
+        font-size: 16px !important;
+        margin-bottom: 20px !important;
+        padding-bottom: 10px;
+    }
+
+    .dash-card .row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 12px;
+    }
+
+    .dash-card .row > [class*="col-"] {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .form-control { padding: 11px 13px !important; font-size: 13.5px !important; }
+
+    .main-content p.text-secondary.text-center {
+        margin-bottom: 24px !important;
+        font-size: 13px !important;
     }
     
     .btn-submit-pri {
         width: 100% !important;
     }
+}
+
+@media (max-width: 380px) {
+    .dash-card .row { grid-template-columns: 1fr; }
 }

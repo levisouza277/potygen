@@ -77,6 +77,14 @@ body {
     margin-top: 15px;
 }
 
+.header-text h1.page-title {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-size: 26px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0 !important;
+    line-height: 1.2;
+}
+
 .header-text p {
     font-size: 15px !important;
     color: var(--ink-700) !important;

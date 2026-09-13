@@ -64,10 +64,12 @@
 }
 
 .page-title {
-    font-size: 24px;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-size: 26px;
     font-weight: 800;
     color: var(--ink-900);
-    letter-spacing: -0.5px;
+    letter-spacing: 0;
+    line-height: 1.2;
 }
 
 .user-location-badge {
