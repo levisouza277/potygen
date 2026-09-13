@@ -25,7 +25,7 @@ if (eyeToggle) {
     if (session) {
 
         window.location.href =
-            '../pages/dashboard.html';
+            'src/pages/dashboard.html';
 
     }
 
@@ -89,7 +89,42 @@ if (loginForm) {
 
             }
             console.log('Sucesso:', data);
-            window.location.href = '../pages/dashboard.html';
+
+            let perfil = data.user.user_metadata;
+            if (!perfil?.nome) {
+                try {
+                    const perfilSalvo = JSON.parse(localStorage.getItem('potygen_perfil_pendente'));
+                    if (perfilSalvo?.email === data.user.email) perfil = perfilSalvo;
+                } catch (erroLeitura) {
+                    console.warn('Perfil pendente inválido:', erroLeitura);
+                }
+            }
+
+            if (perfil?.nome) {
+                const { error: erroPerfil } = await supabaseClient
+                    .from('usuarios')
+                    .upsert({
+                        id: data.user.id,
+                        nome: perfil.nome,
+                        email: data.user.email,
+                        telefone: perfil.telefone,
+                        cpf: perfil.cpf,
+                        propriedade: perfil.propriedade,
+                        cidade: perfil.cidade,
+                        estado: perfil.estado,
+                        tipo_usuario: perfil.tipo_usuario || 'produtor'
+                    }, { onConflict: 'id' });
+
+                if (erroPerfil) {
+                    console.error('Erro ao salvar perfil:', erroPerfil);
+                    alert('Login realizado, mas não foi possível carregar o perfil: ' + erroPerfil.message);
+                    return;
+                }
+
+                localStorage.removeItem('potygen_perfil_pendente');
+            }
+
+            window.location.href = 'src/pages/dashboard.html';
 
         } catch (err) {
             console.error('Erro inesperado:', err);

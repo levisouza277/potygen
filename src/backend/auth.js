@@ -30,7 +30,7 @@ async function verificarLogin() {
     if (!session) {
 
         window.location.replace(
-            '../pages/index.html'
+            '../../index.html'
         );
 
         return false;
@@ -58,7 +58,7 @@ supabaseClient.auth.onAuthStateChange(
         if (event === 'SIGNED_OUT') {
 
             window.location.replace(
-                '../pages/index.html'
+                '../../index.html'
             );
 
         }

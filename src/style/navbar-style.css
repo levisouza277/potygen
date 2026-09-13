@@ -225,6 +225,7 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
 .nav-logo-wrap {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
     padding: 4px 10px 22px;
     margin-bottom: 8px;
@@ -243,7 +244,15 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
     color: var(--forest-600);
     opacity: 0.75;
 }
-.nav-logo { width: 140px; max-width: 100%; height: auto; object-fit: contain; flex-shrink: 0; }
+.nav-logo {
+    width: 116px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 14px;
+    overflow: hidden;
+}
 
 .potygen-nav {
     display: flex;

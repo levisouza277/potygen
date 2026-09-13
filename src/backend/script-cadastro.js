@@ -120,9 +120,32 @@ if (cadastroForm) {
 
         botao.innerHTML = 'Criando conta...';
 
+        const perfilPendente = {
+            email,
+            nome,
+            telefone,
+            cpf,
+            propriedade,
+            cidade,
+            estado,
+            tipo_usuario: 'produtor'
+        };
+        localStorage.setItem('potygen_perfil_pendente', JSON.stringify(perfilPendente));
+
         const { data, error } = await supabaseClient.auth.signUp({
             email: email,
-            password: senha
+            password: senha,
+            options: {
+                data: {
+                    nome,
+                    telefone,
+                    cpf,
+                    propriedade,
+                    cidade,
+                    estado,
+                    tipo_usuario: 'produtor'
+                }
+            }
         });
 
         if (error) {
@@ -134,29 +157,39 @@ if (cadastroForm) {
 
         const usuario = data.user;
 
-        const { error: erroBanco } = await supabaseClient
-            .from('usuarios')
-            .insert({
-                id: usuario.id,
-                nome: nome,
-                email: email,
-                telefone: telefone,
-                cpf: cpf,
-                propriedade: propriedade,
-                cidade: cidade,
-                estado: estado,
-                tipo_usuario: 'produtor'
-            });
-        if (erroBanco) {
-            alert('Erro ao salvar usuário.');
-            console.log(erroBanco);
-            botao.innerHTML = 'Criar Minha Conta';
-            return;
+        if (data.session) {
+            const { error: erroBanco } = await supabaseClient
+                .from('usuarios')
+                .upsert({
+                    id: usuario.id,
+                    nome,
+                    email,
+                    telefone,
+                    cpf,
+                    propriedade,
+                    cidade,
+                    estado,
+                    tipo_usuario: 'produtor'
+                }, { onConflict: 'id' });
+            if (erroBanco) {
+                alert('A conta foi criada, mas não foi possível salvar o perfil: ' + erroBanco.message);
+                console.error(erroBanco);
+                botao.innerHTML = 'Criar Minha Conta';
+                return;
+            }
+            localStorage.removeItem('potygen_perfil_pendente');
         }
 
-        alert('Conta criada com sucesso!');
+        alert(data.session
+            ? 'Conta criada com sucesso!'
+            : 'Conta criada! Verifique seu e-mail para confirmar o cadastro e depois faça login.');
         console.log(usuario);
-        window.location.href = '../pages/index.html';
+
+        if (data.session) {
+            sessionStorage.setItem('sessao_temporaria', 'true');
+        }
+
+        window.location.href = '../../index.html';
 
     });
 }
