@@ -187,6 +187,48 @@
     background: #dbe6d8;
 }
 
+/* Tema escuro: o chatbot é inserido dinamicamente no body, por isso precisa
+   de estilos próprios em vez de depender apenas dos componentes da página. */
+.dark-theme .potygen-chat-panel {
+    background: var(--surface);
+    border-color: var(--border-strong);
+    box-shadow: 0 28px 45px rgba(0, 0, 0, 0.38);
+}
+
+.dark-theme .potygen-chat-messages {
+    background: var(--bg);
+}
+
+.dark-theme .potygen-chat-message-bot .potygen-chat-bubble {
+    background: #21332a;
+    color: var(--ink-900);
+    border-color: var(--border);
+}
+
+.dark-theme .potygen-chat-compose {
+    background: var(--surface);
+    border-top-color: var(--border);
+}
+
+.dark-theme .potygen-chat-compose input {
+    background: #21332a;
+    color: var(--ink-900);
+    border-color: var(--border-strong);
+}
+
+.dark-theme .potygen-chat-compose input::placeholder {
+    color: var(--ink-300);
+}
+
+.dark-theme .potygen-chat-mic {
+    background: #243b30;
+    color: #7ee2a8;
+}
+
+.dark-theme .potygen-chat-mic:hover {
+    background: #2f4b3d;
+}
+
 /* Estado de Gravação Ativa (Quadrado/Círculo Vermelho Pulsando) */
 .potygen-chat-mic.potygen-mic-recording {
     background: #dc2626 !important;
