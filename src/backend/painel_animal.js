@@ -611,6 +611,20 @@ document.addEventListener('DOMContentLoaded', async ()=>{
             return;
         }
         usuarioId = session.user.id;
+        const { data: usuario, error } = await db
+    .from('usuarios')
+    .select('nome')
+    .eq('id', usuarioId)
+    .maybeSingle();
+
+if (error) {
+    console.error('[perfil] Erro ao carregar nome:', error);
+} else {
+    const nomeEl = document.getElementById('userNameDisplay');
+    if (nomeEl && usuario?.nome) {
+        nomeEl.textContent = usuario.nome;
+    }
+}
     } catch(e){ console.error('[auth]', e); }
 
     // Fazendas — restaura do sessionStorage se PotygenFazenda já estiver populado
@@ -618,6 +632,18 @@ document.addEventListener('DOMContentLoaded', async ()=>{
         try {
             const ativa = await window.inicializarFazenda();
             fazendaIdAtiva = ativa?.id || window.PotygenFazenda?.getFazendaId?.() || null;
+            const localidadeEl = document.getElementById('userFarmDisplay');
+
+if (localidadeEl && ativa) {
+    const cidadeEstado = [ativa.cidade, ativa.estado]
+        .filter(Boolean)
+        .join('/');
+
+    localidadeEl.textContent = [
+        ativa.tipo_criacao,
+        cidadeEstado
+    ].filter(Boolean).join(' • ') || '—';
+}
         } catch(e){ console.error('[fazenda]', e); }
     } else {
         // Fallback: lê direto do sessionStorage
