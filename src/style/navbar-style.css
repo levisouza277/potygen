@@ -330,11 +330,12 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
 .top-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 20px 32px 0 78px;   /* 78px reserva espaço para o hamburger */
+    justify-content: center;
+    padding: 20px 78px 0;
     background: transparent;
     min-height: var(--topbar-h);
     gap: 16px;
+    position: relative;
 }
 
 /* Títulos principais seguem a mesma hierarquia em todas as telas. */
@@ -345,6 +346,11 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
     line-height: 1.2;
     letter-spacing: 0;
     color: var(--ink-900);
+}
+
+.top-bar > .user-location-badge {
+    position: absolute;
+    right: 32px;
 }
 
 /* ── MODALS ──────────────────────────────────────────────────────────────── */
@@ -501,12 +507,13 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
 
 /* ── RESPONSIVO ──────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-    .top-bar { padding: 18px 20px 0 74px; }
+    .top-bar { padding: 18px 74px 0; }
     .modal-content { padding: 26px 20px; }
 }
 @media (max-width: 768px) {
     :root { --topbar-h: 64px; }
-    .top-bar { padding: 16px 16px 0 70px; }
+    .top-bar { padding: 16px 70px 0; }
+    .top-bar > .user-location-badge { right: 16px; }
     .input-row, .input-row.three-cols { grid-template-columns: 1fr; }
     .modal-content { padding: 22px 16px; border-radius: var(--r-lg); }
     .modal-header h2 { font-size: 19px; }
@@ -517,7 +524,7 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
 @media (max-width: 480px) {
     .potygen-sidebar { width: 86vw; padding: 22px 14px 18px; }
     .nav-menu-toggle { top: 14px; left: 14px; width: 42px; height: 42px; }
-    .top-bar { padding: 14px 14px 0 66px; }
+    .top-bar { padding: 14px 66px 0; }
 }
 
 /* Em telas pequenas o conteúdo precisa crescer com a página, não com a viewport. */

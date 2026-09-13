@@ -47,7 +47,12 @@
     background: radial-gradient(circle, rgba(33, 163, 90, 0.10), transparent 70%);
     pointer-events: none;
 }
-.welcome-text { position: relative; z-index: 1; min-width: 0; }
+.welcome-text {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    text-align: center;
+}
 .welcome-text h1.page-title {
     font-family: var(--font-sans);
     font-size: 26px;
