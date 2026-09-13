@@ -68,6 +68,34 @@ body {
     position: relative;
 }
 
+.gestao-page-header {
+    position: relative;
+    padding-top: 10px;
+    margin-bottom: 28px;
+}
+
+.gestao-page-header .header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gestao-page-header .header-text h1.page-title {
+    margin-top: 0;
+    margin-bottom: 4px !important;
+}
+
+.gestao-page-header .header-text p.page-sub {
+    justify-content: center;
+    margin: 0 !important;
+}
+
+.gestao-page-header > .btn-primary {
+    position: absolute;
+    right: 0;
+    top: 10px;
+}
+
 .header-text h1 {
     font-size: 32px !important;
     font-weight: 800 !important;
@@ -775,6 +803,12 @@ tr:hover td {
         align-items: stretch;
         gap: 16px;
         margin-bottom: 24px;
+    }
+
+    .gestao-page-header { padding-top: 8px; }
+    .gestao-page-header > .btn-primary {
+        position: static;
+        margin-top: 12px;
     }
 
     .header-text h1 { font-size: 27px !important; }

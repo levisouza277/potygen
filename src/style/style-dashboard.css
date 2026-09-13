@@ -16,7 +16,7 @@
 
 /* ── DASHBOARD BODY ──────────────────────────────────────────────────────── */
 .dashboard-body {
-    padding: 16px 28px 56px;
+    padding: 26px 28px 56px;
     max-width: 1640px;
     width: 100%;
     margin: 0 auto;
@@ -25,6 +25,25 @@
 @media (max-width: 600px)  { .dashboard-body { padding: 12px 14px 36px; } }
 
 /* ── WELCOME / PAGE HEADER ───────────────────────────────────────────────── */
+.dashboard-page-header {
+    position: relative;
+    margin-bottom: 28px;
+    padding-top: 10px;
+}
+.dashboard-title-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.dashboard-title-group .page-title { margin-bottom: 4px; }
+.dashboard-title-group .page-sub { margin-top: 0; }
+.dashboard-title-group .fazenda-header-badge { margin-top: 8px; }
+.dashboard-page-header > .welcome-actions {
+    position: absolute;
+    right: 0;
+    top: 10px;
+}
+
 .welcome-section {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -345,6 +364,8 @@
 
 /* ── RESPONSIVO FINAL ────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
+    .dashboard-page-header { padding-top: 8px; }
+    .dashboard-page-header .welcome-actions { position: static; }
     .welcome-section { grid-template-columns: 1fr; align-items: flex-start; padding: 20px 18px; }
     .welcome-actions { align-items: stretch; width: 100%; }
     .filter-action-row, .user-profile-with-bell { justify-content: flex-start; }

@@ -1,26 +1,3 @@
-(async () => {
-
-    const lembrarMe =
-        localStorage.getItem(
-            'potygen_lembrar_me'
-        );
-
-    const sessaoTemporaria =
-        sessionStorage.getItem(
-            'sessao_temporaria'
-        );
-
-    if (
-        lembrarMe !== 'true' &&
-        !sessaoTemporaria
-    ) {
-
-        await supabaseClient.auth.signOut();
-
-    }
-
-})();
-
 async function verificarLogin() {
 
     const {
