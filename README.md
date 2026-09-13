@@ -1,7 +1,7 @@
 # Potygen - Pecuária de Precisão e Gestão Bioclimática
 
 O **Potygen** é uma plataforma web responsiva voltada para a transformação digital, melhoramento genético e gestão reprodutiva da pecuária familiar nos Sertões de Crateús. O sistema substitui as anotações manuais por um controle prático baseado em inteligência artificial, dados climáticos e gestão financeira.
-
+## LINK DE ACESSO: potygen.vercel.app
 ## 🕹️ Manual de Operação da Solução (Passo a Passo das Telas)
 
 ### 1. Acesso e Autenticação
