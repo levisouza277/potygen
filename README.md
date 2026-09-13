@@ -1,31 +1,7 @@
 # Potygen - Pecuária de Precisão e Gestão Bioclimática
 
 O **Potygen** é uma plataforma web responsiva voltada para a transformação digital, melhoramento genético e gestão reprodutiva da pecuária familiar nos Sertões de Crateús. O sistema substitui as anotações manuais por um controle prático baseado em inteligência artificial, dados climáticos e gestão financeira.
-
----
-
-## 🛠️ Como a Inteligência Artificial Funciona
-
-O assistente inteligente do Potygen funciona como um **Consultor de Dados Seguro** do rebanho, utilizando o modelo **Gemini** com uma trava de contexto para garantir que ele nunca invente informações:
-
-1. **Resposta Blindada:** O sistema junta esses dados reais com a pergunta do usuário e envia para o Gemini com uma ordem rígida: *"Você é o Potygen. Responda apenas usando estes dados reais da fazenda. É proibido inventar qualquer informação fora deste bloco"*. Isso garante respostas exatas, seguras e baseadas na realidade do produtor.
-2. **Análise de Clima Local (Brain.js):** Uma inteligência que roda direto no navegador cruza dados de temperatura e umidade para calcular o risco de estresse térmico antes de uma inseminação, avisando o produtor se há risco de perda do sêmen.
-
----
-
-## ⚙️ Execução Local (Ambiente de Apresentação)
-
-Para garantir estabilidade na apresentação e contornar erros de servidores de hospedagem na véspera da entrega, a interface roda localmente através do VS Code, mas salva e busca os dados na nuvem normalmente.
-
-### Como rodar:
-1. Abra a pasta do projeto no **VS Code**.
-2. Certifique-se de ter a extensão **Live Server** instalada.
-3. Abra o arquivo `index.html`.
-4. Clique em **"Go Live"** na barra inferior do VS Code.
-5. A aplicação abrirá no navegador.
-
----
-
+## LINK DE ACESSO: potygen.vercel.app
 ## 🕹️ Manual de Operação da Solução (Passo a Passo das Telas)
 
 ### 1. Acesso e Autenticação
