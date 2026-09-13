@@ -577,6 +577,19 @@ function deletarAnimal(id) {
 // ============================================
 // RENDERIZAÇÃO DA TABELA
 // ============================================
+function obterStatusAnimal(animal) {
+    const status = animal.status ?? animal.status_animal ?? animal.situacao;
+    return status === null || status === undefined || status === '' ? 'Ativo' : String(status);
+}
+
+function classeStatusAnimal(status) {
+    return status
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-');
+}
+
 function renderizarTabela() {
     const tbody = document.getElementById('tabelaAnimais');
     if (!tbody) return;
@@ -597,6 +610,7 @@ function renderizarTabela() {
         const finalidade = animal.finalidade || '—';
         const lote = animal.lote || '—';
         const pelagem = animal.pelagem || '—';
+        const status = obterStatusAnimal(animal);
 
         return `
             <tr>
@@ -608,6 +622,7 @@ function renderizarTabela() {
                 <td>${finalidade}</td>
                 <td>${lote}</td>
                 <td>${pelagem}</td>
+                <td><span class="status-animal status-${classeStatusAnimal(status)}">${status}</span></td>
                 <td class="action-buttons">
                     <button class="action-btn action-view" onclick="visualizarAnimal('${animal.id}')">
                         <i class="fa-solid fa-eye"></i> Ver características
@@ -636,6 +651,7 @@ function renderizarTabelaFiltrada(lista) {
     tbody.innerHTML = lista.map(animal => {
         const idade = calcularIdade(animal.data_nascimento || animal.dataNascimento);
         const pesoAtual = animal.peso_atual ?? animal.pesoAtual ?? 0;
+        const status = obterStatusAnimal(animal);
 
         return `
             <tr>
@@ -647,6 +663,7 @@ function renderizarTabelaFiltrada(lista) {
                 <td>${animal.finalidade || '—'}</td>
                 <td>${animal.lote || '—'}</td>
                 <td>${animal.pelagem || '—'}</td>
+                <td><span class="status-animal status-${classeStatusAnimal(status)}">${status}</span></td>
                 <td class="action-buttons">
                     <button class="action-btn action-view" onclick="visualizarAnimal('${animal.id}')">
                         <i class="fa-solid fa-eye"></i> Ver características

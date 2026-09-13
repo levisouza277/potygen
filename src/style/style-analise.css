@@ -502,8 +502,17 @@ body.dark-theme {
 .dark-theme .metric-value,
 .dark-theme .itu-status-text,
 .dark-theme .page-subtitle,
-.dark-theme .feedback-texto {
+.dark-theme .feedback-texto,
+.dark-theme .input-group label,
+.dark-theme .input-group-busca label,
+.dark-theme .recomendacao-texto,
+.dark-theme .modal-card-actions .btn-secondary {
     color: #f1f7f3 !important;
+}
+
+.dark-theme .help-text,
+.dark-theme .help-text i {
+    color: #a6b8ad !important;
 }
 
 .dark-theme .input-busca-potygen,
@@ -529,6 +538,10 @@ body.dark-theme {
     border-color: #2a3b32 !important;
 }
 
+.dark-theme .animal-item:hover {
+    background: #284333 !important;
+}
+
 .dark-theme .feedback-container-potygen,
 .dark-theme .metric-box,
 .dark-theme .barra-fundo {
@@ -537,11 +550,25 @@ body.dark-theme {
     border-color: #2a3b32 !important;
 }
 
+.dark-theme .btn-estimar,
+.dark-theme .modal-card-actions .btn-secondary {
+    background: #24332c !important;
+    color: #f1f7f3 !important;
+    border-color: #3c5547 !important;
+}
+
+.dark-theme #consanguinidade {
+    background-color: #121c18 !important;
+}
+
 .dark-theme .feedback-label,
-.dark-theme .score-label,
 .dark-theme .metric-label,
 .dark-theme .update-timestamp {
     color: #a6b8ad !important;
+}
+
+.dark-theme .score-label {
+    color: #7ed4a3 !important;
 }
 
 .dark-theme .recomendacao-box {

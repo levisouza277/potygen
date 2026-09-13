@@ -359,12 +359,45 @@ tr:hover td {
     color: #4338ca !important;
 }
 
+.status-animal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.status-inativo,
+.status-morto,
+.status-vendido,
+.status-baixado {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-pendente,
+.status-em-revisao {
+    background: #fef3c7;
+    color: #92400e;
+}
+
 /* Botões de Ação na Tabela */
 .action-buttons {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-    align-items: center;
+    display: table-cell;
+    text-align: right;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.action-buttons .action-btn + .action-btn {
+    margin-left: 8px;
 }
 
 .action-btn {
@@ -781,6 +814,23 @@ tr:hover td {
     .main-content { padding: 90px 24px 30px 24px; }
 }
 @media (max-width: 768px) {
+    html,
+    body {
+        min-height: 100dvh;
+        background-color: var(--bg-main);
+    }
+
+    .app-container,
+    .main-content {
+        min-height: 100dvh !important;
+        height: auto !important;
+    }
+
+    .main-content {
+        overflow-y: visible !important;
+        background-color: var(--bg-main);
+    }
+
     .form-grid, .form-grid.grid-3, .info-grid, .detail-cards {
         grid-template-columns: 1fr !important;
     }
@@ -856,6 +906,36 @@ tr:hover td {
 .dark-theme .fi-nome,
 .dark-theme .fi-sub {
     color: #d0ddd5 !important;
+}
+
+.dark-theme .status-animal {
+    background: #164e36 !important;
+    color: #bbf7d0 !important;
+}
+
+.dark-theme .status-inativo,
+.dark-theme .status-morto,
+.dark-theme .status-vendido,
+.dark-theme .status-baixado {
+    background: #5b2525 !important;
+    color: #fecaca !important;
+}
+
+.dark-theme .status-pendente,
+.dark-theme .status-em-revisao {
+    background: #5a4218 !important;
+    color: #fde68a !important;
+}
+
+.dark-theme .action-btn.action-view {
+    background: #294033 !important;
+    color: #f1f7f3 !important;
+    border-color: #3c5547 !important;
+}
+
+.dark-theme .action-btn.action-view:hover {
+    background: #3c6b50 !important;
+    color: #ffffff !important;
 }
 
 .dark-theme .dropdown-item:hover,
