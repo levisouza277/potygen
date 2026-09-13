@@ -18,7 +18,9 @@
 
     const state = {
         isOpen: false,
-        messages: []
+        messages: [],
+        isRecording: false,
+        recognition: null
     };
 
     function normalizarTexto(text) {
@@ -345,6 +347,60 @@
         setTimeout(() => addMessage('bot', response), 250);
     }
 
+    // Configuração do Reconhecimento de Voz (Web Speech API)
+    function setupSpeechRecognition(micBtn, inputEl) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            micBtn.style.display = 'none'; // Oculta o botão se o navegador não der suporte
+            console.warn('Web Speech API não suportada neste navegador.');
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'pt-BR';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+            state.isRecording = true;
+            micBtn.classList.add('potygen-mic-recording');
+            inputEl.placeholder = 'Ouvindo... Fale agora...';
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            inputEl.value = transcript;
+            // Caso deseje enviar a mensagem automaticamente após falar, descomente a linha abaixo:
+            // sendMessage();
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Erro no reconhecimento de voz:', event.error);
+            stopRecording();
+        };
+
+        recognition.onend = () => {
+            stopRecording();
+        };
+
+        function stopRecording() {
+            state.isRecording = false;
+            micBtn.classList.remove('potygen-mic-recording');
+            inputEl.placeholder = 'Digite sua solicitação...';
+        }
+
+        micBtn.addEventListener('click', () => {
+            if (state.isRecording) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        });
+
+        state.recognition = recognition;
+    }
+
     function createFloatingChat() {
         if (document.getElementById(CHATBOT_ID)) return;
 
@@ -372,6 +428,9 @@
                 </div>
                 <div class="potygen-chat-compose">
                     <input id="potygen-chat-input" type="text" placeholder="Digite sua solicitação..." maxlength="200" />
+                    <button id="potygen-chat-mic" type="button" aria-label="Gravar áudio">
+                        <i class="fa-solid fa-microphone"></i>
+                    </button>
                     <button id="potygen-chat-submit" type="button" aria-label="Enviar mensagem">
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
@@ -385,6 +444,7 @@
         const closeBtn = wrapper.querySelector('.potygen-chat-close');
         const panel = wrapper.querySelector('.potygen-chat-panel');
         const input = wrapper.querySelector('#potygen-chat-input');
+        const micBtn = wrapper.querySelector('#potygen-chat-mic');
         const submit = wrapper.querySelector('#potygen-chat-submit');
 
         toggle.addEventListener('click', () => {
@@ -406,6 +466,9 @@
         input.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') sendMessage();
         });
+
+        // Inicializa o recurso do microfone
+        setupSpeechRecognition(micBtn, input);
     }
 
     function init() {
