@@ -643,7 +643,18 @@ function mostrarMensagem(mensagem, tipo = 'info', titulo = '') {
 // ============================================
 async function verificarAutenticacao() {
     if (!supabaseClient) await initSupabase();
-    const { data: { user }, error } = await supabaseClient.auth.getUser();
+    let user = null;
+    let error = null;
+
+    for (let tentativa = 0; tentativa < 4 && !user; tentativa += 1) {
+        const resposta = await supabaseClient.auth.getUser();
+        user = resposta.data?.user || null;
+        error = resposta.error || null;
+        if (!user && tentativa < 3) {
+            await new Promise(resolve => setTimeout(resolve, 250));
+        }
+    }
+
     if (error || !user) {
         console.warn('⚠️ Usuário não autenticado');
         mostrarMensagem('Você não está logado. Por favor, faça login para continuar.', 'erro', 'Autenticação Necessária');

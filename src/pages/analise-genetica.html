@@ -320,14 +320,17 @@
     <div id="navbar-container"></div>
 
     <main class="main-content" id="mainContent">
-        <header class="top-bar">
-            <div class="breadcrumb-area">
-                <p class="page-subtitle">Páginas / Análise Genética</p>
+        <header class="app-page-header">
+            <div class="header-copy">
                 <h1 class="page-title">Predição Reprodutiva IA</h1>
+                <p class="page-sub">Análise genética e recomendações para o manejo reprodutivo</p>
             </div>
-            <div class="user-location-badge">
-                <i class="fa-solid fa-location-dot"></i>
-                <span id="lblLocalizacaoUsuario">Buscando localização...</span>
+            <div class="header-actions">
+                <div class="user-location-badge"><i class="fa-solid fa-location-dot"></i><span id="lblLocalizacaoUsuario">Buscando localização...</span></div>
+                <div class="user-profile-with-bell">
+                    <div class="user-profile-box"><div class="user-text"><span class="user-name" id="userNameDisplay">—</span><span class="user-farm" id="userFarmDisplay">—</span></div><div class="user-avatar"></div></div>
+                    <button id="notificationBell" type="button" class="notification-bell" aria-label="Notificações"><i class="fa-solid fa-bell"></i><span class="bell-dot"></span></button>
+                </div>
             </div>
         </header>
 

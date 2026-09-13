@@ -47,6 +47,21 @@ function initNavbar() {
     });
     
     console.log('✅ Elementos encontrados!');
+
+    const userNameElements = document.querySelectorAll('#userNameDisplay');
+    if (typeof supabaseClient !== 'undefined') {
+        supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
+            if (!session) return;
+            const { data: usuario } = await supabaseClient
+                .from('usuarios')
+                .select('nome')
+                .eq('id', session.user.id)
+                .single();
+            userNameElements.forEach(element => {
+                if (usuario?.nome) element.textContent = usuario.nome;
+            });
+        }).catch(() => {});
+    }
     
     const isDesktop = () => window.innerWidth > 1024;
     

@@ -884,6 +884,65 @@ tr:hover td {
     border-color: #2a3b32 !important;
 }
 
+.dark-theme .lista-racas-dropdown,
+.dark-theme .lista-racas-dropdown .raca-item {
+    background: #18231f !important;
+    background-color: #18231f !important;
+    color: #f1f7f3 !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .lista-racas-dropdown .raca-item:hover {
+    background: #21332a !important;
+    color: #bef264 !important;
+}
+
+.dark-theme .input-group select option,
+.dark-theme .input-group-f select option,
+.dark-theme .modal-content select option {
+    background: #101a16 !important;
+    color: #f1f7f3 !important;
+}
+
+.dark-theme .doenca-card {
+    background: #18231f !important;
+    background-color: #18231f !important;
+    border-color: #2a3b32 !important;
+    color: #f1f7f3 !important;
+}
+
+.dark-theme .doenca-card label,
+.dark-theme .doenca-card .input-group label {
+    color: #f1f7f3 !important;
+}
+
+.dark-theme .doenca-card input,
+.dark-theme .doenca-card select,
+.dark-theme .doenca-card textarea {
+    background: #101a16 !important;
+    background-color: #101a16 !important;
+    border-color: #2a3b32 !important;
+    color: #f1f7f3 !important;
+}
+
+.dark-theme .doenca-card > div[id^="detalhes_"] {
+    border-top-color: #2a3b32 !important;
+}
+
+.dark-theme .btn-secondary,
+.dark-theme .btn-confirmar-cancelar {
+    background: #24332c !important;
+    background-color: #24332c !important;
+    border-color: #3c5547 !important;
+    color: #f1f7f3 !important;
+}
+
+.dark-theme .btn-secondary:hover,
+.dark-theme .btn-confirmar-cancelar:hover {
+    background: #2d4638 !important;
+    color: #ffffff !important;
+}
+
 .dark-theme .modal-header,
 .dark-theme .modal-footer,
 .dark-theme .modal-confirmacao-header,

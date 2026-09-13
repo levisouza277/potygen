@@ -42,6 +42,8 @@
     position: absolute;
     right: 0;
     top: 10px;
+    flex-direction: row;
+    align-items: center;
 }
 
 .welcome-section {
@@ -365,7 +367,7 @@
 /* ── RESPONSIVO FINAL ────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
     .dashboard-page-header { padding-top: 8px; }
-    .dashboard-page-header .welcome-actions { position: static; }
+    .dashboard-page-header .welcome-actions { position: static; flex-direction: row; }
     .welcome-section { grid-template-columns: 1fr; align-items: flex-start; padding: 20px 18px; }
     .welcome-actions { align-items: stretch; width: 100%; }
     .filter-action-row, .user-profile-with-bell { justify-content: flex-start; }
@@ -380,6 +382,7 @@
     .charts-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .chart-card-box h3 { font-size: 13px; }
     .chart-wrapper { height: 180px; }
+    .dashboard-page-header .welcome-actions { align-items: flex-start; flex-direction: column; }
 }
 @media (max-width: 420px) {
     .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }

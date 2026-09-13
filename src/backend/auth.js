@@ -1,15 +1,19 @@
-async function verificarLogin() {
+async function obterSessaoEstavel(tentativas = 4) {
+    for (let tentativa = 0; tentativa < tentativas; tentativa += 1) {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session) return session;
+        if (tentativa < tentativas - 1) {
+            await new Promise(resolve => setTimeout(resolve, 250));
+        }
+    }
+    return null;
+}
 
-    const {
-        data: { session }
-    } = await supabaseClient.auth.getSession();
+async function verificarLogin() {
+    const session = await obterSessaoEstavel();
 
     if (!session) {
-
-        window.location.replace(
-            '../../index.html'
-        );
-
+        window.location.replace('../../index.html');
         return false;
     }
 
