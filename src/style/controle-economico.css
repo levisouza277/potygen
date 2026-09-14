@@ -534,3 +534,220 @@ body { background: var(--bg); color: var(--text); }
 .dark-theme .prod-filter-card .search-box input::placeholder {
   color: #82968a !important;
 }
+
+/* Opções dos relatórios PDF nos modais financeiro e de produção. */
+.dark-theme .opcao-pdf {
+  background: #18231f !important;
+  border-color: #3c5547 !important;
+}
+
+.dark-theme .opcao-pdf i {
+  color: #a6b8ad !important;
+}
+
+.dark-theme .opcao-pdf strong {
+  color: #f1f7f3 !important;
+}
+
+.dark-theme .opcao-pdf span {
+  color: #a6b8ad !important;
+}
+
+.dark-theme .opcao-pdf:hover {
+  background: #21332a !important;
+  border-color: #7ed4a3 !important;
+}
+
+.dark-theme .opcao-pdf.active {
+  background: #193d2d !important;
+  border-color: #60b985 !important;
+}
+
+.dark-theme .opcao-pdf.active i,
+.dark-theme .opcao-pdf.active strong {
+  color: #86efac !important;
+}
+
+.dark-theme .opcao-pdf.active span {
+  color: #d0f5dc !important;
+}
+
+/* Controles do modal de produção no tema escuro. */
+.dark-theme #modalProducao .field-label {
+  color: #f1f7f3 !important;
+}
+
+.dark-theme #modalProducao .prod-pick {
+  background: #18231f !important;
+  border-color: #3c5547 !important;
+  color: #d0ddd5 !important;
+}
+
+.dark-theme #modalProducao .prod-pick:hover {
+  background: #21332a !important;
+  border-color: #7ed4a3 !important;
+  color: #bef264 !important;
+}
+
+.dark-theme #modalProducao .prod-pick.active {
+  background: #193d2d !important;
+  border-color: #60a5fa !important;
+  color: #93c5fd !important;
+}
+
+.dark-theme #modalProducao .prod-pick.esp.active {
+  background: #3f351d !important;
+  border-color: #f4c96b !important;
+  color: #f4c96b !important;
+}
+
+.dark-theme #modalProducao #prodQualidade,
+.dark-theme #modalProducao #prodQualidade option {
+  background: #101a16 !important;
+  color: #f1f7f3 !important;
+  border-color: #3c5547 !important;
+}
+
+.dark-theme #modalProducao .field-group select {
+  background-color: #101a16 !important;
+  color: #f1f7f3 !important;
+  border-color: #3c5547 !important;
+  color-scheme: dark;
+}
+
+.dark-theme #modalProducao .field-group select option {
+  background-color: #101a16 !important;
+  color: #f1f7f3 !important;
+}
+
+/* Cards "Por espécie" com superfície escura e acentos discretos. */
+.dark-theme .esp-card {
+  background: #18231f !important;
+  border-color: #2a3b32 !important;
+  box-shadow: none;
+}
+
+.dark-theme .esp-bovino {
+  border-left: 4px solid #d6a84f !important;
+}
+
+.dark-theme .esp-ovino {
+  border-left: 4px solid #a78bda !important;
+}
+
+.dark-theme .esp-caprino {
+  border-left: 4px solid #5cc8bd !important;
+}
+
+.dark-theme .esp-bovino .esp-head,
+.dark-theme .esp-bovino .esp-val {
+  color: #f4c96b !important;
+}
+
+.dark-theme .esp-ovino .esp-head,
+.dark-theme .esp-ovino .esp-val {
+  color: #c4b5fd !important;
+}
+
+.dark-theme .esp-caprino .esp-head,
+.dark-theme .esp-caprino .esp-val {
+  color: #7ddbd2 !important;
+}
+
+.dark-theme .esp-sub {
+  color: #d0ddd5 !important;
+}
+
+.dark-theme .esp-cnt {
+  color: #a6b8ad !important;
+}
+
+/* Contraste da tabela de transações no tema escuro. */
+.dark-theme .table-wrap {
+  background: #18231f !important;
+  border-color: #2a3b32 !important;
+}
+
+.dark-theme .transacoes-table th {
+  color: #a6b8ad !important;
+  border-bottom-color: #3c5547 !important;
+}
+
+.dark-theme .transacoes-table td {
+  color: #f1f7f3 !important;
+  border-bottom-color: #2a3b32 !important;
+}
+
+.dark-theme .transacoes-table td strong {
+  color: #f1f7f3 !important;
+}
+
+.dark-theme .transacoes-table td small,
+.dark-theme .transacoes-table td span:not(.tipo-badge):not(.valor-receita):not(.valor-despesa) {
+  color: #a6b8ad !important;
+}
+
+.dark-theme .transacoes-table .valor-receita {
+  color: #86efac !important;
+}
+
+.dark-theme .transacoes-table .valor-despesa {
+  color: #fda4af !important;
+}
+
+.dark-theme .transacoes-table tr:hover td {
+  background: #21332a !important;
+}
+
+.dark-theme .transacoes-table .empty-row {
+  color: #a6b8ad !important;
+}
+
+/* Badges e detalhes da tabela de registros de produção. */
+.dark-theme .prod-table .prod-mini-badge {
+  border: 1px solid #3c5547;
+}
+
+.dark-theme .prod-table .prod-mini-badge.leite {
+  background: #19334a !important;
+  color: #93c5fd !important;
+}
+
+.dark-theme .prod-table .prod-mini-badge.carne {
+  background: #4a252d !important;
+  color: #fda4af !important;
+}
+
+.dark-theme .prod-table .prod-mini-badge.couro {
+  background: #4a351c !important;
+  color: #f4c96b !important;
+}
+
+.dark-theme .prod-table .prod-mini-badge.la {
+  background: #34294d !important;
+  color: #c4b5fd !important;
+}
+
+.dark-theme .prod-table .prod-mini-badge.bovino {
+  background: #4a351c !important;
+  color: #f4c96b !important;
+}
+
+.dark-theme .prod-table .prod-mini-badge.ovino {
+  background: #34294d !important;
+  color: #c4b5fd !important;
+}
+
+.dark-theme .prod-table .prod-mini-badge.caprino {
+  background: #193f3d !important;
+  color: #7ddbd2 !important;
+}
+
+.dark-theme .prod-table .qualidade-circle {
+  background: #164e36 !important;
+  color: #bbf7d0 !important;
+}
+
+.dark-theme .prod-table td small {
+  color: #a6b8ad !important;
+}

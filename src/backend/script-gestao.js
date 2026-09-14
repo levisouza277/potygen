@@ -3,6 +3,7 @@
 // ============================================
 // OBS: supabaseClient é inicializado em database.js
 let animais = [];
+let ordenacaoAtual = 'padrao';
 
 // ============================================
 // HELPERS GLOBAIS (usados por fazenda-ui.js)
@@ -367,7 +368,17 @@ async function salvarAnimalDB(animalData) {
 
     } catch (err) {
         console.error('Erro ao salvar animal:', err);
-        if (err.message.includes('row-level security')) {
+        const erroDuplicidade = err?.code === '23505'
+            || /duplicate key|unique constraint|already exists/i.test(err?.message || '');
+
+        if (erroDuplicidade) {
+            const brinco = animalData.codigo ? ` (${animalData.codigo})` : '';
+            mostrarMensagem(
+                `O brinco${brinco} já está cadastrado. Informe outro brinco para este animal.`,
+                'erro',
+                'Brinco já utilizado'
+            );
+        } else if (err.message.includes('row-level security')) {
             mostrarMensagem('Erro de permissão. Faça logout e login novamente.', 'erro');
         } else {
             mostrarMensagem('Erro ao salvar: ' + (err.message || 'Verifique os dados e tente novamente.'), 'erro');
@@ -590,6 +601,34 @@ function classeStatusAnimal(status) {
         .replace(/[^a-z0-9]+/g, '-');
 }
 
+function ordenarAnimais(lista) {
+    const ordenados = [...lista];
+    const texto = valor => String(valor || '').trim();
+    const peso = animal => Number(animal.peso_atual ?? animal.pesoAtual ?? 0) || 0;
+    const nascimento = animal => animal.data_nascimento || animal.dataNascimento || '';
+
+    ordenados.sort((animalA, animalB) => {
+        switch (ordenacaoAtual) {
+            case 'nome-asc':
+                return texto(animalA.nome).localeCompare(texto(animalB.nome), 'pt-BR', { sensitivity: 'base' });
+            case 'nome-desc':
+                return texto(animalB.nome).localeCompare(texto(animalA.nome), 'pt-BR', { sensitivity: 'base' });
+            case 'peso-desc':
+                return peso(animalB) - peso(animalA);
+            case 'peso-asc':
+                return peso(animalA) - peso(animalB);
+            case 'idade-desc':
+                return nascimento(animalA).localeCompare(nascimento(animalB));
+            case 'idade-asc':
+                return nascimento(animalB).localeCompare(nascimento(animalA));
+            default:
+                return 0;
+        }
+    });
+
+    return ordenados;
+}
+
 function renderizarTabela() {
     const tbody = document.getElementById('tabelaAnimais');
     if (!tbody) return;
@@ -599,7 +638,7 @@ function renderizarTabela() {
         return;
     }
 
-    tbody.innerHTML = animais.map(animal => {
+    tbody.innerHTML = ordenarAnimais(animais).map(animal => {
         const idade = calcularIdade(animal.data_nascimento || animal.dataNascimento);
         const nome = animal.nome || 'Sem nome';
         const codigo = animal.codigo || '';
@@ -648,7 +687,7 @@ function renderizarTabelaFiltrada(lista) {
         return;
     }
 
-    tbody.innerHTML = lista.map(animal => {
+    tbody.innerHTML = ordenarAnimais(lista).map(animal => {
         const idade = calcularIdade(animal.data_nascimento || animal.dataNascimento);
         const pesoAtual = animal.peso_atual ?? animal.pesoAtual ?? 0;
         const status = obterStatusAnimal(animal);
@@ -1692,13 +1731,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     const dropdownBtn = document.getElementById('dropdownBtn');
     const dropdownMenu = document.getElementById('dropdownMenu');
     const selectedEspecieText = document.getElementById('selectedEspecie');
+    const ordenarBtn = document.getElementById('btnOrdenar');
+    const ordenacaoMenu = document.getElementById('ordenacaoMenu');
+    const ordenacaoSelecionadaText = document.getElementById('ordenacaoSelecionada');
 
     if (dropdownBtn && dropdownMenu) {
         dropdownBtn.addEventListener('click', e => {
             e.stopPropagation();
             dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
         });
-        document.addEventListener('click', () => { dropdownMenu.style.display = 'none'; });
+        document.addEventListener('click', () => {
+            dropdownMenu.style.display = 'none';
+            if (ordenacaoMenu) {
+                ordenacaoMenu.style.display = 'none';
+                ordenarBtn?.setAttribute('aria-expanded', 'false');
+            }
+        });
         document.querySelectorAll('.dropdown-item').forEach(item => {
             item.addEventListener('click', function() {
                 document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
@@ -1708,6 +1756,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 executarFiltroGeral();
             });
         }); 
+    }
+
+    if (ordenarBtn && ordenacaoMenu) {
+        ordenarBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            const aberto = ordenacaoMenu.style.display === 'block';
+            ordenacaoMenu.style.display = aberto ? 'none' : 'block';
+            ordenarBtn.setAttribute('aria-expanded', String(!aberto));
+        });
+
+        document.querySelectorAll('.ordenacao-item').forEach(item => {
+            item.addEventListener('click', e => {
+                e.stopPropagation();
+                document.querySelectorAll('.ordenacao-item').forEach(opcao => opcao.classList.remove('selected'));
+                item.classList.add('selected');
+                ordenacaoAtual = item.dataset.sort || 'padrao';
+                if (ordenacaoSelecionadaText) ordenacaoSelecionadaText.textContent = item.textContent;
+                ordenacaoMenu.style.display = 'none';
+                ordenarBtn.setAttribute('aria-expanded', 'false');
+                executarFiltroGeral();
+            });
+        });
     }
 
     document.getElementById('busca')?.addEventListener('input', executarFiltroGeral);

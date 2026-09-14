@@ -98,7 +98,7 @@ async function carregarMatrizes() {
     const fazendaId = getFazendaIdAtual();
     if (!fazendaId) {
         todasMatrizes = [];
-        console.warn('⚠️ Nenhuma fazenda selecionada — matrizes não carregadas');
+        console.warn('Nenhuma fazenda selecionada — matrizes não carregadas');
         return [];
     }
 
@@ -537,12 +537,12 @@ async function salvarInseminacao(event) {
 
         const taxaPrenhez = Math.floor(Math.random() * (85 - 45 + 1) + 45);
 
-        const mensagemSucesso = `✅ Inseminação registrada com sucesso! 🎉\n\n` +
-                                `🐄 Entre a ${tipoFemea} **${femea.nome || femea.codigo}** e o ${tipoMacho} **${reprodutor.nome || reprodutor.codigo}**\n` +
-                                `👨‍⚕️ Realizado por: **${tecnico}**\n` +
-                                `📊 Taxa de prenhez estimada: **${taxaPrenhez}%**\n\n` +
-                                `📍 Localização: ${localizacao || 'Não informada'}\n` +
-                                `📅 Data: ${new Date(dataInseminacao).toLocaleDateString('pt-BR')}`;
+        const mensagemSucesso = ` Inseminação registrada com sucesso!\n\n` +
+                                ` Entre a ${tipoFemea} ${femea.nome || femea.codigo} e o ${tipoMacho} ${reprodutor.nome || reprodutor.codigo}\n` +
+                                ` Realizado por: ${tecnico}\n` +
+                                ` Taxa de prenhez estimada: ${taxaPrenhez}%\n\n` +
+                                ` Localização: ${localizacao || 'Não informada'}\n` +
+                                ` Data: ${new Date(dataInseminacao).toLocaleDateString('pt-BR')}`;
 
         mostrarMensagem(mensagemSucesso, 'sucesso', '🎯 Registro Confirmado');
         limparFormulario();

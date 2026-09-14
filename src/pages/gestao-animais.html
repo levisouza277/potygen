@@ -54,9 +54,20 @@
                     </div>
                 </div>
                 
-                <button class="btn-ordenar" id="btnOrdenar">
-                    <i class="fa-solid fa-arrow-down-wide-short"></i> Ordenar
+                <button class="btn-ordenar" id="btnOrdenar" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa-solid fa-arrow-down-wide-short"></i>
+                    <span id="ordenacaoSelecionada">Ordenar</span>
+                    <i class="fa-solid fa-chevron-down"></i>
                 </button>
+                <div class="dropdown-menu ordenacao-menu" id="ordenacaoMenu">
+                    <div class="ordenacao-item selected" data-sort="padrao">Ordem padrão</div>
+                    <div class="ordenacao-item" data-sort="nome-asc">Nome (A-Z)</div>
+                    <div class="ordenacao-item" data-sort="nome-desc">Nome (Z-A)</div>
+                    <div class="ordenacao-item" data-sort="peso-desc">Maior peso</div>
+                    <div class="ordenacao-item" data-sort="peso-asc">Menor peso</div>
+                    <div class="ordenacao-item" data-sort="idade-desc">Mais velho</div>
+                    <div class="ordenacao-item" data-sort="idade-asc">Mais novo</div>
+                </div>
             </div>
         </div>
 

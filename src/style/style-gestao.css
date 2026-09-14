@@ -222,6 +222,7 @@ body {
     display: flex;
     gap: 12px;
     align-items: center;
+    position: relative;
 }
 
 /* Dropdowns e Seletores Premium */
@@ -293,6 +294,32 @@ body {
     background: var(--forest-100) !important;
     color: var(--forest-700) !important;
     font-weight: 700 !important;
+}
+
+.ordenacao-menu {
+    left: auto;
+    right: 0;
+}
+
+.ordenacao-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-900);
+    border-radius: 10px;
+    transition: all 0.15s ease;
+}
+
+.ordenacao-item:hover {
+    background: var(--forest-50);
+    color: var(--forest-700);
+}
+
+.ordenacao-item.selected {
+    background: var(--forest-100);
+    color: var(--forest-700);
+    font-weight: 700;
 }
 
 /* ── 5. TABELA EXECUTIVA DE ALTA FIDELIDADE ─────────────────────────────── */
@@ -908,6 +935,21 @@ tr:hover td {
     color: #d0ddd5 !important;
 }
 
+.dark-theme .ordenacao-menu {
+    background: #18231f !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme .ordenacao-item {
+    color: #f1f7f3 !important;
+}
+
+.dark-theme .ordenacao-item:hover,
+.dark-theme .ordenacao-item.selected {
+    background: #21332a !important;
+    color: #bef264 !important;
+}
+
 .dark-theme .status-animal {
     background: #164e36 !important;
     color: #bbf7d0 !important;
@@ -1052,6 +1094,27 @@ tr:hover td {
 .dark-theme .modal-confirmacao-footer {
     background: #14201b !important;
     border-color: #2a3b32 !important;
+}
+
+.dark-theme #modalMensagem .modal-confirmacao-body,
+.dark-theme #modalMensagem #modalMensagemTexto {
+    background: #18231f !important;
+    color: #f1f7f3 !important;
+}
+
+.dark-theme #modalMensagem .modal-confirmacao-content {
+    background: #18231f !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme #modalMensagem .modal-confirmacao-header,
+.dark-theme #modalMensagem .modal-confirmacao-footer {
+    background: #14201b !important;
+    border-color: #2a3b32 !important;
+}
+
+.dark-theme #modalMensagem .modal-confirmacao-header.sucesso h3 {
+    color: #7ed4a3 !important;
 }
 
 .dark-theme .modal-body,
