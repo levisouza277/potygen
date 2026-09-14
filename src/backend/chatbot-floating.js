@@ -372,7 +372,8 @@
             const transcript = event.results[0][0].transcript;
             inputEl.value = transcript;
             // Caso deseje enviar a mensagem automaticamente após falar, descomente a linha abaixo:
-            // sendMessage();
+            // Envia o comando reconhecido imediatamente, sem exigir o clique em enviar.
+            sendMessage();
         };
 
         recognition.onerror = (event) => {
