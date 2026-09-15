@@ -102,6 +102,14 @@ body:has(.potygen-sidebar.open),
 body:has(.potygen-sidebar.active),
 body:has(.potygen-sidebar.is-open) { overflow: hidden; }
 
+@media (max-width: 1024px) {
+    body.nav-locked {
+        position: fixed;
+        width: 100%;
+        overscroll-behavior: none;
+    }
+}
+
 /* ── DESKTOP: empurra a página em vez de sobrepor ────────────────────────── */
 @media (min-width: 1025px) {
     /* libera scroll vertical no desktop quando o menu está aberto */
@@ -207,14 +215,18 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
     padding: 26px 18px 22px;
     position: fixed;
     top: 0;
+    bottom: 0;
     left: 0;
-    height: 100vh;
-    height: 100dvh;              /* respeita barra de endereço mobile */
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;          /* respeita barra de endereço mobile */
     transform: translateX(-105%);
     transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
     z-index: 1150;
     overflow-y: auto;
     overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     will-change: transform;
 }
 .potygen-sidebar.nav-open {
@@ -1021,6 +1033,18 @@ body.dark-theme {
     border-color: #2a3b32 !important;
 }
 
+.dark-theme .dia-card.hoje {
+    background: #21332a !important;
+    background-color: #21332a !important;
+    border: 3px solid #bef264 !important;
+    box-shadow: 0 0 0 2px rgba(190, 242, 100, 0.22), 0 4px 12px rgba(0, 0, 0, 0.28) !important;
+}
+
+.dark-theme .dia-card.hoje .dia-numero {
+    color: #bef264 !important;
+    font-weight: 800;
+}
+
 .dark-theme .dia-card:hover,
 .dark-theme .card-especie:hover,
 .dark-theme .eventos-dia-lista li:hover,
@@ -1045,6 +1069,10 @@ body.dark-theme {
 
 /* Em telas pequenas o conteúdo precisa crescer com a página, não com a viewport. */
 @media (max-width: 768px) {
+    .potygen-sidebar {
+        min-height: 100svh;
+    }
+
     .app-container,
     .main-content {
         min-height: 0 !important;

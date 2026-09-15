@@ -59,9 +59,12 @@ window.fecharModal = fecharModal;
 function addDias(dataStr, dias){
     const d = new Date(dataStr + 'T00:00:00');
     d.setDate(d.getDate() + dias);
-    return d.toISOString().slice(0,10);
+    return formatarDataLocal(d);
 }
-function hojeStr(){ return new Date().toISOString().slice(0,10); }
+function formatarDataLocal(data){
+    return `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}-${String(data.getDate()).padStart(2, '0')}`;
+}
+function hojeStr(){ return formatarDataLocal(new Date()); }
 function fmtBR(dataStr){
     if (!dataStr) return '—';
     const [y,m,d] = dataStr.split('T')[0].split('-');
@@ -595,6 +598,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     Agenda.fazendaId = window.PotygenFazenda?.getFazendaId?.() || null;
     await carregarTudo();
+
+    const diaInicial = new URLSearchParams(window.location.search).get('dia');
+    if (diaInicial && /^\d{4}-\d{2}-\d{2}$/.test(diaInicial)) {
+        const data = new Date(`${diaInicial}T00:00:00`);
+        Agenda.mesAtual = data.getMonth();
+        Agenda.anoAtual = data.getFullYear();
+        renderCalendario();
+        abrirEventosDoDia(diaInicial);
+    }
 });
 
 // Escuta evento global de troca de fazenda (caso UI não dispare callback)

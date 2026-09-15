@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../backend/theme-init.js"></script>
-    <title>PotyGen - Dashboard</title>
+    <title>PotyGen - Informações Gerais</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../style/navbar-style.css">
@@ -23,7 +23,7 @@
         <div class="dashboard-body">
             <div class="app-page-header dashboard-page-header">
                 <div class="header-copy">
-                    <h1 class="page-title">Dashboard</h1>
+                    <h1 class="page-title">Informações Gerais</h1>
                     <p class="page-sub">Visão geral do rebanho e monitoramento genético</p>
                     <span class="fazenda-header-badge" id="fazendaHeaderBadge" onclick="abrirModalTrocarFazenda()"><i class="fa-solid fa-tractor"></i><span id="fazendaBadgeNome">—</span><i class="fa-solid fa-chevron-down" style="font-size:9px;opacity:0.6;"></i></span>
                 </div>
@@ -38,64 +38,29 @@
                         </div>
                         <button id="notificationBell" type="button" class="notification-bell" aria-label="Notificações">
                             <i class="fa-solid fa-bell"></i>
-                            <span class="bell-dot"></span>
+                            <span class="bell-count" id="dashboardNotificationCount" hidden>0</span>
                         </button>
+                        <div class="dashboard-notification-popover" id="dashboardNotificationPopover" hidden>
+                            <div class="dashboard-notification-header">
+                                <div>
+                                    <strong>Agenda de hoje</strong>
+                                    <span id="dashboardNotificationDate"></span>
+                                </div>
+                                <button type="button" id="closeDashboardNotifications" aria-label="Fechar notificações">&times;</button>
+                            </div>
+                            <div class="dashboard-notification-list" id="dashboardNotificationList">
+                                <div class="dashboard-notification-empty">Carregando agenda...</div>
+                            </div>
+                            <a class="dashboard-notification-agenda" id="openTodayAgenda" href="agenda-reprodutiva.html">
+                                <i class="fa-solid fa-calendar-days"></i> Ver agenda do dia
+                            </a>
+                        </div>
                     </div>
                     <div class="filter-action-row">
                         <button id="openDashboardFilters" class="btn-action-sec">
                             <i class="fa-solid fa-filter"></i>
                             Filtro
                         </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="dashboard-filters-modal modal-backdrop" id="dashboardFiltersModal">
-                <div class="modal-content filter-modal">
-                    <header class="modal-header modal-header-small">
-                        <div>
-                            <h2>Filtros de Gráfico</h2>
-                            <p>Escolha o segmento, período e os tipos de gráfico.</p>
-                        </div>
-                        <button class="btn-close" id="closeDashboardFilters">&times;</button>
-                    </header>
-                    <section class="filter-modal-body">
-                        <div class="filter-modal-grid">
-                            <div class="filter-field">
-                                <label for="dashboardFilter">Segmento</label>
-                                <select id="dashboardFilter">
-                                    <option value="Todos">Todos os animais</option>
-                                    <option value="Bovinos">Bovinos</option>
-                                    <option value="Ovinos">Ovinos</option>
-                                    <option value="Caprinos">Caprinos</option>
-                                </select>
-                            </div>
-                            <div class="filter-field">
-                                <label for="dashboardPeriod">Período</label>
-                                <select id="dashboardPeriod">
-                                    <option value="6meses">Últimos 6 meses</option>
-                                    <option value="3meses">Últimos 3 meses</option>
-                                    <option value="12meses">Últimos 12 meses</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="chart-type-panel modal-chart-panel">
-                            <label>Tipos de gráfico</label>
-                            <div class="chart-checkboxes modal-chart-checkboxes">
-                                <label><input type="checkbox" value="line" checked> Linha</label>
-                                <label><input type="checkbox" value="bar" checked> Barra</label>
-                                <label><input type="checkbox" value="doughnut" checked> Rosca</label>
-                                <label><input type="checkbox" value="pie" checked> Pizza</label>
-                                <label><input type="checkbox" value="radar" checked> Radar</label>
-                                <label><input type="checkbox" value="polarArea" checked> Polar</label>
-                                <label><input type="checkbox" value="bubble" checked> Bubble</label>
-                                <label><input type="checkbox" value="scatter" checked> Scatter</label>
-                            </div>
-                        </div>
-                    </section>
-                    <div class="modal-footer-actions filter-footer-actions">
-                        <button class="btn-cancel" id="cancelDashboardFilters">Fechar</button>
-                        <button class="btn-submit-pri" id="applyDashboardFilters">Aplicar</button>
                     </div>
                 </div>
             </div>
@@ -112,6 +77,15 @@
                     </header>
                     <section class="filter-modal-body">
                         <div class="filter-modal-grid">
+                            <div class="filter-field">
+                                <label for="dashboardView">Visão dos gráficos</label>
+                                <select id="dashboardView">
+                                    <option value="geral">Visão geral</option>
+                                    <option value="fazenda">Comparar fazendas</option>
+                                    <option value="animais">Gestão dos animais</option>
+                                    <option value="economica">Gestão econômica</option>
+                                </select>
+                            </div>
                             <!-- FILTRO FAZENDA -->
                             <div class="filter-field filter-field-fazenda">
                                 <label for="filterFazenda">Fazenda</label>

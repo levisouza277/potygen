@@ -107,6 +107,15 @@
 .fi-nome  { font-weight: 600; color: #0f172a; font-size: .9rem; }
 .fi-sub   { font-size: .75rem; color: #64748b; }
 .fi-check { display: none; }
+.fi-delete {
+    width: 34px; height: 34px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid #fecaca; border-radius: 8px;
+    background: #fff1f2; color: #dc2626; cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+}
+.fi-delete:hover { background: #dc2626; border-color: #dc2626; color: #fff; }
+.fi-delete:focus-visible { outline: 2px solid #dc2626; outline-offset: 2px; }
 
 .fazendas-lista-vazia {
     text-align: center; padding: 32px 16px;
@@ -321,6 +330,8 @@
     border-color: #2a3b32 !important;
     color: #d0ddd5;
 }
+.dark-theme .fi-delete { background: #3b1f24; border-color: #7f1d1d; color: #fca5a5; }
+.dark-theme .fi-delete:hover { background: #dc2626; color: #fff; }
 
 .dark-theme .fazenda-item:hover,
 .dark-theme .fazenda-item.ativa,

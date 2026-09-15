@@ -70,14 +70,31 @@ function initNavbar() {
     })();
     
     const isDesktop = () => window.innerWidth > 1024;
+    let lockedScrollY = 0;
+
+    function lockPageScroll() {
+        if (isDesktop()) return;
+        lockedScrollY = window.scrollY;
+        document.body.classList.add('nav-locked');
+        document.body.style.top = `-${lockedScrollY}px`;
+    }
+
+    function unlockPageScroll() {
+        if (isDesktop() || !document.body.classList.contains('nav-locked')) return;
+        document.body.classList.remove('nav-locked');
+        document.body.style.top = '';
+        window.scrollTo(0, lockedScrollY);
+    }
     
     function openSidebar() {
         sidebar.classList.add('nav-open');
+        lockPageScroll();
         if (overlay && !isDesktop()) overlay.classList.add('visible');
     }
     
     function closeSidebar() {
         sidebar.classList.remove('nav-open');
+        unlockPageScroll();
         if (overlay) overlay.classList.remove('visible');
     }
     

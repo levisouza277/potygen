@@ -32,6 +32,19 @@ window.PotygenFazenda = {
     }
 };
 
+function normalizarEspecie(especie) {
+    return String(especie || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .toLowerCase();
+}
+
+function ehEspecie(especie, tipo) {
+    const valor = normalizarEspecie(especie);
+    return valor === tipo || valor.startsWith(`${tipo} `) || valor.startsWith(`${tipo}-`) || valor.startsWith(tipo.slice(0, -1));
+}
+
 // ============================================================
 // CARREGAR FAZENDAS DO USUÁRIO
 // ============================================================
@@ -141,6 +154,43 @@ async function cadastrarFazenda(dados) {
 }
 
 // ============================================================
+// EXCLUIR FAZENDA E TODOS OS DADOS RELACIONADOS
+// ============================================================
+
+async function excluirFazenda(fazendaId) {
+    try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) throw new Error('Usuário não autenticado');
+        if (!fazendaId) throw new Error('Fazenda inválida');
+
+        const { error } = await supabaseClient.rpc('excluir_fazenda_com_dados', {
+            p_fazenda_id: fazendaId
+        });
+
+        if (error) throw error;
+
+        const fazendaExcluidaEraAtual = window.PotygenFazenda.getFazendaId() === fazendaId;
+        window.PotygenFazenda.todasFazendas = window.PotygenFazenda.todasFazendas
+            .filter(fazenda => fazenda.id !== fazendaId);
+
+        if (fazendaExcluidaEraAtual) {
+            window.PotygenFazenda.fazendaAtual = null;
+            sessionStorage.removeItem('fazenda_atual_id');
+            sessionStorage.removeItem('fazenda_atual_json');
+
+            const proximaFazenda = window.PotygenFazenda.todasFazendas[0];
+            if (proximaFazenda) selecionarFazenda(proximaFazenda);
+            else document.dispatchEvent(new CustomEvent('semFazenda'));
+        }
+
+        return { sucesso: true, fazendaExcluidaEraAtual, proximaFazenda: window.PotygenFazenda.todasFazendas[0] || null };
+    } catch (err) {
+        console.error('Erro ao excluir fazenda:', err);
+        return { sucesso: false, erro: err.message || 'Não foi possível excluir a fazenda.' };
+    }
+}
+
+// ============================================================
 // BUSCAR DADOS DO USUÁRIO (nome/cpf para preencher modal)
 // ============================================================
 
@@ -201,9 +251,9 @@ async function buscarEstatisticasFazenda(fazendaId, todasFazendas = false) {
         if (error) throw error;
 
         // Contagens por espécie
-        const bovinos = animais.filter(a => a.especie?.toLowerCase().includes('bovin')).length;
-        const ovinos  = animais.filter(a => a.especie?.toLowerCase().includes('ovin')).length;
-        const caprinos = animais.filter(a => a.especie?.toLowerCase().includes('caprin')).length;
+        const bovinos = animais.filter(a => ehEspecie(a.especie, 'bovino') || ehEspecie(a.especie, 'bovina')).length;
+        const ovinos  = animais.filter(a => ehEspecie(a.especie, 'ovino') || ehEspecie(a.especie, 'ovina')).length;
+        const caprinos = animais.filter(a => ehEspecie(a.especie, 'caprino') || ehEspecie(a.especie, 'caprina')).length;
         const total = animais.length;
 
         // Inseminações do mês
@@ -218,14 +268,11 @@ async function buscarEstatisticasFazenda(fazendaId, todasFazendas = false) {
             .gte('data_inseminacao', inicioMes.toISOString().split('T')[0]);
 
         if (!todasFazendas && fazendaId) {
-            // Filtra inseminações pelos animais da fazenda
-            const idsFemeas = animais.map(a => a.id);
-            if (idsFemeas.length > 0) {
-                queryInsem = queryInsem.in('femea_id', idsFemeas);
-            }
+            queryInsem = queryInsem.eq('fazenda_id', fazendaId);
         }
 
-        const { data: inseminacoes } = await queryInsem;
+        const { data: inseminacoes, error: inseminacoesError } = await queryInsem;
+        if (inseminacoesError) throw inseminacoesError;
         const totalInsem = inseminacoes?.length || 0;
 
         // Taxa de prenhez (inseminações com resultado positivo)
@@ -236,13 +283,11 @@ async function buscarEstatisticasFazenda(fazendaId, todasFazendas = false) {
             .not('resultado_prenhez', 'is', null);
 
         if (!todasFazendas && fazendaId) {
-            const idsFemeas = animais.map(a => a.id);
-            if (idsFemeas.length > 0) {
-                queryPrenhez = queryPrenhez.in('femea_id', idsFemeas);
-            }
+            queryPrenhez = queryPrenhez.eq('fazenda_id', fazendaId);
         }
 
-        const { data: diagnosticos } = await queryPrenhez;
+        const { data: diagnosticos, error: diagnosticosError } = await queryPrenhez;
+        if (diagnosticosError) throw diagnosticosError;
         const totalDiag = diagnosticos?.length || 0;
         const positivosDiag = diagnosticos?.filter(d => d.resultado_prenhez === true).length || 0;
         const taxaPrenhez = totalDiag > 0 ? Math.round((positivosDiag / totalDiag) * 100) : 0;
@@ -256,7 +301,12 @@ async function buscarEstatisticasFazenda(fazendaId, todasFazendas = false) {
             .eq('status', 'Agendada')
             .lt('data_inseminacao', hoje);
 
-        const { data: alertas } = await queryAlertas;
+        if (!todasFazendas && fazendaId) {
+            queryAlertas = queryAlertas.eq('fazenda_id', fazendaId);
+        }
+
+        const { data: alertas, error: alertasError } = await queryAlertas;
+        if (alertasError) throw alertasError;
         const totalAlertas = alertas?.length || 0;
 
         return {
@@ -379,3 +429,5 @@ window.inicializarFazenda = async function() {
 
     return fazendaAtiva;
 };
+
+window.excluirFazenda = excluirFazenda;

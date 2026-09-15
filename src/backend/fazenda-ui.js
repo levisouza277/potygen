@@ -148,8 +148,42 @@ window.PotygenFazendaUI = {
                     <div class="fi-sub">${[f.tipo_criacao, [f.cidade, f.estado].filter(Boolean).join('/')].filter(Boolean).join(' · ')}</div>
                 </div>
                 <i class="fa-solid fa-check fi-check"></i>
+                <button type="button" class="fi-delete" title="Excluir fazenda"
+                        aria-label="Excluir fazenda ${f.nome}"
+                        onclick="event.stopPropagation(); PotygenFazendaUI._excluirFazendaUI('${f.id}')">
+                    <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+                </button>
             </div>
         `).join('');
+    },
+
+    async _excluirFazendaUI(fazendaId) {
+        const fazenda = window.PotygenFazenda?.todasFazendas.find(f => f.id === fazendaId);
+        if (!fazenda) return;
+
+        const confirmacao = window.confirm(
+            `Excluir a fazenda "${fazenda.nome}"?\n\n` +
+            'Esta ação apagará permanentemente todos os animais, inseminações, agenda, análises e dados econômicos vinculados.'
+        );
+        if (!confirmacao) return;
+
+        const resultado = await window.excluirFazenda(fazendaId);
+        if (!resultado.sucesso) {
+            mostrarToast(`Erro ao excluir fazenda: ${resultado.erro}`, 'error');
+            return;
+        }
+
+        this._renderizarListaFazendas();
+        mostrarToast(`Fazenda "${fazenda.nome}" excluída com sucesso.`);
+
+        if (resultado.fazendaExcluidaEraAtual) {
+            if (resultado.proximaFazenda) {
+                this.atualizarDisplayFazenda(resultado.proximaFazenda);
+            } else {
+                fecharModal('modalTrocarFazenda');
+                this.abrirModalCadastrarFazenda();
+            }
+        }
     },
 
     _selecionarFazendaUI(fazendaId) {
