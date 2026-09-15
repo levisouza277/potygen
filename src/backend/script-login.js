@@ -160,8 +160,10 @@ esqueciSenha.addEventListener(
             .resetPasswordForEmail(
                 email,
                 {
-                    redirectTo:
-                    'http://127.0.0.1:5500/src/pages/esqueceusenha.html'
+                    redirectTo: new URL(
+                        'src/pages/esqueceusenha.html',
+                        window.location.origin + '/'
+                    ).href
                 }
             );
 

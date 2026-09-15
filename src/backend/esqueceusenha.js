@@ -189,12 +189,18 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+          const { error: logoutError } = await supabaseClient.auth.signOut();
+          if (logoutError) {
+            alert('Senha alterada, mas não foi possível encerrar a sessão: ' + logoutError.message);
+            return;
+          }
+
         showSuccess();
 
         setTimeout(() => {
 
             window.location.href =
-                '../pages/index.html';
+              '/index.html';
 
         }, 2000);
 

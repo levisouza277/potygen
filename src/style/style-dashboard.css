@@ -260,6 +260,8 @@ body {
     border-color: var(--forest-300);
     box-shadow: var(--shadow-md);
 }
+.stat-card-alertas { cursor: pointer; }
+.stat-card-alertas:focus-visible { outline: 2px solid var(--forest-500); outline-offset: 3px; }
 
 .stat-card-header {
     display: flex; justify-content: space-between; align-items: center;

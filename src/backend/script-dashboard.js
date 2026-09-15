@@ -86,6 +86,7 @@ function updateChart(canvasId, type, labels, datasets, extraOptions = {}) {
 // GRÁFICOS (CHART.JS) - dados de fallback
 // ==========================================
 const dashboardCharts = {};
+let notificacoesDoDia = 0;
 
 function renderizarGraficos() {
     initializeDashboardFilters();
@@ -113,6 +114,33 @@ function setupNotificationButton() {
             popover.hidden = true;
         }
     });
+
+    const alertasCard = document.getElementById('alertasCard');
+    const abrirAlertas = () => {
+        if (popover.hidden) {
+            popover.hidden = false;
+            carregarNotificacoesDoDia();
+        } else {
+            popover.hidden = true;
+        }
+    };
+    alertasCard?.addEventListener('click', abrirAlertas);
+    alertasCard?.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            abrirAlertas();
+        }
+    });
+}
+
+function atualizarCardAlertas(total) {
+    const card = document.getElementById('statAlertas');
+    if (card) {
+        card.textContent = Number(total || 0).toLocaleString('pt-BR');
+        card.classList.remove('loading');
+    }
+    const alertasCard = document.getElementById('alertasCard');
+    if (alertasCard) alertasCard.setAttribute('aria-label', `${total || 0} alertas para hoje. Abrir alertas`);
 }
 
 function dataLocalISO() {
@@ -138,6 +166,8 @@ async function carregarNotificacoesDoDia() {
     if (linkAgenda) linkAgenda.href = `agenda-reprodutiva.html?dia=${dataHoje}`;
     if (!lista) return;
     if (!fazendaId) {
+        notificacoesDoDia = 0;
+        atualizarCardAlertas(0);
         if (contador) { contador.textContent = '0'; contador.hidden = true; }
         if (notificationBell) notificationBell.setAttribute('aria-label', 'Notificações: nenhuma para hoje');
         lista.innerHTML = '<div class="dashboard-notification-empty">Nenhuma fazenda selecionada.</div>';
@@ -150,6 +180,8 @@ async function carregarNotificacoesDoDia() {
         .select('id, femea_id, data_inseminacao, data_prevista_cio, data_cio_real, data_ultrassom, data_prevista_parto, data_parto_real, status, cio_confirmado, resultado_prenhez')
         .eq('fazenda_id', fazendaId);
     if (error) {
+        notificacoesDoDia = 0;
+        atualizarCardAlertas(0);
         if (contador) { contador.textContent = '0'; contador.hidden = true; }
         if (notificationBell) notificationBell.setAttribute('aria-label', 'Notificações indisponíveis');
         lista.innerHTML = '<div class="dashboard-notification-empty">Não foi possível carregar a agenda.</div>';
@@ -176,6 +208,8 @@ async function carregarNotificacoesDoDia() {
     });
 
     if (!itens.length) {
+        notificacoesDoDia = 0;
+        atualizarCardAlertas(0);
         if (contador) { contador.textContent = '0'; contador.hidden = true; }
         if (notificationBell) notificationBell.setAttribute('aria-label', 'Notificações: nenhuma para hoje');
         lista.innerHTML = '<div class="dashboard-notification-empty"><i class="fa-solid fa-calendar-check"></i><span>Nenhum compromisso agendado para hoje.</span></div>';
@@ -185,6 +219,8 @@ async function carregarNotificacoesDoDia() {
         contador.textContent = itens.length > 99 ? '99+' : String(itens.length);
         contador.hidden = false;
     }
+    notificacoesDoDia = itens.length;
+    atualizarCardAlertas(notificacoesDoDia);
     if (notificationBell) notificationBell.setAttribute('aria-label', `Notificações: ${itens.length} para hoje`);
     lista.innerHTML = itens.map(item => {
         const nome = item.animal?.codigo || item.animal?.nome || 'Animal sem identificação';
@@ -299,7 +335,7 @@ async function carregarDadosDashboard() {
         setCard('statTotalAnimais', stats.total.toLocaleString('pt-BR'));
         setCard('statTaxaPrenhez', stats.taxaPrenhez + '%');
         setCard('statInseminacoes', stats.inseminacoesMes.toLocaleString('pt-BR'));
-        setCard('statAlertas', stats.alertas.toLocaleString('pt-BR'));
+        atualizarCardAlertas(notificacoesDoDia);
 
         const bovinos  = segmento === 'Todos' ? stats.bovinos  : (segmento === 'Bovinos'  ? stats.bovinos  : 0);
         const ovinos   = segmento === 'Todos' ? stats.ovinos   : (segmento === 'Ovinos'   ? stats.ovinos   : 0);
