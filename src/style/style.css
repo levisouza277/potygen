@@ -459,15 +459,15 @@ input:focus-visible, button:focus-visible, a:focus-visible {
     .mobile-brand-logo {
         display: flex;
         position: absolute;
-        top: 14px;
+        top: 30px;
         left: 50%;
         transform: translateX(-50%);
         align-items: center;
         justify-content: center;
-        width: 64px;
-        height: 64px;
-        margin: 0 auto 10px;
-        border-radius: 16px;
+        width: 96px;
+        height: 96px;
+        margin: 0 auto;
+        border-radius: 20px;
         overflow: hidden;
         background: var(--white);
         box-shadow: 0 14px 30px rgba(10, 77, 46, 0.22);
@@ -498,10 +498,10 @@ input:focus-visible, button:focus-visible, a:focus-visible {
     .login-side { padding-top: 12px; }
     .mobile-brand-logo {
         display: flex;
-        top: 8px;
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
+        top: 14px;
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
     }
     .login-box h1 { font-size: 26px; margin-bottom: 3px; }
     .login-box .desc { font-size: 12px; margin-bottom: 10px; }
