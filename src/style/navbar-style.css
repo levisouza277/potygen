@@ -190,6 +190,9 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
     box-shadow: var(--shadow-forest);
 }
 
+/* Cabeçalho compacto compartilhado pelas páginas do aplicativo. */
+.potygen-mobile-topbar { display: none; }
+
 /* ── OVERLAY (sempre por trás da sidebar) ────────────────────────────────── */
 .nav-overlay {
     position: fixed;
@@ -560,6 +563,105 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
 }
 
 @media (max-width: 768px) {
+    .potygen-mobile-topbar:not(.dashboard-mobile-topbar) {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1100;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 100%;
+        height: 76px;
+        padding: 0 18px;
+        background: var(--surface);
+        color: var(--ink-900);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .potygen-mobile-topbar:not(.dashboard-mobile-topbar) .nav-menu-toggle {
+        position: static;
+        display: inline-flex;
+        flex: 0 0 38px;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        color: var(--ink-900);
+        font-size: 21px;
+    }
+
+    .potygen-mobile-logo {
+        display: block;
+        width: 135px;
+        height: 43px;
+        object-fit: contain;
+        object-position: left center;
+    }
+
+    .potygen-mobile-user-controls {
+        position: absolute;
+        top: 19px;
+        right: 14px;
+        display: flex;
+        align-items: center;
+        height: 38px;
+    }
+
+    .potygen-mobile-user-controls .user-profile-with-bell {
+        position: static;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .potygen-mobile-user-controls .user-profile-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px;
+        border-radius: 50%;
+    }
+
+    .potygen-mobile-user-controls .user-text { display: none !important; }
+
+    .potygen-mobile-user-controls .user-avatar,
+    .potygen-mobile-user-controls .notification-bell {
+        width: 34px;
+        height: 34px;
+    }
+
+    /* O botão injetado da sidebar é substituído pelo do cabeçalho. */
+    #navbar-container #navToggleBtn { display: none; }
+
+    .app-container:has(> .potygen-mobile-topbar):not(:has(.dashboard-mobile-topbar)) .main-content {
+        padding-top: 100px !important;
+    }
+
+    body:has(> .potygen-mobile-topbar) > .max-w-6xl {
+        padding-top: 100px !important;
+    }
+
+    /* Nas páginas com controles no topo, o título não reserva mais espaço à esquerda. */
+    body:has(.potygen-mobile-topbar:not(.dashboard-mobile-topbar)) .app-page-header {
+        padding-left: 0 !important;
+        text-align: center;
+    }
+
+    body:has(.potygen-mobile-topbar:not(.dashboard-mobile-topbar)) .app-page-header .header-copy {
+        width: 100%;
+        text-align: center;
+    }
+
+    body:has(.potygen-mobile-topbar:not(.dashboard-mobile-topbar)) .app-page-header .page-sub {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
     .main-content { padding: 24px 16px 40px !important; }
     .app-page-header {
         align-items: stretch;

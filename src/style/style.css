@@ -438,20 +438,36 @@ input:focus-visible, button:focus-visible, a:focus-visible {
     .login-side { padding: 80px 32px 48px; }
 }
 @media (max-width: 768px) {
+    html,
+    body {
+        height: 100dvh;
+        min-height: 100dvh;
+        overflow: hidden;
+    }
+
+    .main-wrapper {
+        min-height: calc(100dvh - 58px);
+        height: calc(100dvh - 58px);
+    }
+
     .login-side {
         align-items: center;
-        justify-content: flex-start;
-        padding: 76px 32px 36px;
+        justify-content: center;
+        padding: 18px 32px;
         flex-direction: column;
     }
     .mobile-brand-logo {
         display: flex;
+        position: absolute;
+        top: 14px;
+        left: 50%;
+        transform: translateX(-50%);
         align-items: center;
         justify-content: center;
-        width: 104px;
-        height: 104px;
-        margin: 0 auto 26px;
-        border-radius: 22px;
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 10px;
+        border-radius: 16px;
         overflow: hidden;
         background: var(--white);
         box-shadow: 0 14px 30px rgba(10, 77, 46, 0.22);
@@ -463,15 +479,46 @@ input:focus-visible, button:focus-visible, a:focus-visible {
         object-fit: cover;
         border-radius: inherit;
     }
-    .login-side::before { top: 22px; left: 0; right: 0; text-align: center; }
+    .login-side::before { display: none; }
     .login-side::after { display: none; }
-    .login-box h1 { font-size: 34px; text-align: left; }
-    .login-box .desc { font-size: 14.5px; }
-    .actions { flex-direction: column; gap: 14px; align-items: flex-start; }
-    .btn-submit { height: 56px; font-size: 15px; }
-    .input-wrap { height: 54px; }
+    .login-box h1 { font-size: 30px; text-align: left; margin-bottom: 6px; }
+    .login-box .desc { font-size: 13px; line-height: 1.35; margin-bottom: 18px; }
+    .field { margin-bottom: 10px; }
+    .field label { margin-bottom: 4px; }
+    .actions { flex-direction: row; gap: 8px; align-items: center; }
+    .btn-submit { height: 48px; font-size: 14px; }
+    .input-wrap { height: 46px; }
 }
 @media (max-width: 480px) {
-    .login-side { padding: 76px 22px 36px; }
-    .mobile-brand-logo { margin-bottom: 28px; }
+    .login-side { padding: 18px 22px; }
+    .mobile-brand-logo { margin-bottom: 8px; }
+}
+
+@media (max-width: 768px) and (max-height: 680px) {
+    .login-side { padding-top: 12px; }
+    .mobile-brand-logo {
+        display: flex;
+        top: 8px;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+    }
+    .login-box h1 { font-size: 26px; margin-bottom: 3px; }
+    .login-box .desc { font-size: 12px; margin-bottom: 10px; }
+    .field { margin-bottom: 7px; }
+    .input-wrap { height: 42px; }
+    .btn-submit { height: 44px; }
+    .footer-link { margin-top: 10px; }
+}
+
+.login-page-footer { display: none; }
+
+@media (max-width: 768px) {
+    .login-page-footer {
+        display: block;
+        height: 58px;
+        padding: 10px 14px;
+        font-size: 10px;
+        line-height: 1.35;
+    }
 }

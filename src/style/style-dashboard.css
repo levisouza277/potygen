@@ -516,7 +516,7 @@ body {
         padding: 0 18px;
         background: var(--surface);
         color: var(--ink-900);
-        border-bottom: 2px solid #111;
+        border-bottom: 1px solid var(--border);
         width: 100vw;
     }
     .dashboard-mobile-menu,

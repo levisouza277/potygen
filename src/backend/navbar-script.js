@@ -10,7 +10,7 @@ function initNavbar() {
     const overlay = document.getElementById('navOverlay');
     const themeToggle = document.getElementById('themeToggleBtn');
     const navLogo = document.getElementById('navLogo');
-    const mobileDashboardMenu = document.getElementById('dashboardMobileMenu');
+    const mobileMenus = document.querySelectorAll('.potygen-mobile-menu');
     
     if (!toggleBtn || !sidebar) {
         console.error('❌ Elementos não encontrados:', { toggleBtn: !!toggleBtn, sidebar: !!sidebar });
@@ -25,10 +25,9 @@ function initNavbar() {
             navLogo.src = isDark ? '../assets/logo2.png' : '../assets/logo.png';
         }
 
-        const mobileDashboardLogo = document.getElementById('mobileDashboardLogo');
-        if (mobileDashboardLogo) {
-            mobileDashboardLogo.src = isDark ? '../assets/logo02.jpeg' : '../assets/logo01.jpeg';
-        }
+        document.querySelectorAll('.potygen-mobile-logo').forEach(logo => {
+            logo.src = isDark ? '../assets/logo02.jpeg' : '../assets/logo01.jpeg';
+        });
 
         if (themeToggle) {
             const icon = themeToggle.querySelector('i');
@@ -76,6 +75,35 @@ function initNavbar() {
     })();
 
     initSharedNotifications();
+
+    function organizarControlesTopoMobile() {
+        const container = document.querySelector('.potygen-mobile-user-controls');
+        const controls = document.querySelector('.app-page-header .user-profile-with-bell');
+        if (!container || !controls) return;
+
+        const originalParent = controls.parentElement;
+        const originalNextSibling = controls.nextSibling;
+        const mobileQuery = window.matchMedia('(max-width: 768px)');
+
+        const aplicarPosicao = () => {
+            if (mobileQuery.matches) {
+                if (controls.parentElement !== container) container.appendChild(controls);
+                return;
+            }
+
+            if (controls.parentElement !== originalParent) {
+                originalParent.insertBefore(controls, originalNextSibling);
+            }
+        };
+
+        aplicarPosicao();
+        if (!container.dataset.mobileControlsListener) {
+            mobileQuery.addEventListener('change', aplicarPosicao);
+            container.dataset.mobileControlsListener = 'true';
+        }
+    }
+
+    organizarControlesTopoMobile();
     
     const isDesktop = () => window.innerWidth > 1024;
     let lockedScrollY = 0;
@@ -118,11 +146,11 @@ function initNavbar() {
         e.stopPropagation();
         toggleSidebar();
     });
-    mobileDashboardMenu?.addEventListener('click', (e) => {
+    mobileMenus.forEach(menu => menu.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
         toggleSidebar();
-    });
+    }));
     console.log('✅ Event listener do botão configurado');
     
     // Overlay
