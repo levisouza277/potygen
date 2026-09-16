@@ -70,6 +70,7 @@ window.PotygenFazendaUI = {
 
         if (fazendaAtiva) {
             this.atualizarDisplayFazenda(fazendaAtiva);
+            document.dispatchEvent(new CustomEvent('fazendaInicializada', { detail: fazendaAtiva }));
         } else {
             const nomeEl = document.getElementById('sidebarFazendaNome');
             const subEl  = document.getElementById('sidebarFazendaSub');

@@ -15,6 +15,16 @@ body {
     background: #f4f7fe;
     background-image: none;
 }
+.dashboard-mobile-topbar { display: none; }
+.dashboard-page-header > .welcome-actions {
+    display: flex;
+    position: absolute;
+    right: 0;
+    top: 10px;
+    width: auto;
+    height: auto;
+    overflow: visible;
+}
 .main-content {
     background: #f4f7fe;
 }
@@ -476,6 +486,213 @@ body {
     .filter-action-row, .user-profile-with-bell { justify-content: flex-start; }
 }
 @media (max-width: 768px) {
+    .app-container {
+        display: block !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    #navbar-container {
+        width: 0 !important;
+        height: 0 !important;
+    }
+    .main-content {
+        display: block !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        margin: 0 !important;
+    }
+    .dashboard-mobile-topbar {
+        display: flex;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1100;
+        align-items: center;
+        gap: 14px;
+        height: 76px;
+        padding: 0 18px;
+        background: var(--surface);
+        color: var(--ink-900);
+        border-bottom: 2px solid #111;
+        width: 100vw;
+    }
+    .dashboard-mobile-menu,
+    .dashboard-mobile-profile {
+        position: static;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        border: 0;
+        background: transparent;
+        color: var(--ink-900);
+        font-size: 21px;
+        cursor: pointer;
+    }
+    #navbar-container #navToggleBtn { display: none; }
+    .dashboard-mobile-logo {
+        display: block;
+        width: 135px;
+        height: 43px;
+        object-fit: contain;
+        object-position: left center;
+    }
+    .dashboard-mobile-user-controls {
+        position: absolute !important;
+        top: 19px !important;
+        right: 14px !important;
+        left: auto !important;
+        z-index: 2 !important;
+        display: flex !important;
+        align-items: center;
+        width: auto !important;
+        height: 38px;
+    }
+    .dashboard-mobile-user-controls .user-profile-with-bell {
+        position: static !important;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+    .dashboard-mobile-user-controls .user-profile-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        max-width: 154px;
+        padding: 5px 5px 5px 10px;
+        border-radius: 100px;
+    }
+    .dashboard-mobile-user-controls .user-text {
+        display: flex !important;
+        min-width: 0;
+        max-width: 105px;
+        text-align: right;
+    }
+    .dashboard-mobile-user-controls .user-name,
+    .dashboard-mobile-user-controls .user-farm {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .dashboard-mobile-user-controls .user-name { font-size: 10.5px; }
+    .dashboard-mobile-user-controls .user-farm { font-size: 8.5px; }
+    .dashboard-mobile-user-controls .user-avatar {
+        width: 34px;
+        height: 34px;
+    }
+    .main-content { padding: 76px 14px 34px !important; }
+    .dashboard-body { padding: 80px 0 36px; }
+    .main-content .dashboard-page-header {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 4px 12px !important;
+        align-items: start !important;
+        margin: 15px 0 18px !important;
+        padding: 0 0 2px !important;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+    .dashboard-page-header .header-copy {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-column: 1 / -1;
+        gap: 4px 18px;
+        align-items: start;
+    }
+    .dashboard-page-header .page-title {
+        grid-column: 1;
+        grid-row: 1;
+        margin: 0;
+        font-size: 27px;
+        line-height: 1.12;
+        letter-spacing: 0;
+    }
+    .dashboard-page-header .page-sub {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.35;
+    }
+    .dashboard-page-header .fazenda-header-badge {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: start;
+        margin: 0;
+        max-width: 154px;
+        padding: 5px 9px 5px 5px;
+        font-size: 11px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .dashboard-page-header .fazenda-header-badge > i:first-child { width: 28px; height: 28px; }
+    .main-content .dashboard-page-header .welcome-actions {
+        display: block !important;
+        position: static !important;
+        grid-column: 1 / -1;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    .dashboard-page-header .filter-action-row {
+        display: flex !important;
+        justify-content: flex-start;
+        margin: 4px 0 0;
+    }
+    .dashboard-page-header .user-profile-with-bell {
+        position: static !important;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+    .dashboard-page-header .user-profile-box {
+        padding: 4px;
+        border-radius: 50%;
+        background: var(--surface);
+    }
+    .dashboard-page-header .user-text { display: none !important; }
+    .dashboard-page-header .notification-bell {
+        width: 38px;
+        height: 38px;
+    }
+    .dashboard-page-header .dashboard-notification-popover:not([hidden]) {
+        position: fixed !important;
+        top: 76px !important;
+        left: 14px !important;
+        right: 14px !important;
+        width: auto !important;
+        max-height: calc(100vh - 92px);
+        z-index: 2000 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        background: var(--surface, #ffffff) !important;
+        color: var(--ink-900, #10251b) !important;
+        border: 1px solid var(--border, #dbe7df) !important;
+        box-shadow: 0 18px 45px rgba(8, 35, 24, .24) !important;
+    }
+    .dashboard-page-header .dashboard-notification-list {
+        color: var(--ink-900, #10251b);
+        background: var(--surface, #ffffff);
+    }
+    .dashboard-page-header .dashboard-notification-empty {
+        color: var(--ink-500, #586a60);
+    }
+    .stats-grid,
+    .charts-row {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        clear: both;
+    }
     .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .stat-card { padding: 16px 14px; }
     .icon-wrap { width: 38px; height: 38px; font-size: 15px; }
@@ -496,4 +713,33 @@ body {
     .chart-card-box { padding: 14px 10px 10px; }
     .chart-card-box h3 { font-size: 12px; }
     .chart-wrapper { height: 155px; }
+}
+@media (max-width: 429px) {
+    .dashboard-mobile-user-controls .user-text {
+        display: none !important;
+    }
+}
+@media (min-width: 769px) {
+    .dashboard-mobile-topbar,
+    .dashboard-mobile-user-controls { display: none !important; }
+    .main-content .dashboard-page-header > .welcome-actions {
+        display: flex !important;
+        position: absolute !important;
+        top: 10px !important;
+        right: 0 !important;
+        width: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        z-index: 2 !important;
+    }
+    .main-content .dashboard-page-header > .welcome-actions .user-profile-with-bell {
+        display: flex !important;
+        position: relative !important;
+        align-items: center !important;
+    }
+    .main-content .dashboard-page-header > .welcome-actions .filter-action-row {
+        display: flex !important;
+    }
 }
