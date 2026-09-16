@@ -3,7 +3,7 @@
    style.css · Split-screen editorial design with agro feel
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&family=Manrope:wght@400;500;600;700;800;900&display=swap');
 
 :root {
     --forest-950: #04231a;
@@ -40,8 +40,8 @@
     --dur-fast: 0.18s;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-    --font-sans:    'Inter', system-ui, sans-serif;
-    --font-display: 'Fraunces', 'Inter', serif;
+    --font-sans:    'Manrope', 'Inter', system-ui, sans-serif;
+    --font-display: 'Manrope', 'Inter', system-ui, sans-serif;
     --font-mono:    'JetBrains Mono', ui-monospace, monospace;
 
     --grad-forest: linear-gradient(135deg, var(--forest-800) 0%, var(--forest-600) 100%);
@@ -51,6 +51,9 @@
 html { height: 100%; -webkit-text-size-adjust: 100%; overflow: hidden; }
 
 body {
+    --font-sans: 'Manrope', 'Inter', system-ui, sans-serif;
+    --font-display: 'Manrope', 'Inter', system-ui, sans-serif;
+    --font-mono: 'Manrope', 'Inter', system-ui, sans-serif;
     font-family: var(--font-sans);
     background: var(--cream-50);
     color: var(--ink-700);
@@ -100,6 +103,8 @@ body {
     height: 1px;
     background: var(--forest-300);
 }
+
+.mobile-brand-logo { display: none; }
 
 .login-box {
     width: 100%;
@@ -432,13 +437,41 @@ input:focus-visible, button:focus-visible, a:focus-visible {
     .info-side { display: none; }
     .login-side { padding: 80px 32px 48px; }
 }
-@media (max-width: 480px) {
-    .login-side { padding: 80px 22px 36px; }
-    .login-side::before { left: 22px; }
-    .login-side::after { left: 152px; }
+@media (max-width: 768px) {
+    .login-side {
+        align-items: center;
+        justify-content: flex-start;
+        padding: 76px 32px 36px;
+        flex-direction: column;
+    }
+    .mobile-brand-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 104px;
+        height: 104px;
+        margin: 0 auto 26px;
+        border-radius: 22px;
+        overflow: hidden;
+        background: var(--white);
+        box-shadow: 0 14px 30px rgba(10, 77, 46, 0.22);
+    }
+    .mobile-brand-logo img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: inherit;
+    }
+    .login-side::before { top: 22px; left: 0; right: 0; text-align: center; }
+    .login-side::after { display: none; }
     .login-box h1 { font-size: 34px; text-align: left; }
     .login-box .desc { font-size: 14.5px; }
     .actions { flex-direction: column; gap: 14px; align-items: flex-start; }
     .btn-submit { height: 56px; font-size: 15px; }
     .input-wrap { height: 54px; }
+}
+@media (max-width: 480px) {
+    .login-side { padding: 76px 22px 36px; }
+    .mobile-brand-logo { margin-bottom: 28px; }
 }
