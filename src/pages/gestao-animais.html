@@ -596,6 +596,108 @@
 <script src="../backend/navbar-script.js"></script>
 <script src="../backend/logout.js"></script>
 <script src="../backend/chatbot-floating.js"></script>
+<script>
+(function () {
+    function iniciarCadastroPeloChatbot() {
+        const abrirFormulario = sessionStorage.getItem('potygen_open_animal_form');
+        const dados = sessionStorage.getItem('potygen_pending_animal');
+
+
+        if (abrirFormulario !== '1' || !dados) {
+            return;
+        }
+
+
+        // Limpa a instrução para não repetir caso o usuário atualize a página
+        sessionStorage.removeItem('potygen_open_animal_form');
+
+
+        // Espera a página "respirar" e todos os scripts nativos carregarem (500ms)
+        setTimeout(() => {
+            const btnNovoAnimal = document.getElementById('btnNovoAnimal');
+            const modal = document.getElementById('modalForm');
+
+
+            if (!btnNovoAnimal || !modal) return;
+
+
+            // 1. Tenta acionar o botão pelas vias oficiais (isso aciona os resets nativos do seu sistema)
+            btnNovoAnimal.click();
+
+
+            // 2. Força a exibição visualmente (garantia caso o clique falhe pelo timing)
+            modal.style.display = 'flex';
+            modal.style.visibility = 'visible';
+            modal.style.opacity = '1';
+
+
+            // 3. Aguarda mais 300ms para a animação do modal acabar e preenche os dados
+            setTimeout(() => {
+                preencherDados(dados);
+            }, 300);
+
+
+        }, 500);
+    }
+
+
+   
+    function preencherDados(dadosJson) {
+        let animal;
+        try {
+            animal = JSON.parse(dadosJson);
+        } catch (erro) {
+            console.error('PotyGen: Erro ao ler os dados do animal.', erro);
+            return;
+        }
+
+
+        const setFieldAndTrigger = (id, value) => {
+            if (!value) return;
+            const el = document.getElementById(id);
+            if (el) {
+                el.value = value;
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        };
+
+
+        // 1º PASSO: Preencher as "chaves-mestras" que geram os campos dinâmicos
+        setFieldAndTrigger('formEspecie', animal.especie);
+        setFieldAndTrigger('formSexo', animal.sexo);
+
+
+        // 2º PASSO: Disparar as funções nativas para criar as opções de Finalidade e exibir os campos de Macho/Fêmea
+        if (typeof window.toggleCamposPorSexo === 'function') window.toggleCamposPorSexo();
+        if (typeof window.calcularIdadeAnimal === 'function') window.calcularIdadeAnimal();
+
+
+        // 3º PASSO: Preencher todo o resto agora que o formulário está pronto
+        setFieldAndTrigger('formCodigo', animal.codigo);
+        setFieldAndTrigger('formNome', animal.nome);
+        setFieldAndTrigger('buscaRaca', animal.raca);
+        setFieldAndTrigger('formRaca', animal.raca);
+        setFieldAndTrigger('formGrauSangue', animal.grauSangue);
+        setFieldAndTrigger('formPelagem', animal.pelagem); // <-- Adicionado o preenchimento da pelagem aqui
+        setFieldAndTrigger('formDataNascimento', animal.dataNascimento);
+        setFieldAndTrigger('formPesoNascer', animal.pesoNascer);
+        setFieldAndTrigger('formPesoAtual', animal.pesoAtual);
+        setFieldAndTrigger('formLote', animal.lote);
+        setFieldAndTrigger('formFinalidade', animal.finalidade); // <-- Agora vai funcionar porque as opções já existem!
+
+
+        // Limpa os dados da memória
+        sessionStorage.removeItem('potygen_pending_animal');
+    }
+
+
+    // Garante que a verificação só ocorra DEPOIS que todo o HTML, CSS e JS da página carregarem
+    window.addEventListener('load', iniciarCadastroPeloChatbot);
+})();
+</script>
+
+
 
 <footer class="potygen-footer">
     <p><span class="potygen-footer__project">PotyGen</span> &copy; 2026. Todos os direitos reservados. Desenvolvido por estudantes do terceiro ano de Informática da EEEP Manoel Mano.</p>

@@ -252,3 +252,23 @@
     }
 }
 
+/* Botão de Reiniciar / Mudar de Assunto */
+.potygen-chat-reset {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.potygen-chat-reset:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: rotate(-30deg);
+}
+
