@@ -11,11 +11,21 @@
     <link rel="stylesheet" href="../style/style-dashboard.css">
     <link rel="stylesheet" href="../style/fazenda-modal.css">
     <link rel="stylesheet" href="../style/chatbot-floating.css">
+    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../style/footer.css">
 </head>
 <body>
 
 <div class="app-container">
     <!-- NAVBAR CARREGADA DINAMICAMENTE -->
+
+    <div class="dashboard-mobile-topbar">
+        <button type="button" class="dashboard-mobile-menu nav-menu-toggle" id="dashboardMobileMenu" aria-label="Abrir menu">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <img class="dashboard-mobile-logo" id="mobileDashboardLogo" src="../assets/logo01.jpeg" alt="PotyGen">
+        <div class="dashboard-mobile-user-controls" id="dashboardMobileUserControls"></div>
+    </div>
     
     <div class="dashboard-mobile-topbar">
         <button type="button" class="dashboard-mobile-menu nav-menu-toggle" id="dashboardMobileMenu" aria-label="Abrir menu">
@@ -401,5 +411,8 @@
 <script src="../backend/navbar-script.js"></script>
 <script src="../backend/logout.js"></script>
 <script src="../backend/chatbot-floating.js"></script>
+<footer class="potygen-footer">
+    <p><span class="potygen-footer__project">PotyGen</span> &copy; 2026. Todos os direitos reservados. Desenvolvido por estudantes do terceiro ano de Informática da EEEP Manoel Mano.</p>
+</footer>
 </body>
 </html>

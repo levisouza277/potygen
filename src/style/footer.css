@@ -1,0 +1,44 @@
+/* Rodapé institucional compartilhado pelas páginas do PotyGen. */
+.potygen-footer {
+    margin-top: 32px;
+    padding: 20px 24px;
+    background: #ffffff;
+    border-top: 1px solid #e7ece9;
+    color: #5f6b65;
+    font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.potygen-footer p {
+    margin: 0;
+}
+
+.potygen-footer__project {
+    color: #0d8a4f;
+    font-weight: 800;
+}
+
+body.dark-theme .potygen-footer,
+body.dark-mode .potygen-footer,
+body[data-theme='dark'] .potygen-footer {
+    background: #17201c;
+    border-color: #2b3b33;
+    color: #b8c7bf;
+}
+
+/* No desktop, o conteúdo só é deslocado enquanto a navbar está aberta. */
+@media (min-width: 1025px) {
+    body:has(.potygen-sidebar.nav-open) .potygen-footer {
+        margin-left: var(--sidebar-w, 280px);
+    }
+}
+
+@media (max-width: 768px) {
+    .potygen-footer {
+        margin-top: 24px;
+        padding: 18px 16px;
+        font-size: 12px;
+    }
+}

@@ -89,11 +89,44 @@ const dashboardCharts = {};
 let notificacoesDoDia = 0;
 
 function renderizarGraficos() {
+    organizarControlesCabecalhoMobile();
     initializeDashboardFilters();
     setupChartTypeSelection();
     setupDashboardFilterModal();
     setupNotificationButton();
     updateDashboardCharts();
+}
+
+function organizarControlesCabecalhoMobile() {
+    const container = document.getElementById('dashboardMobileUserControls');
+    const originalParent = document.querySelector('.dashboard-page-header > .welcome-actions');
+    const controls = document.querySelector('.dashboard-mobile-user-controls .user-profile-with-bell, .dashboard-page-header .user-profile-with-bell');
+    if (!container || !controls) return;
+
+    if (!organizarControlesCabecalhoMobile.originalParent) {
+        organizarControlesCabecalhoMobile.originalParent = originalParent || controls.parentElement;
+        organizarControlesCabecalhoMobile.originalNextSibling = organizarControlesCabecalhoMobile.originalParent?.querySelector('.filter-action-row');
+    }
+
+    const mobileQuery = window.matchMedia('(max-width: 768px)');
+    const aplicarPosicao = () => {
+        if (mobileQuery.matches) {
+            if (controls.parentElement !== container) container.appendChild(controls);
+            return;
+        }
+
+        const originalParent = organizarControlesCabecalhoMobile.originalParent;
+        const originalNextSibling = organizarControlesCabecalhoMobile.originalNextSibling;
+        if (originalParent && controls.parentElement !== originalParent) {
+            originalParent.insertBefore(controls, originalNextSibling && originalNextSibling.parentElement === originalParent ? originalNextSibling : null);
+        }
+    };
+
+    aplicarPosicao();
+    if (!organizarControlesCabecalhoMobile.mediaListenerAdded) {
+        mobileQuery.addEventListener('change', aplicarPosicao);
+        organizarControlesCabecalhoMobile.mediaListenerAdded = true;
+    }
 }
 
 function setupNotificationButton() {
