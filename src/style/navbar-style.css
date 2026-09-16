@@ -223,7 +223,8 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
     transform: translateX(-105%);
     transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
     z-index: 1150;
-    overflow-y: auto;
+    /* A sidebar não possui rolagem própria; a página continua rolando normalmente. */
+    overflow-y: hidden;
     overflow-x: hidden;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
@@ -322,7 +323,12 @@ img, svg, canvas, video { max-width: 100%; height: auto; display: block; }
     box-shadow: 0 0 8px var(--lime-500);
 }
 
-.nav-footer { padding-top: 14px; border-top: 1px solid var(--border); margin-top: 12px; }
+.nav-footer {
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+    flex-shrink: 0;
+}
 .logout-btn { color: var(--red-500) !important; }
 .logout-btn i { color: var(--red-500) !important; }
 .logout-btn:hover { background: var(--red-50) !important; color: var(--red-500) !important; }
@@ -1082,4 +1088,12 @@ body.dark-theme {
     .main-content {
         overflow-y: visible !important;
     }
+}
+
+/* Mantém todas as ações visíveis sem criar rolagem na navbar em telas baixas. */
+@media (max-height: 720px) {
+    .potygen-sidebar { padding: 16px 14px; }
+    .nav-logo-wrap { padding-bottom: 12px; }
+    .nav-item { padding: 9px 12px; }
+    .nav-footer { padding-top: 8px; }
 }

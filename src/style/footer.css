@@ -1,6 +1,7 @@
 /* Rodapé institucional compartilhado pelas páginas do PotyGen. */
 .potygen-footer {
-    margin-top: 32px;
+    /* Sem margem externa: evita uma faixa do fundo da página acima do rodapé. */
+    margin-top: 0;
     padding: 20px 24px;
     background: #ffffff;
     border-top: 1px solid #e7ece9;
@@ -23,8 +24,9 @@
 body.dark-theme .potygen-footer,
 body.dark-mode .potygen-footer,
 body[data-theme='dark'] .potygen-footer {
-    background: #17201c;
-    border-color: #2b3b33;
+    /* Usa o mesmo fundo do aplicativo, evitando uma barra escura separada. */
+    background: var(--bg, #0d1512);
+    border-color: var(--border, #2a3b32);
     color: #b8c7bf;
 }
 
@@ -37,7 +39,6 @@ body[data-theme='dark'] .potygen-footer {
 
 @media (max-width: 768px) {
     .potygen-footer {
-        margin-top: 24px;
         padding: 18px 16px;
         font-size: 12px;
     }

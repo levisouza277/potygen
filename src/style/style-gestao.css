@@ -51,8 +51,8 @@ body {
     flex: 1;
     padding: 45px 40px;
     background: var(--bg-main);
-    overflow-y: auto;
-    height: 100vh;
+    /* A rolagem fica no documento para incluir o rodapé. */
+    min-height: 100vh;
 }
 
 /* ── 2. CABEÇALHO DA PÁGINA & BADGES PREMIUM ─────────────────────────────── */

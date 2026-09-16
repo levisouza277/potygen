@@ -39,8 +39,8 @@
     flex: 1;
     padding: 32px;
     background: var(--bg-main);
-    height: 100vh;
-    overflow-y: auto;
+    /* Evita rolagem interna separada do rodapé. */
+    min-height: 100vh;
 }
 
 /* Custom Scrollbar para Consistência UI */

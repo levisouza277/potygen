@@ -48,8 +48,8 @@ body {
     flex: 1;
     padding: 45px 40px;
     background: var(--bg-main);
-    overflow-y: auto;
-    height: 100vh;
+    /* A página inteira deve rolar junto com o rodapé. */
+    min-height: 100vh;
 }
 
 /* Transformação radical dos textos centralizados originais para alinhamento premium de Dashboard */
